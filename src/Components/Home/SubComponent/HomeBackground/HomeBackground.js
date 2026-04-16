@@ -5,6 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Image, StyleSheet, View } from "react-native";
 import AnimatedThrowCard from "../../../SubComponents/AnimateThrowCards/AnimateThrowCards";
 import CenterTable from "../../../SubComponents/CenterTable/CenterTable";
+import { animateIfReady } from "./animateIfReady";
 const originalImageSize = { width: 1920, height: 1080 };
 
 export default function HomeBackGround({ children }) {
@@ -55,36 +56,36 @@ export default function HomeBackGround({ children }) {
         let randomPlayer = Math.floor(Math.random() * 3);
         let player = ["my@gm.co", "okay@gm.co", "nos@gm.co"];
 
-        // setAnimationState((org) => ({
-        //   ...org,
-        //   currentPlayer: player[randomPlayer],
-        // }));
-        // setPlayersGmeTableInfo((org) => {
-        //   let obj = {};
-        //   if (!obj.throwAreaCards) {
-        //     obj.throwAreaCards = { totalNumberOfCards: 0 };
-        //   } else if (obj.throwAreaCards.totalNumberOfCards === 6) {
-        //     obj.throwAreaCards.totalNumberOfCards = 2;
-        //   } else {
-        //     obj.throwAreaCards.totalNumberOfCards += 1;
-        //   }
-
-        //   return obj;
-        // });
-        // animateIfReady(
-        //   true,
-        //   restPropertiesAnimationDbs[player[randomPlayer]],
-        //   centerTable,
-        //   setFromP,
-        //   setToP,
-        //   setDisplayCardAnimaiton
-        // );
+        setAnimationState((org) => ({
+          ...org,
+          currentPlayer: player[randomPlayer],
+        }));
+        setPlayersGmeTableInfo((org) => {
+          let obj = {...org};
+          if (!obj.throwAreaCards) {
+            obj.throwAreaCards = { totalNumberOfCards: 0 };
+          } else if (obj.throwAreaCards.totalNumberOfCards === 6) {
+            obj.throwAreaCards.totalNumberOfCards = 2;
+          } else {
+            obj.throwAreaCards.totalNumberOfCards += 1;
+          }
+          console.log("the number of cards are ",obj.throwAreaCards.totalNumberOfCards)
+          return obj;
+        });
+        animateIfReady(
+          true,
+          restPropertiesAnimationDbs[player[randomPlayer]],
+          centerTable,
+          setFromP,
+          setToP,
+          setDisplayCardAnimaiton
+        );
       }, 3000);
 
       return () => {
         clearInterval(intervalId);
       };
-    }, []) // <-- keep dependencies minimal
+    }, [])
   );
 
   return (

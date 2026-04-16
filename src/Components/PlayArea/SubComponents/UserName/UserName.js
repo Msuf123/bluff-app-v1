@@ -80,12 +80,12 @@ export default function UserName({
           width < 344 ? { fontSize: 5 } : {},
         ]}
       >
-        Dbianxxxxxx
+        {userName ? userName.names :"" }
       </Text>
     </View>
   );
 }
-//{userName ? userName.names : }
+//
 const style = StyleSheet.create({
   div: {
     flex: 1,

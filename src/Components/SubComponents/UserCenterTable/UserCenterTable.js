@@ -4,7 +4,7 @@ import { Image, StyleSheet, View } from "react-native";
 import { animationDbs, playersGameTableInfo } from "../../../AppState/Atoms";
 import { useScreenDimensions } from "../../../Hooks/useScreenDimensions";
 
-export default function UserCenterTable({ display }) {
+export default function UserCenterTable() {
   const centerTable = useRef();
   const { width, height } = useScreenDimensions();
   const [playerTable] = useAtom(playersGameTableInfo);

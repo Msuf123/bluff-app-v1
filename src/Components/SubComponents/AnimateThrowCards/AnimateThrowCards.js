@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Animated, Image, StyleSheet } from "react-native";
 import { displayAnimation } from "../../../AppState/Atoms";
 import { useAtom } from "jotai";
