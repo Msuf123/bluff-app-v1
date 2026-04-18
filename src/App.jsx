@@ -1,5 +1,5 @@
 
-import { NewAppScreen } from '@react-native/new-app-screen';
+
 import { useAtom } from 'jotai';
 import { StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
 import {
@@ -12,6 +12,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { themeAtom } from './AppState/Atoms';
 import ProfilePage from './Components/Profile/Profile';
 import Login from './Components/Login/Login';
+import SignIn from './Components/Sign-In/SignIn';
+import OtpScreen from './Components/OtpScreen/OtpScreen';
+import PassInputFields from './Components/PasswordInputFields/PasswordInputFields';
 const Stack = createNativeStackNavigator();
 function App() {
     const [theme] = useAtom(themeAtom);
@@ -64,6 +67,21 @@ function App() {
 
                     options={{ headerShown: false, contentStyle: { marginBottom: 0 }, headerStyle: { display: 1, position: "relative" } }}
                 /></Stack.Navigator>
+                <Stack.Screen
+        name="signIn"
+        component={SignIn}
+        options={{ headerShown: false,title:"Sign-Up",...styleTopBar }}
+      />
+      <Stack.Screen
+        name="Otp"
+        component={OtpScreen}
+        options={{ headerShown: true,title:"Sign-Up" ,...styleTopBar}}
+      />
+      <Stack.Screen
+        name="passSet"
+        component={PassInputFields}
+        options={{ headerShown: true,title:"Sign-Up",...styleTopBar }}
+      />
         </NavigationContainer>
 
     );
