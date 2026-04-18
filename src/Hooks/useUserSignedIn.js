@@ -16,7 +16,7 @@ export function useUserSignedIn() {
           const credentials = await Keychain.getGenericPassword();
 let tokenPresent = null
 if (credentials) {
-  const tokenPresent = credentials.password; // assuming token is stored as password
+   tokenPresent = credentials.password; // assuming token is stored as password
   console.log('Token:', tokenPresent);
 } else {
   console.log('No credentials stored');

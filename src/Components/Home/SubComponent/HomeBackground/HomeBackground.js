@@ -69,7 +69,6 @@ export default function HomeBackGround({ children }) {
           } else {
             obj.throwAreaCards.totalNumberOfCards += 1;
           }
-          console.log("the number of cards are ",obj.throwAreaCards.totalNumberOfCards)
           return obj;
         });
         animateIfReady(

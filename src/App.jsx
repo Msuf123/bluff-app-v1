@@ -10,30 +10,21 @@ import Home from './Components/Home/Home';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { themeAtom } from './AppState/Atoms';
+import ProfilePage from './Components/Profile/Profile';
+import Login from './Components/Login/Login';
 const Stack = createNativeStackNavigator();
-function AppStack() {
+function App() {
     const [theme] = useAtom(themeAtom);
     const styleTopBar = {
         headerTitleStyle: {
             color: theme?.colors?.textPrimary,
             fontWeight: "bold",
+
         }, headerStyle: {
             backgroundColor: theme?.colors?.topBarNav,
-        }, headerTintColor: theme?.colors?.textPrimary
+        }, headerTintColor: theme?.colors?.textPrimary,
+
     }
-    return (
-        <Stack.Navigator initialRouteName="home">
-            <Stack.Screen
-                name="home"
-                component={Home}
-                options={{
-                    headerShown: false,
-                    unmountOnBlur: true,
-                }}
-            /></Stack.Navigator>
-    )
-}
-function MainApp() {
     const linking = {
         prefixes: ["bluffZone://", "http://localhost:8081"],
         config: {
@@ -51,28 +42,31 @@ function MainApp() {
     };
 
     return (
-        <NavigationContainer linking={linking}>
-            <AppStack />
+
+        <NavigationContainer linking={linking}  >
+            <Stack.Navigator initialRouteName="home">
+                <Stack.Screen
+                    name="home"
+                    component={Home}
+                    options={{
+                        headerShown: false,
+                        unmountOnBlur: true,
+
+                    }}
+                /><Stack.Screen
+                    name="profile"
+                    component={ProfilePage}
+                    options={{ headerShown: false, headerTitle: "Account", ...styleTopBar }}
+                ></Stack.Screen>
+                <Stack.Screen
+                    name="login"
+                    component={Login}
+
+                    options={{ headerShown: false, contentStyle: { marginBottom: 0 }, headerStyle: { display: 1, position: "relative" } }}
+                /></Stack.Navigator>
         </NavigationContainer>
+
     );
 }
-function App() {
-    const isDarkMode = useColorScheme() === 'dark';
-
-    return (
-        <SafeAreaProvider>
-            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-            <MainApp></MainApp>
-        </SafeAreaProvider>
-    );
-}
-
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-});
 
 export default App;
