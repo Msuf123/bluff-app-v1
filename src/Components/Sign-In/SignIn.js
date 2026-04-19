@@ -2,14 +2,15 @@ import { useState } from "react";
 import { authStateEmail, themeAtom } from "../../AppState/Atoms";
 import { useAtom } from "jotai";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import CommonSignInButton from "./SubComponent/CommonSignInButton/CommonSignInButton";
+import emailChecker from "./SubComponent/CommonSignInButton/emailChecker";
 
 export default function SignIn() {
   const [emailId, setEmailId] = useState("");
   const [email, setEmail] = useAtom(authStateEmail);
   const [validEmail, setValidEmail] = useState(true);
-  const [theme]=useAtom(themeAtom)
+  const [theme] = useAtom(themeAtom);
   const nav = useNavigation();
   function handelChangeText(e) {
     setValidEmail(emailChecker(e));
@@ -19,15 +20,16 @@ export default function SignIn() {
   const { params } = useRoute();
 
   return (
-    <View style={[style.div,{backgroundColor:theme.colors?.background}]}>
+    <View style={[style.div, { backgroundColor: theme.colors?.background }]}>
       <TextInput
         keyboardType="email-address"
         style={[
-          style.input,{
-              backgroundColor: theme?.colors?.inputBackground,
-              borderColor: theme?.colors?.inputBorder,
-              color: theme?.colors?.textPrimary,
-            },
+          style.input,
+          {
+            backgroundColor: theme?.colors?.inputBackground,
+            borderColor: theme?.colors?.inputBorder,
+            color: theme?.colors?.textPrimary,
+          },
           validEmail ? {} : { borderColor: "red" },
           Platform.OS === "web"
             ? { minWidth: 150, maxWidth: "40%", outlineStyle: "none" }

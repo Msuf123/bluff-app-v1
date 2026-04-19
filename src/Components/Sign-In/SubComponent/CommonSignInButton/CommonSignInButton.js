@@ -1,11 +1,15 @@
 import { useAtom } from "jotai";
 import { useState } from "react";
-import { authAtom, backendUrlAtom, themeAtom } from "../../../../AppState/Atoms";
+import {
+  authAtom,
+  backendUrlAtom,
+  themeAtom,
+} from "../../../../AppState/Atoms";
 import { useNavigation } from "@react-navigation/native";
 import emailChecker from "./emailChecker";
 import fetchReq from "../../../Login/Functions/FetchReq";
 import Toast from "react-native-toast-message";
-import { Platform, Pressable, StyleSheet } from "react-native";
+import { Platform, Pressable, StyleSheet, Text } from "react-native";
 
 export default function CommonSignInButton({
   emailId,
@@ -21,7 +25,7 @@ export default function CommonSignInButton({
   const [urls] = useAtom(backendUrlAtom);
   const [_, setAtuhState] = useAtom(authAtom);
   const nav = useNavigation();
-  const [theme]=useAtom(themeAtom)
+  const [theme] = useAtom(themeAtom);
   function pressButton() {
     if (emailId !== "" && emailChecker(emailId)) {
       setLoadingState(true);
@@ -92,17 +96,22 @@ export default function CommonSignInButton({
   return (
     <Pressable
       style={[
-        style.button,{backgroundColor:theme.colors?.primary},
+        style.button,
+        { backgroundColor: theme.colors?.primary },
         { width: inputWidth ? inputWidth : "80%" },
         Platform.OS === "web" ? { minWidth: 150, maxWidth: "40%" } : {},
       ]}
       onPressOut={pressButton}
     >
-      {loadingState ? <Text style={{color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold"}}>Loaidng</Text> : <Text style={{color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold"}}>Next</Text>}
+      {loadingState ? (
+        <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
+          Loaidng
+        </Text>
+      ) : (
+        <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
+          Next
+        </Text>
+      )}
     </Pressable>
   );
 }

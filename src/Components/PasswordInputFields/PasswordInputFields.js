@@ -1,8 +1,14 @@
 import { useAtom } from "jotai";
 import { authStateEmail, authStateOtp, themeAtom } from "../../AppState/Atoms";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
-import { Platform, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { EyeIcon, EyeOffIcon } from "lucide-react-native";
 import CommonSignInButton from "../Sign-In/SubComponent/CommonSignInButton/CommonSignInButton";
 
@@ -15,7 +21,7 @@ export default function PassInputFields() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [passwordMatched, setPasswordMatched] = useState(true);
-  
+
   const url = useRoute();
   useEffect(() => {
     if (pass === pass2) {
@@ -31,12 +37,14 @@ export default function PassInputFields() {
     setShowPassword2((prev) => !prev);
   };
   return (
-    <View style={[styles.container,{backgroundColor:theme.colors?.background}]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors?.background }]}
+    >
       <View
         style={[
           styles.passwordContainer,
           { marginBottom: 30 },
-          {  marginTop: 25 },
+          { marginTop: 25 },
           Platform.OS === "web" ? { minWidth: 150, maxWidth: "40%" } : {},
         ]}
       >
