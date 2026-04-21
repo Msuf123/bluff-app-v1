@@ -236,7 +236,7 @@ export default function ProfileInfo() {
           style={{
             width: 200,
             height: 200,
-            borderRadius: 100,
+            borderRadius: 200,
             overflow: "hidden",
           }}
         >
@@ -254,7 +254,8 @@ export default function ProfileInfo() {
             </View>
           ) : null}
           <Image
-            style={{ width: 200, height: 200, borderRadius: 100 }}
+            style={{ width: 200, height: 200, borderRadius: 200 }}
+            resizeMode="contain"
             source={{
               uri: image,
             }}
