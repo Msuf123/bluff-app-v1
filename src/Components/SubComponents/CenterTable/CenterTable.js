@@ -1,5 +1,8 @@
 import { useAtom } from "jotai";
-import { playerCardChooseOnGameTable, playersGameTableInfo } from "../../../AppState/Atoms";
+import {
+  playerCardChooseOnGameTable,
+  playersGameTableInfo,
+} from "../../../AppState/Atoms";
 import { useRoute } from "@react-navigation/native";
 import { useEffect } from "react";
 import { StatusBar, StyleSheet, View } from "react-native";

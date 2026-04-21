@@ -4,13 +4,22 @@ import { useAtom } from "jotai";
 import { useNavigation } from "@react-navigation/native";
 import { useUserSignedIn } from "../../../../../../Hooks/useUserSignedIn";
 import getProfileInfo from "./Functions/getProfileInfo";
-import { Image, Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { debounce } from "lodash";
 import changeUserName from "./Functions/changeUserName";
 import { launchImageLibrary } from "react-native-image-picker";
 import SkeletonLoadingOfprofileInfoSection from "./SubComponents/SkeletonLoadingOfProfileInfoSection";
 import ProgressDot from "./SubComponents/ProgressDot/ProgressDot";
 import GButton from "../../../../../SubComponents/GButton/GButton";
+import { readFileAsBase64, uploadChunks } from "./Functions/readFileAsBase64";
 
 export default function ProfileInfo() {
   const [userName, setUserName] = useState("");
@@ -19,10 +28,10 @@ export default function ProfileInfo() {
   const [stateLoading, setStateLoading] = useState("hide");
   const [backedUrl] = useAtom(backendUrlAtom);
   const [image, setImage] = useState(
-    "https://res.cloudinary.com/dkoptxs2o/image/upload/v1761653016/vecteezy_blue-profile-icon_36885313_odxqtn.png"
+    "https://res.cloudinary.com/dkoptxs2o/image/upload/v1761653016/vecteezy_blue-profile-icon_36885313_odxqtn.png",
   );
   const [originalImageUrlState, setOriginalImageUrlState] = useState(
-    "https://res.cloudinary.com/dkoptxs2o/image/upload/v1761653016/vecteezy_blue-profile-icon_36885313_odxqtn.png"
+    "https://res.cloudinary.com/dkoptxs2o/image/upload/v1761653016/vecteezy_blue-profile-icon_36885313_odxqtn.png",
   );
   const navigation = useNavigation();
   const [uploadigState, setUploadingState] = useState(0);
@@ -30,7 +39,7 @@ export default function ProfileInfo() {
   const [loading, isAuth] = useUserSignedIn();
   const nav = useNavigation();
   const [componentData, setComponentData] = useState(false);
-  const [theme]=useAtom(themeAtom)
+  const [theme] = useAtom(themeAtom);
   useEffect(() => {
     if (!loading) {
       if (!isAuth) {
@@ -42,7 +51,9 @@ export default function ProfileInfo() {
     getProfileInfo(backedUrl + "/profile/info").then((a) => {
       if (a.hasOwnProperty("name") || a.hasOwnProperty("image")) {
         setComponentData(true);
-        setImage(a["image"]);
+        if (a["image"]) {
+          setImage(a["image"]);
+        }
         setOriginalImageUrlState(a["image"]);
         setUserName(a["name"]);
       }
@@ -59,7 +70,7 @@ export default function ProfileInfo() {
     debounce(async (parameter) => {
       changeUserNameWrapper(parameter);
     }, 1000),
-    []
+    [],
   );
   async function changeUserNameWrapper(parameter) {
     let res = await changeUserName(backedUrl, parameter);
@@ -73,66 +84,88 @@ export default function ProfileInfo() {
     }, 1000);
   }
   const pickImage = async () => {
-  try {
-    const result = await launchImageLibrary({
-      mediaType: 'photo',
-      quality: 1,
-      selectionLimit: 1,
-    });
+    try {
+      const result = await launchImageLibrary({
+        mediaType: "photo",
+        quality: 1,
+        selectionLimit: 1,
+      });
 
-    if (result.didCancel) {
-      console.log("User cancelled image picker");
-      return;
+      if (result.didCancel) {
+        console.log("User cancelled image picker");
+        return;
+      }
+
+      if (result.errorCode) {
+        console.log("Error: ", result.errorMessage);
+        return;
+      }
+
+      const asset = result.assets[0];
+
+      setImage(asset.uri);
+
+      const base64 = await readFileAsBase64(asset.uri);
+      console.log(base64, "kk");
+      uploadChunks(
+        base64,
+        asset.fileName || "image.jpg",
+        setUploadingState,
+        setImage,
+        originalImageUrlState,
+        backedUrl,
+      );
+    } catch (err) {
+      console.error("❌ Image picker error:", err);
     }
-
-    if (result.errorCode) {
-      console.log("Error: ", result.errorMessage);
-      return;
-    }
-
-    const asset = result.assets[0];
-
-    setImage(asset.uri);
-
-    const base64 = await readFileAsBase64(asset.uri);
-
-    uploadChunks(
-      base64,
-      asset.fileName || "image.jpg",
-      setUploadingState,
-      setImage,
-      originalImageUrlState,
-      backedUrl
-    );
-  } catch (err) {
-    console.error("❌ Image picker error:", err);
-  }
-};
+  };
 
   return !componentData ? (
     <SkeletonLoadingOfprofileInfoSection />
   ) : (
     <View
       style={[
-        style.outerdiv,{backgroundColor:theme.colors?.background,width:"100%",height:"100%"},
+        style.outerdiv,
+        {
+          backgroundColor: theme.colors?.background,
+          width: "100%",
+          height: "100%",
+        },
         Platform.OS !== "web" ? { flexDirection: "column-reverse" } : {},
       ]}
     >
       <View
         style={[
-          style.userName,{backgroundColor:theme.colors?.background,width:"100%",height:"100%"},
+          style.userName,
+          {
+            backgroundColor: theme.colors?.background,
+            width: "100%",
+            height: "100%",
+          },
           Platform.OS !== "web"
             ? {
                 marginTop: 0,
-                paddingTop:"20%",
-                paddingLeft:20,
+                paddingTop: "20%",
+                paddingLeft: 20,
                 width: "100%",
               }
             : {},
         ]}
       >
-        <Text style={[style.userNameText,{color:theme.colors?.textPrimary,marginBottom:20}]}>User Name:</Text>
-        <View style={[style.userNameEdit,{backgroundColor:theme.colors?.background}]}>
+        <Text
+          style={[
+            style.userNameText,
+            { color: theme.colors?.textPrimary, marginBottom: 20 },
+          ]}
+        >
+          User Name:
+        </Text>
+        <View
+          style={[
+            style.userNameEdit,
+            { backgroundColor: theme.colors?.background },
+          ]}
+        >
           {/* Hidden Text to measure width */}
           <View style={style.progressBar}>
             <ProgressDot status={stateLoading} />
@@ -163,22 +196,24 @@ export default function ProfileInfo() {
                 maxWidth: 200,
                 borderWidth: 0,
                 backgroundColor: "transparent",
-                color:theme.colors?.textPrimary ,
+                color: theme.colors?.textPrimary,
                 outlineStyle: "none",
-                borderColor:theme.colors?.textPrimary,
-                fontSize:18
+                borderColor: theme.colors?.textPrimary,
+                fontSize: 18,
               },
             ]}
           />
 
-         
-            <Image
-              style={[style.imageIcon,style.pressButton,{backgroundColor:"white",borderRadius:2,marginLeft:15},
+          <Image
+            style={[
+              style.imageIcon,
+              style.pressButton,
+              { backgroundColor: "white", borderRadius: 2, marginLeft: 15 },
               { left: inputWidth },
-              inputWidth > 200 ? { left: 200 } : {},]}
-              source={require("@/assets/edit.png")}
-            />
-        
+              inputWidth > 200 ? { left: 200 } : {},
+            ]}
+            source={require("@/assets/edit.png")}
+          />
         </View>
       </View>
       <View>
@@ -246,7 +281,7 @@ const style = StyleSheet.create({
   outerdiv: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    alignItems: "center", 
+    alignItems: "center",
   },
   userNameEdit: {
     flexDirection: "row",
@@ -257,7 +292,7 @@ const style = StyleSheet.create({
   },
   userName: {
     display: "flex",
-    flex:1
+    flex: 1,
   },
   imageIcon: {
     width: 19,
@@ -275,7 +310,7 @@ const style = StyleSheet.create({
     padding: 0,
     margin: 0,
     borderBottomWidth: 1,
-    
+
     position: "absolute",
   },
   pressButton: {

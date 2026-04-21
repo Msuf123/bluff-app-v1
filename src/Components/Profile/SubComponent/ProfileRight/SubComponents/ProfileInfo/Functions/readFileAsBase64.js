@@ -1,5 +1,5 @@
 import { Platform } from "react-native";
-import * as Keychain from 'react-native-keychain';
+import * as Keychain from "react-native-keychain";
 import Toast from "react-native-toast-message";
 
 // Unified function to read file contents as base64
@@ -18,8 +18,17 @@ export const readFileAsBase64 = async (uri) => {
       reader.readAsDataURL(blob);
     });
   } else {
-    return await FileSystem.readAsStringAsync(uri, {
-      encoding: FileSystem.EncodingType.Base64,
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result.split(",")[1];
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
     });
   }
 };
@@ -38,10 +47,10 @@ export const uploadChunks = async (
   setStatus,
   setOriginalImageUrlState,
   originalImageUrl,
-  backendUrl
+  backendUrl,
 ) => {
   const chunks = splitBase64IntoChunks(base64String);
-  const uploadId = Date.now().toString(); // Or generate a UUID
+  const uploadId = Date.now().toString();
   const totalChunks = chunks.length;
 
   for (let i = 0; i < totalChunks; i++) {
@@ -52,18 +61,18 @@ export const uploadChunks = async (
       fileName,
       uploadId,
     };
-    console.log(chunkData.totalChunks);
+
     let result;
     try {
       let tokens = null;
       if (Platform.OS !== "web") {
         const credentials = await Keychain.getGenericPassword();
-if (credentials) {
-   tokens = credentials.password; // assuming token is stored as password
-  console.log('Token:', tokens);
-} else {
-  console.log('No credentials stored');
-} 
+        if (credentials) {
+          tokens = credentials.password; // assuming token is stored as password
+          console.log("Token:", tokens);
+        } else {
+          console.log("No credentials stored");
+        }
       }
       const response = await fetch(backendUrl + "/image/upload-chunk", {
         method: "POST",
@@ -100,7 +109,7 @@ if (credentials) {
       setOriginalImageUrlState(result["cloudinaryUrl"]);
       setStatus(0);
     } else {
-      setStatus((i + 1 / totalChunks) * 100);
+      setStatus(((i + 1) / totalChunks) * 100);
     }
 
     console.log(`Uploaded chunk ${i + 1}/${totalChunks}`, result);

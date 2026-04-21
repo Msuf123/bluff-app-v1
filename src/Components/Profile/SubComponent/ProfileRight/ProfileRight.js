@@ -13,28 +13,61 @@ export function ProfileRight() {
       <Tab.Navigator
         initialRouteName="info"
         screenOptions={{
-         headerShown: false,
-  tabBarActiveTintColor: theme?.colors?.bottomBarActive,
-  tabBarInactiveTintColor: theme?.colors?.bottomBarInActive,
-  tabBarBackground: () => (
-    <View style={{ flex: 1, backgroundColor: theme?.colors?.topBarNav }} />
-  ),   
+          headerShown: false,
+          tabBarActiveTintColor: theme?.colors?.bottomBarActive,
+          tabBarInactiveTintColor: theme?.colors?.bottomBarInActive,
+          tabBarBackground: () => (
+            <View
+              style={{ flex: 1, backgroundColor: theme?.colors?.topBarNav }}
+            />
+          ),
         }}
       >
         <Tab.Screen
           name="info"
           component={ProfileInfo}
-          options={{ title: "Profile", headerShown: false ,tabBarIcon:()=><Image  source={require("@/assets/user.png")}
-        style={{ width: 20, height: 20 }}
-        resizeMode="contain"/>}}
+          options={{
+            title: "Profile",
+            headerShown: false,
+            tabBarIcon: () => (
+              <View
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                }}
+              >
+                <Image
+                  source={require("@/assets/user.png")}
+                  style={{ width: 20, height: 20 }}
+                  resizeMode="contain"
+                />
+              </View>
+            ),
+          }}
         />
         <Tab.Screen
           name="account"
           component={ProfileAccount}
-          options={{ title: "Account Settings",tabBarIcon:()=><Image  source={require("@/assets/settings.png")}
-        style={{ width: 20, height: 20 }}
-        resizeMode="contain"/> }}
-          
+          options={{
+            title: "Account Settings",
+            tabBarIcon: () => (
+              <View
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "50%",
+                  padding: 0.7,
+                  overflow: "hidden",
+                }}
+              >
+                <Image
+                  source={require("@/assets/settings.png")}
+                  style={{ width: 20, height: 20 }}
+                  resizeMode="contain"
+                />
+              </View>
+            ),
+          }}
         />
       </Tab.Navigator>
     </View>
@@ -43,7 +76,7 @@ export function ProfileRight() {
 const style = StyleSheet.create({
   div: {
     width: "100%",
-   
+
     borderRadius: 20,
     overflow: "hidden",
   },

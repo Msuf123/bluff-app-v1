@@ -3,13 +3,10 @@ import { lightTheme, powerSavingTheme } from "./Theme";
 
 export const authAtom = atom(false);
 export const backendUrlAtom = atom("http://192.168.1.168:8001");
-export const themeAtom = atom(lightTheme);
+export const themeAtom = atom(powerSavingTheme);
 export const webScoket = atom(null);
 export const playerGameArea = atom({
-  players: [
-    { email: "kk", readyStatus: false, name: "123456789 1234", image: "ksk" },
-    { email: "kks", readyStatus: false, name: "Akshat", image: "ksk" },
-  ],
+  players: [],
 });
 export const playersGameTableInfo = atom({
   throwAreaCards: { totalNumberOfCards: 2 },

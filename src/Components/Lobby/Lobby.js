@@ -1,5 +1,6 @@
 import { getDefaultStore, useAtom } from "jotai";
 import {
+  animationDbs,
   atHome,
   authAtom,
   backendUrlAtom,
@@ -16,6 +17,7 @@ import {
   playerCardChooseOnGameTable,
   playerGameArea,
   playersGameTableInfo,
+  remoteAudio,
   scorePlayer,
   scroeBoard,
   themeAtom,
@@ -82,6 +84,7 @@ export default function Lobby() {
   useEffect(() => {
     let webScoket = null;
     function createRoom(parentUrl, token, nav) {
+      console.log("This is my req");
       let url = (
         parentUrl +
         "/room?action=create&platform=" +

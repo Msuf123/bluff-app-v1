@@ -10,9 +10,14 @@ import OtpScreen from "./Components/OtpScreen/OtpScreen";
 import PassInputFields from "./Components/PasswordInputFields/PasswordInputFields";
 import Toast from "react-native-toast-message";
 import Lobby from "./Components/Lobby/Lobby";
+import PlayArea from "./Components/PlayArea/PlayArea";
+import { useEffect } from "react";
+import { usePowerState } from "react-native-device-info";
+import { lightTheme, powerSavingTheme } from "./AppState/Theme";
 const Stack = createNativeStackNavigator();
 function App() {
-  const [theme] = useAtom(themeAtom);
+  const [theme, setThemeAtom] = useAtom(themeAtom);
+
   const styleTopBar = {
     headerTitleStyle: {
       color: theme?.colors?.textPrimary,
@@ -23,6 +28,7 @@ function App() {
     },
     headerTintColor: theme?.colors?.textPrimary,
   };
+  const { lowPowerMode } = usePowerState();
   // const linking = {
   //     prefixes: ["bluffZone://", "http://localhost:8081"],
   //     config: {
@@ -38,63 +44,76 @@ function App() {
   //         },
   //     },
   // };
-
+  useEffect(() => {
+    if (lowPowerMode) {
+      setThemeAtom(powerSavingTheme);
+    } else {
+      setThemeAtom(lightTheme);
+    }
+  }, [lowPowerMode]);
   return (
-    <NavigationContainer>
+    <>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="home">
+          <Stack.Screen
+            name="home"
+            component={Home}
+            options={{
+              headerShown: false,
+              unmountOnBlur: true,
+            }}
+          />
+          <Stack.Screen
+            name="profile"
+            component={ProfilePage}
+            options={{
+              headerShown: false,
+              headerTitle: "Account",
+              ...styleTopBar,
+            }}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="login"
+            component={Login}
+            options={{
+              headerShown: false,
+              contentStyle: { marginBottom: 0 },
+              headerStyle: { display: 1, position: "relative" },
+            }}
+          />
+          <Stack.Screen
+            name="Lobby"
+            component={Lobby}
+            options={{
+              headerShown: false,
+              ...styleTopBar,
+              // headerRight: () => <RightHeaderBarLobbyArea />,
+            }}
+          />
+          <Stack.Screen
+            name="PlayTabel"
+            component={PlayArea}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="signIn"
+            component={SignIn}
+            options={{ headerShown: false, title: "Sign-Up", ...styleTopBar }}
+          />
+          <Stack.Screen
+            name="Otp"
+            component={OtpScreen}
+            options={{ headerShown: false, title: "Sign-Up", ...styleTopBar }}
+          />
+          <Stack.Screen
+            name="passSet"
+            component={PassInputFields}
+            options={{ headerShown: false, title: "Sign-Up", ...styleTopBar }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
       <Toast />
-      <Stack.Navigator initialRouteName="home">
-        <Stack.Screen
-          name="home"
-          component={Home}
-          options={{
-            headerShown: false,
-            unmountOnBlur: true,
-          }}
-        />
-        <Stack.Screen
-          name="profile"
-          component={ProfilePage}
-          options={{
-            headerShown: false,
-            headerTitle: "Account",
-            ...styleTopBar,
-          }}
-        ></Stack.Screen>
-        <Stack.Screen
-          name="login"
-          component={Login}
-          options={{
-            headerShown: false,
-            contentStyle: { marginBottom: 0 },
-            headerStyle: { display: 1, position: "relative" },
-          }}
-        />
-        <Stack.Screen
-          name="Lobby"
-          component={Lobby}
-          options={{
-            headerShown: false,
-            ...styleTopBar,
-            // headerRight: () => <RightHeaderBarLobbyArea />,
-          }}
-        />
-        <Stack.Screen
-          name="signIn"
-          component={SignIn}
-          options={{ headerShown: false, title: "Sign-Up", ...styleTopBar }}
-        />
-        <Stack.Screen
-          name="Otp"
-          component={OtpScreen}
-          options={{ headerShown: false, title: "Sign-Up", ...styleTopBar }}
-        />
-        <Stack.Screen
-          name="passSet"
-          component={PassInputFields}
-          options={{ headerShown: false, title: "Sign-Up", ...styleTopBar }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    </>
   );
 }
 
