@@ -1,12 +1,13 @@
 import { useAtom } from "jotai";
 import { authAtom, backendUrlAtom } from "../../../../../../../AppState/Atoms";
 import { Platform } from "react-native";
- import * as Keychain from 'react-native-keychain';
+import * as Keychain from "react-native-keychain";
+import { useNavigation } from "@react-navigation/native";
 
 export default function useDeleteUser() {
   const [, setAuth] = useAtom(authAtom);
   const [urls] = useAtom(backendUrlAtom);
-
+  const nav = useNavigation();
   async function deleteUser() {
     const url = `${urls}/auth/deleteAccount`;
     const headers = {
@@ -15,15 +16,15 @@ export default function useDeleteUser() {
 
     try {
       if (Platform.OS === "android" || Platform.OS === "ios") {
-        let token =null
+        let token = null;
         const credentials = await Keychain.getGenericPassword();
 
-if (credentials) {
-   token = credentials.password; 
-  console.log('Token:', token);
-} else {
-  console.log('No credentials stored');
-}
+        if (credentials) {
+          token = credentials.password;
+          console.log("Token:", token);
+        } else {
+          console.log("No credentials stored");
+        }
         if (token) {
           headers["Token"] = token;
         }
@@ -43,13 +44,12 @@ if (credentials) {
       // Clear token & auth state
       if (Platform.OS === "android" || Platform.OS === "ios") {
         await Keychain.resetGenericPassword();
+        nav.navigate("home");
       }
 
       setAuth(false);
-      return true;
     } catch (error) {
       console.error("Delete user error:", error);
-      return false;
     }
   }
 
