@@ -48,13 +48,13 @@ function App() {
     if (lowPowerMode) {
       setThemeAtom(powerSavingTheme);
     } else {
-      setThemeAtom(lightTheme);
+      setThemeAtom(powerSavingTheme);
     }
   }, [lowPowerMode]);
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="home">
+        <Stack.Navigator initialRouteName="PlayTabel">
           <Stack.Screen
             name="home"
             component={Home}

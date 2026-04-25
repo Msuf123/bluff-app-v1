@@ -1,106 +1,151 @@
-import { useAtom } from "jotai";
-import { playerCardChooseOnGameTable, webScoket } from "../../../../AppState/Atoms";
-import { StyleSheet, View } from "react-native";
-import ButtonCustom from "../../../SubComponents/ButtonCustom/ButtonCustom";
+import { useAtom } from 'jotai';
+import {
+  playerCardChooseOnGameTable,
+  themeAtom,
+  webScoket,
+} from '../../../../AppState/Atoms';
+
+import ButtonCustom from '../../../SubComponents/ButtonCustom/ButtonCustom';
+import { Platform, StyleSheet, View } from 'react-native';
 
 export default function ThrowShowOptions({ disabled }) {
   const [cardChooseS, setCardChoose] = useAtom(playerCardChooseOnGameTable);
   const [ws] = useAtom(webScoket);
+  const [theme] = useAtom(themeAtom);
+  const styles = makeStyles(theme);
+
   function throwCards() {
     setCardChoose(true);
   }
+
   return (
-    <View style={[style.div]}>
+    <View style={styles.div}>
       <ButtonCustom
-        heading={"Thow"}
+        heading={'Throw'}
         pressFun={throwCards}
-        textStyle={[style.textStyle, style.textOne]}
-        divStyle={[style.buttons, style.buttonOne]}
-      ></ButtonCustom>
+        textStyle={[styles.textStyle, styles.textOne]}
+        divStyle={[styles.buttons, styles.buttonOne]}
+      />
+
+      <View style={styles.divider} />
+
       <ButtonCustom
-        heading={"Show"}
+        heading={'Show'}
         textStyle={[
-          style.textStyle,
-          style.textTwo,
-          disabled ? style.disabledTwoText : null,
+          styles.textStyle,
+          styles.textTwo,
+          disabled && styles.disabledText,
         ]}
         divStyle={[
-          style.buttons,
-          style.buttonTwo,
-          disabled ? style.disabledTwo : null,
+          styles.buttons,
+          styles.buttonTwo,
+          disabled && styles.disabledButton,
         ]}
         pressFun={() => {
-          ws.send(JSON.stringify({ action: "showCards" }));
+          ws.send(JSON.stringify({ action: 'showCards' }));
         }}
-      ></ButtonCustom>
+      />
+
+      <View style={styles.divider} />
+
       <ButtonCustom
-        heading={"Pass"}
+        heading={'Pass'}
         textStyle={[
-          style.textStyle,
-          style.textThree,
-          disabled ? style.disabledTwoText : null,
+          styles.textStyle,
+          styles.textThree,
+          disabled && styles.disabledText,
         ]}
         pressFun={() => {
-          ws.send(JSON.stringify({ action: "userCardPass" }));
+          ws.send(JSON.stringify({ action: 'userCardPass' }));
         }}
         divStyle={[
-          style.buttons,
-          style.buttonThree,
-          disabled ? style.disabledTwo : null,
+          styles.buttons,
+          styles.buttonThree,
+          disabled && styles.disabledButton,
         ]}
-      ></ButtonCustom>
+      />
     </View>
   );
 }
-const style = StyleSheet.create({
-  div: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    width: 300,
-    height: 150,
-    backgroundColor: "rgba(34, 32, 32, 0.94)",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 20,
-    transform: [{ translateX: -150 }, { translateY: -75 }], // half of width and height
-  },
-  buttons: {
-    borderWidth: 2,
-    borderColor: "rgb(214, 214, 214)",
-    margin: 10,
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: "transparent",
-  },
-  buttonOne: {
-    borderColor: "rgb(93, 255, 28)",
-  },
-  buttonTwo: {
-    borderColor: "rgb(255, 178, 12)",
-  },
-  buttonThree: {
-    borderColor: "rgb(142, 47, 250)",
-  },
-  textStyle: {
-    fontWeight: "800",
-    color: "white",
-    fontSize: 20,
-  },
-  textOne: {
-    color: "rgb(184, 255, 70)",
-  },
-  textTwo: {
-    color: "rgb(255, 213, 27)",
-  },
-  textThree: {
-    color: "rgb(142, 47, 250)",
-  },
-  disabledTwo: {
-    borderColor: "rgb(99, 70, 10)",
-  },
-  disabledTwoText: {
-    color: "rgb(105, 89, 16)",
-  },
-});
+
+const makeStyles = theme =>
+  StyleSheet.create({
+    div: {
+      width: 320,
+      height: 90,
+      backgroundColor: theme.colors.transparentBackground,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: theme.colors.inputBorder,
+
+      overflow: 'hidden',
+      ...(Platform.OS === 'web' && {
+        boxShadow: '0 8px 32px rgba(0,0,0,0.45)',
+      }),
+      ...(Platform.OS !== 'web' && {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.4,
+        shadowRadius: 12,
+        elevation: 10,
+      }),
+    },
+
+    // Each button block
+    buttons: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 14,
+      paddingHorizontal: 6,
+      backgroundColor: 'transparent',
+      borderRadius: 0,
+      borderWidth: 0,
+    },
+
+    // Throw — use theme primary with a green-ish tint kept for game semantics
+    buttonOne: {
+      borderRightWidth: 0,
+    },
+    // Show — amber tint kept for game semantics
+    buttonTwo: {
+      borderRightWidth: 0,
+    },
+    // Pass — purple tint kept for game semantics
+    buttonThree: {},
+
+    // Top accent bar per button (via borderTopWidth trick on text container)
+    textStyle: {
+      fontWeight: '800',
+      fontSize: 17,
+      fontFamily: theme.fonts.heading,
+      letterSpacing: 0.5,
+    },
+    textOne: {
+      color: '#8DFF3A', // Throw — green, game semantic color
+    },
+    textTwo: {
+      color: '#FFD51B', // Show — amber, game semantic color
+    },
+    textThree: {
+      color: theme.colors.primary, // Pass — uses theme primary (blue / pink)
+    },
+
+    // Disabled states
+    disabledButton: {
+      opacity: 0.35,
+    },
+    disabledText: {
+      color: theme.colors.textSecondary,
+    },
+
+    // Vertical divider between buttons
+    divider: {
+      width: 1,
+      height: '55%',
+      backgroundColor: theme.colors.inputBorder,
+    },
+  });

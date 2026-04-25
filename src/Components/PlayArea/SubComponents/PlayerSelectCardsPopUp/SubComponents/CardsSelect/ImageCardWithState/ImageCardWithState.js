@@ -1,112 +1,127 @@
-import { useAtom } from "jotai";
-import { useRef, useState } from "react";
-import { playerCardsArrayThatHeSelected } from "../../../../../../../AppState/Atoms";
-import { useScreenDimensions } from "../../../../../../../Hooks/useScreenDimensions";
-import { Image, PanResponder, StyleSheet, View } from "react-native";
+import { useAtom } from 'jotai';
+import { memo, useCallback, useRef, useState } from 'react';
+import {
+  playerCardsArrayThatHeSelected,
+  themeAtom,
+} from '../../../../../../../AppState/Atoms';
+import { useScreenDimensions } from '../../../../../../../Hooks/useScreenDimensions';
+import {
+  Image,
+  PanResponder,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 
-export default function ImageCardWithState({ url, index, cardName }) {
+const ImageCardWithState = memo(function ImageCardWithState({ cardName, url }) {
   const [clicked, setClicked] = useState(false);
-  const [userSelectedCards, setUserSelectedCards] = useAtom(
-    playerCardsArrayThatHeSelected
-  );
+  const clickedRef = useRef(false);
+  const [, setUserSelectedCards] = useAtom(playerCardsArrayThatHeSelected);
+  const [theme] = useAtom(themeAtom);
   const { width } = useScreenDimensions();
-  let dyValue = 0;
-  const pan = useRef(false);
-  let fiveHundredMiliSecondTimesItRan = 0;
+  const styles = makeCardStyles(theme);
+  const handleSelect = useCallback(() => {
+    const wasSelected = clickedRef.current;
+    const newValue = !wasSelected;
 
-  function handleSelect() {
-    if (!clicked) {
-      setUserSelectedCards((prev) => {
-        const cardExists = prev.some(
-          (item) => JSON.stringify(item) === JSON.stringify(cardName)
-        );
-        if (cardExists) return prev;
-        return [...prev, cardName];
-      });
-    } else {
-      setUserSelectedCards((prev) =>
-        prev.filter((item) => JSON.stringify(item) !== JSON.stringify(cardName))
-      );
-    }
+    clickedRef.current = newValue;
+    setClicked(newValue);
 
-    setClicked((org) => !org);
-  }
+    setUserSelectedCards(cards => {
+      const key = JSON.stringify(cardName);
+      const exists = cards.some(c => JSON.stringify(c) === key);
 
-  function trackTheUserMovement() {
-    const id = setInterval(() => {
-      let dy = dyValue;
-
-      if (fiveHundredMiliSecondTimesItRan > 2) {
-        clearInterval(id);
-        setTimeout(() => {
-          fiveHundredMiliSecondTimesItRan = 0;
-        }, 1000);
-      } else if (fiveHundredMiliSecondTimesItRan === 2) {
-        if (dy < 3 && dy > -3) {
-          handleSelect(); // Use shared handler
-        }
+      if (newValue && !exists) {
+        return [...cards, cardName];
       }
-      fiveHundredMiliSecondTimesItRan += 1;
-    }, 150);
-  }
 
-  const pans = PanResponder.create({
-    onPanResponderReject: () => {},
-    onPanResponderTerminate: () => {},
-    onPanResponderRelease: () => {},
-    onMoveShouldSetPanResponder: (e, gestureState) => {
-      const { dx, dy } = gestureState;
-      trackTheUserMovement();
-      dyValue = dy;
-      return pan.current;
-    },
-    onPanResponderMove: (e, gestureState) => {},
-  });
+      if (!newValue) {
+        return cards.filter(c => JSON.stringify(c) !== key);
+      }
+
+      return cards;
+    });
+  }, [cardName, setUserSelectedCards]);
+
+  const imgSize = width > 980 ? 90 : 72;
 
   return (
-    <View
-      style={[style.div, clicked ? style.clicked : {}]}
-      {...pans.panHandlers}
-      {...(Platform.OS === "web" ? { onClick: handleSelect } : {})} // 👈 Handle web click
+    <Pressable
+      style={[styles.card, clicked && styles.cardSelected]}
+      onTouchEnd={() => {
+        handleSelect();
+      }}
     >
+      {/* Selected indicator dot */}
+      {clicked && <View style={styles.selectedDot} />}
+
       <Image
-        style={[
-          style.img,
-          width > 980
-            ? {
-                width: 100,
-                height: 100,
-              }
-            : { width: 80, height: 80 },
-        ]}
+        style={[styles.img, { width: imgSize, height: imgSize }]}
         resizeMode="contain"
         source={{ uri: url }}
+        fadeDuration={100}
       />
-    </View>
+    </Pressable>
   );
-}
-
-const style = StyleSheet.create({
-  div: {
-    width: 100,
-    height: "100%",
-
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 5,
-    paddingBottom: 5,
-    borderRadius: 5,
-    backgroundColor: "transparent",
-    marginTop: 0,
-    borderWidth: 1,
-  },
-  img: {
-    width: 70,
-    height: 70,
-  },
-  clicked: {
-    borderColor: "green",
-    borderWidth: 1,
-  },
 });
+
+export default ImageCardWithState;
+
+const makeCardStyles = theme =>
+  StyleSheet.create({
+    card: {
+      width: 90,
+      height: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 6,
+      borderRadius: 10,
+      borderWidth: 1.5,
+      borderColor: theme.colors.inputBorder,
+      backgroundColor: theme.colors.inputBackground,
+      marginHorizontal: 3,
+      position: 'relative',
+      ...(Platform.OS === 'web' && {
+        boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+        cursor: 'pointer',
+        transition: 'transform 0.15s ease, border-color 0.15s ease',
+      }),
+      ...(Platform.OS !== 'web' && {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 3,
+      }),
+    },
+    cardSelected: {
+      borderColor: theme.colors.primary,
+      borderWidth: 2,
+      backgroundColor: theme.colors.inputBackground,
+      transform: [{ translateY: -8 }],
+      ...(Platform.OS === 'web' && {
+        boxShadow: `0 6px 20px ${theme.colors.primary}55`,
+      }),
+      ...(Platform.OS !== 'web' && {
+        shadowColor: theme.colors.primary,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.5,
+        shadowRadius: 8,
+        elevation: 6,
+      }),
+    },
+    selectedDot: {
+      position: 'absolute',
+      top: 5,
+      right: 5,
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      backgroundColor: theme.colors.primary,
+    },
+    img: {
+      width: 72,
+      height: 72,
+    },
+  });

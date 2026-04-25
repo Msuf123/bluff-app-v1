@@ -1,15 +1,15 @@
-import { useAtom } from "jotai";
+import { useAtom } from 'jotai';
 import {
   playerCardChooseOnGameTable,
   playersGameTableInfo,
-} from "../../../AppState/Atoms";
-import { useRoute } from "@react-navigation/native";
-import { useEffect } from "react";
-import { StatusBar, StyleSheet, View } from "react-native";
-import PlayerSelectCardsPopUp from "../../PlayArea/SubComponents/PlayerSelectCardsPopUp/PlayerSelectCardsPopUp";
-import ThrowShowOptions from "../../PlayArea/SubComponents/ThrowShowOptions/ThrowShowOptions";
-import UserCards from "../../PlayArea/SubComponents/UserCards/UserCards";
-import UserCenterTable from "../UserCenterTable/UserCenterTable";
+} from '../../../AppState/Atoms';
+import { useRoute } from '@react-navigation/native';
+import { useEffect } from 'react';
+import { StatusBar, StyleSheet, View } from 'react-native';
+import PlayerSelectCardsPopUp from '../../PlayArea/SubComponents/PlayerSelectCardsPopUp/PlayerSelectCardsPopUp';
+import ThrowShowOptions from '../../PlayArea/SubComponents/ThrowShowOptions/ThrowShowOptions';
+import UserCards from '../../PlayArea/SubComponents/UserCards/UserCards';
+import UserCenterTable from '../UserCenterTable/UserCenterTable';
 
 export default function CenterTable({
   dummyUsers,
@@ -22,10 +22,11 @@ export default function CenterTable({
   const [detiasl] = useAtom(playersGameTableInfo);
   let numberOfPlayer = null;
   let valueOfContext = null;
+  let details = null;
   if (detiasl) {
     details = detiasl;
   } else {
-    details = { opponentCards: 26, opponentName: "no@gm.co" };
+    details = { opponentCards: 26, opponentName: 'no@gm.co' };
   }
   if (useAtomValue) {
     valueOfContext = valueOfContexts;
@@ -79,7 +80,7 @@ export default function CenterTable({
   }
   useEffect(() => {
     return () => {
-      console.log("Unmouteds");
+      console.log('Unmouteds');
     };
   }, []);
   return (
@@ -93,8 +94,6 @@ export default function CenterTable({
           : {},
       ]}
     >
-      <StatusBar hidden={false}></StatusBar>
-
       <View
         style={[
           style.layers,
@@ -102,9 +101,9 @@ export default function CenterTable({
           numberOfPlayer < 5
             ? {}
             : {
-                alignItems: "flex-start",
-                justifyContent: "space-around",
-                flexDirection: "row",
+                alignItems: 'flex-start',
+                justifyContent: 'space-around',
+                flexDirection: 'row',
               },
         ]}
       >
@@ -116,7 +115,7 @@ export default function CenterTable({
             rotateValue={180}
             key={`${i.opponentName}-${valueOfContext.currentPlayer}`}
             currentPlayer={valueOfContext.currentPlayer}
-            styles={{ alignItems: "flex-start", justifyContent: "flex-start" }}
+            styles={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}
           ></UserCards>
         ))}
       </View>
@@ -149,15 +148,15 @@ export default function CenterTable({
           scaledImageSize
             ? {
                 width: scaledImageSize.width,
-                alignItems: "flex-end",
-                justifyContent: "space-around",
-                flexDirection: "row",
-                paddingBottom: "1%",
+                alignItems: 'flex-end',
+                justifyContent: 'space-around',
+                flexDirection: 'row',
+                paddingBottom: '1%',
               }
             : {},
         ]}
       >
-        {route.name === "PlayTabel" ? (
+        {route.name === 'PlayTabel' ? (
           layerThree.map((i, k) => (
             <UserCards
               toShow={true}
@@ -166,7 +165,7 @@ export default function CenterTable({
               currentPlayer={valueOfContext.currentPlayer}
               yourName={valueOfContext.yourName}
               styles={{
-                justifyContent: "flex-end",
+                justifyContent: 'flex-end',
               }}
               scaledImageSize={scaledImageSize}
             ></UserCards>
@@ -176,22 +175,42 @@ export default function CenterTable({
             homePage={true}
             toShow={true}
             rotate={true}
-            cardDetails={{ opponentCards: 26, opponentName: "no@gm.co" }}
+            cardDetails={{ opponentCards: 26, opponentName: 'no@gm.co' }}
             rotateValue={180}
-            key={"df"}
+            key={'df'}
             currentPlayer={valueOfContext.currentPlayer}
             styles={{
               // alignItems: "flex-end",
-              justifyContent: "flex-end",
+              justifyContent: 'flex-end',
             }}
           ></UserCards>
         )}
       </View>
-      {cardChooseS ? <PlayerSelectCardsPopUp></PlayerSelectCardsPopUp> : null}
+      {true && route.name === 'PlayTabel' ? (
+        <PlayerSelectCardsPopUp></PlayerSelectCardsPopUp>
+      ) : null}
       {!cardChooseS &&
       details.yourName == details.currentPlayer &&
       useAtomValue ? (
-        <ThrowShowOptions></ThrowShowOptions>
+        <View
+          style={[
+            scaledImageSize ? { width: scaledImageSize.width } : {},
+            {
+              height: '100%',
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              right: 0,
+              left: 0,
+              backgroundColor: 'rgba(20, 20, 20, 0.9)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          ]}
+        >
+          <ThrowShowOptions></ThrowShowOptions>
+        </View>
       ) : null}
     </View>
   );
@@ -200,51 +219,51 @@ const style = StyleSheet.create({
   div: {
     borderRadius: 50,
 
-    alignItems: "center",
-    overflow: "hidden",
-    justifyContent: "space-between",
-    position: "relative",
-    backgroundColor: "transparent",
+    alignItems: 'center',
+    overflow: 'hidden',
+    justifyContent: 'space-between',
+    position: 'relative',
+    backgroundColor: 'transparent',
   },
   vid: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
   playersDiv: {
     width: 100,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     height: 100,
     margin: 10,
   },
   texts: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     width: 400,
-    display: "flex",
+    display: 'flex',
   },
   heightPlayers: {
-    backgroundColor: "transparent",
-    flexDirection: "row",
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
     flex: 1,
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
   },
   layers: {
     width: 100,
-    backgroundColor: "",
-    height: "22%",
-    alignItems: "center",
-    justifyContent: "space-between",
+    backgroundColor: '',
+    height: '22%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
 
     padding: 0,
-    overflow: "visible",
+    overflow: 'visible',
   },
   middleLayer: {
-    height: "40%",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "transparent",
-    flexDirection: "row",
+    height: '40%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
   },
 });

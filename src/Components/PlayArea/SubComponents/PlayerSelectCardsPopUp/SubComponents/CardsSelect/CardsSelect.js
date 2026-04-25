@@ -1,9 +1,12 @@
-import { useAtom } from "jotai";
-import { useScreenDimensions } from "../../../../../../Hooks/useScreenDimensions";
-import { backendUrlAtom, playersGameTableInfo } from "../../../../../../AppState/Atoms";
-import formatArrayForDisplay from "./formatArrayForDisplay";
-import { FlatList, StyleSheet } from "react-native";
-import SelectCardToThrow from "./SelectCardsToThrow/SelectCardsToThrow";
+import { useAtom } from 'jotai';
+import { useScreenDimensions } from '../../../../../../Hooks/useScreenDimensions';
+import {
+  backendUrlAtom,
+  playersGameTableInfo,
+} from '../../../../../../AppState/Atoms';
+import formatArrayForDisplay from './formatArrayForDisplay';
+import { FlatList, StyleSheet } from 'react-native';
+import SelectCardToThrow from './SelectCardsToThrow/SelectCardsToThrow';
 
 export default function CardsSelect() {
   const { width } = useScreenDimensions();
@@ -28,19 +31,18 @@ export default function CardsSelect() {
       style={style.div}
       data={formattedData}
       renderItem={({ item, index }) => (
-        <SelectCardToThrow key={index} data={item} urls={urls} />
+        <SelectCardToThrow data={item} urls={urls} />
       )}
     />
-    
   );
 }
 
 const style = StyleSheet.create({
   div: {
     flex: 1,
-    width: "60%",
-    height: "100%",
-    backgroundColor: "transparent",
+    width: '60%',
+    height: '100%',
+    backgroundColor: 'transparent',
     borderWidth: 2,
     paddingTop: 10,
     borderRadius: 10,

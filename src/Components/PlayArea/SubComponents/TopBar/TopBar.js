@@ -1,8 +1,8 @@
-import { useNavigation } from "@react-navigation/native";
-import { useAtom } from "jotai";
-import { playersGameTableInfo } from "../../../../AppState/Atoms";
-import { useScreenDimensions } from "../../../../Hooks/useScreenDimensions";
-import { Image, Pressable, StyleSheet, View } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import { useAtom } from 'jotai';
+import { playersGameTableInfo } from '../../../../AppState/Atoms';
+import { useScreenDimensions } from '../../../../Hooks/useScreenDimensions';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function TopBar() {
   const nav = useNavigation();
@@ -18,12 +18,12 @@ export default function TopBar() {
         style={[styles.backButton, width < 400 && styles.backButtonSmall]}
         hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
         onPressOut={() => {
-          nav.popTo("home");
+          nav.popTo('home');
         }}
       >
         <View style={styles.backButtonInner}>
           <Image
-            source={require("@/assets/BackIconRed.png")}
+            source={require('@/assets/BackIconRed.png')}
             style={[styles.backIcon, width < 400 && styles.backIconSmall]}
           />
         </View>
@@ -40,7 +40,7 @@ export default function TopBar() {
       >
         <ScoreItem
           label="Total cards"
-          value={scoreBoardscoreBoard.throwAreaCards.totalNumberOfCards || "0"}
+          value={scoreBoardscoreBoard.throwAreaCards.totalNumberOfCards || '0'}
           width={width}
         />
 
@@ -53,8 +53,8 @@ export default function TopBar() {
           value={
             trimName(
               scoreBoardscoreBoard.throwAreaCards.playerWhoThrewLatestCard ||
-                "",
-            ) + "..."
+                '',
+            ) + '...'
           }
           width={width}
         />
@@ -66,7 +66,7 @@ export default function TopBar() {
         <ScoreItem
           label="Latest card"
           value={
-            scoreBoardscoreBoard.throwAreaCards.currentNumberOfCards || "0"
+            scoreBoardscoreBoard.throwAreaCards.currentNumberOfCards || '0'
           }
           width={width}
         />
@@ -77,7 +77,7 @@ export default function TopBar() {
 
         <ScoreItem
           label="Card name"
-          value={scoreBoardscoreBoard.throwAreaCards.cardLable || "—"}
+          value={scoreBoardscoreBoard.throwAreaCards.cardLable || '—'}
           width={width}
         />
       </View>
@@ -113,17 +113,19 @@ function ScoreItem({ label, value, width }) {
     </View>
   );
 }
-
+function trimName(text) {
+  return text.slice(0, 4);
+}
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: "rgba(0, 0, 0, 1)",
+    backgroundColor: 'rgba(0, 0, 0, 1)',
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(255, 255, 255, 0.1)",
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
     minHeight: 60,
     zIndex: 2,
   },
@@ -132,24 +134,24 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   backButtonSmall: {
     padding: 3,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginBottom: 6,
     marginRight: 2,
   },
   backButtonInner: {
     width: 32,
     height: 32,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backIcon: {
     width: 28,
     height: 28,
-    transform: [{ rotateY: "180deg" }],
+    transform: [{ rotateY: '180deg' }],
   },
   backIconSmall: {
     width: 20,
@@ -159,25 +161,25 @@ const styles = StyleSheet.create({
   // Score Board Styles
   scoreBoard: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.08)",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 8,
     marginHorizontal: 12,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.15)",
-    shadowColor: "#000",
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 3,
   },
   scoreBoardVertical: {
-    flexDirection: "column",
-    alignItems: "stretch",
+    flexDirection: 'column',
+    alignItems: 'stretch',
     marginHorizontal: 0,
     paddingHorizontal: 8,
     paddingVertical: 6,
@@ -194,20 +196,20 @@ const styles = StyleSheet.create({
 
   // Score Item Styles
   scoreItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 8,
     gap: 4,
   },
   scoreItemVertical: {
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     paddingHorizontal: 6,
     paddingVertical: 3,
   },
   label: {
-    color: "rgba(255, 255, 255, 0.7)",
+    color: 'rgba(255, 255, 255, 0.7)',
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   labelSmall: {
     fontSize: 12,
@@ -216,9 +218,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   value: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
     maxWidth: 80,
   },
   valueSmall: {
@@ -227,7 +229,7 @@ const styles = StyleSheet.create({
   },
   valueXSmall: {
     fontSize: 10,
-    maxWidth: "auto",
+    maxWidth: 'auto',
     flexShrink: 1,
   },
 
@@ -235,11 +237,11 @@ const styles = StyleSheet.create({
   divider: {
     width: 1,
     height: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     marginHorizontal: 4,
   },
   dividerHorizontal: {
-    width: "100%",
+    width: '100%',
     height: 1,
     marginHorizontal: 0,
     marginVertical: 2,
