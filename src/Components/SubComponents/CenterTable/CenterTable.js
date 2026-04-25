@@ -186,7 +186,7 @@ export default function CenterTable({
           ></UserCards>
         )}
       </View>
-      {true && route.name === 'PlayTabel' ? (
+      {cardChooseS && route.name === 'PlayTabel' ? (
         <PlayerSelectCardsPopUp></PlayerSelectCardsPopUp>
       ) : null}
       {!cardChooseS &&

@@ -122,20 +122,17 @@ export default function NavButtonsThrowCardPopUp() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
-  // ── Container ──────────────────────────────────────────────────────────────
   container: {
-    width: '100%',
-    alignSelf: 'stretch', // ✅ important
+    width: '100%', // fits inside the 30% parent
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 12,
+    justifyContent: 'space-between',
+    paddingHorizontal: 8,
     paddingVertical: 8,
-    backgroundColor: 'red',
+
     borderTopWidth: 1,
-    gap: 10,
+    gap: 6,
   },
   containerVertical: {
     flexDirection: 'column',
@@ -143,14 +140,13 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
 
-  // ── Back Button ─────────────────────────────────────────────────────────────
-  // Mirrors TopBar's backButton + backButtonInner pattern
   backButton: {
+    flexShrink: 0, // don't shrink the back button
     padding: 0,
     borderRadius: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)', // same as TopBar backButton
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 221, 33, 0.4)', // yellow tint from BackIconYellow
+    borderColor: 'rgba(255, 221, 33, 0.4)',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -161,41 +157,29 @@ const styles = StyleSheet.create({
       android: { elevation: 3 },
     }),
   },
-  backButtonSmall: {
-    padding: 5,
-  },
-  backButtonFullWidth: {
-    width: '100%',
-    maxWidth: 250,
-    alignItems: 'center',
-  },
-  backButtonPressed: {
-    backgroundColor: 'rgba(255, 221, 33, 0.2)',
-  },
+  backButtonSmall: { padding: 5 },
+  backButtonFullWidth: { width: '100%', maxWidth: 250, alignItems: 'center' },
+  backButtonPressed: { backgroundColor: 'rgba(255, 221, 33, 0.2)' },
   backButtonInner: {
     width: 32,
     height: 32,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  backIcon: {
-    width: 20,
-    height: 20,
-  },
+  backIcon: { width: 18, height: 18 },
 
-  // ── Throw Button ────────────────────────────────────────────────────────────
-  // Mirrors TopBar's scoreBoard glass panel aesthetic
   throwButton: {
+    flex: 1, // takes all remaining space after back button
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(76, 175, 80, 0.15)', // green tinted glass
-    borderRadius: 12, // matches TopBar scoreBoard
-    paddingHorizontal: 0,
+    backgroundColor: 'rgba(76, 175, 80, 0.15)',
+    borderRadius: 12,
+    paddingHorizontal: 8,
     paddingVertical: 10,
-    minWidth: 150,
+    minWidth: 0, // allow shrinking, no fixed minWidth
     borderWidth: 1,
-    borderColor: 'rgba(76, 175, 80, 0.5)', // green border, like TopBar's white border
+    borderColor: 'rgba(76, 175, 80, 0.5)',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -211,27 +195,21 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(165, 214, 167, 0.35)',
   },
   throwButtonSmall: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 6,
     paddingVertical: 7,
-    minWidth: 110,
     borderRadius: 10,
   },
-  throwButtonFullWidth: {
-    width: '100%',
-    maxWidth: 250,
-  },
-  throwButtonPressed: {
-    backgroundColor: 'rgba(76, 175, 80, 0.28)',
-  },
+  throwButtonFullWidth: { width: '100%', maxWidth: 250 },
+  throwButtonPressed: { backgroundColor: 'rgba(76, 175, 80, 0.28)' },
   throwButtonText: {
-    color: '#FFFFFF', // matches TopBar value text
-    fontSize: 15,
-    fontWeight: '700', // matches TopBar value fontWeight
+    color: '#FFFFFF',
+    fontSize: 13, // slightly smaller to fit in narrow parent
+    fontWeight: '700',
     textAlign: 'center',
     letterSpacing: 0.3,
   },
   throwButtonTextLoading: {
-    color: 'rgba(255, 255, 255, 0.5)', // dimmed like TopBar label color
+    color: 'rgba(255, 255, 255, 0.5)',
     fontWeight: '600',
   },
 });

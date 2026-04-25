@@ -56,8 +56,8 @@ export default function DropDownSelector({
           style={[
             styles.dropdownButton,
             isDropdownOpen && styles.dropdownButtonOpen,
-            isSmall && { height: 45, width: '92%' },
-            isTiny && { height: 40, width: '90%' },
+            isSmall && { height: 45, width: '100%' },
+            isTiny && { height: 40, width: '100%' },
             isNarrow && { width: '100%', maxWidth: 250, height: 40 },
           ]}
           onPress={toggleDropdown}
@@ -67,9 +67,9 @@ export default function DropDownSelector({
             style={[
               styles.dropdownButtonText,
               !selectedCategory && styles.dropdownPlaceholder,
-              isSmall && { fontSize: 14 },
-              isTiny && { fontSize: 13 },
-              isNarrow && { fontSize: 12 },
+              isSmall && { fontSize: 12 },
+              isTiny && { fontSize: 11 },
+              isNarrow && { fontSize: 10 },
             ]}
           >
             {selectedCategory || 'Select a category'}
@@ -88,8 +88,8 @@ export default function DropDownSelector({
             keyExtractor={item => item}
             style={[
               styles.dropdownList,
-              isSmall && { width: '92%' },
-              isTiny && { width: '90%' },
+              isSmall && { width: '100%' },
+              isTiny && { width: '100%' },
               isNarrow && { width: '100%', maxWidth: 250 },
               heightOfDropDown
                 ? { height: heightOfDropDown, bottom: 10 }
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: 'rgba(255, 255, 255, 0.7)', // matches TopBar label color
-    marginBottom: 8,
+    marginBottom: 4,
   },
 
   dropDownContainer: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
     backgroundColor: 'rgba(255, 255, 255, 0.08)', // matches TopBar scoreBoard bg
     borderRadius: 12, // matches TopBar scoreBoard
     borderWidth: 1,
@@ -203,10 +203,10 @@ const styles = StyleSheet.create({
     borderRadius: 12, // matches TopBar scoreBoard
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.15)', // matches TopBar scoreBoard border
-    marginTop: 4,
+    marginTop: 0,
     maxHeight: 200,
     position: 'absolute',
-    top: 54, // clears the button
+    top: 50, // clears the button
     zIndex: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },

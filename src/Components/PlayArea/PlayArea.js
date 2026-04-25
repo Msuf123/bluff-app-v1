@@ -19,6 +19,7 @@ import AnimatedThrowCard from '../SubComponents/AnimateThrowCards/AnimateThrowCa
 import Spinner from '../SubComponents/Spinner/Spinner';
 import ListPlayer from './SubComponents/ListPlayer/ListPlayer';
 import Orientation from 'react-native-orientation-locker';
+import { SafeAreaView } from 'react-native-safe-area-context';
 export default function PlayArea() {
   const nav = useNavigation();
   const [loaidng, setLoading] = useState(true);
@@ -111,85 +112,87 @@ export default function PlayArea() {
   }, []);
   return (
     <>
-      {!loaidng ? (
-        <>
-          <View style={style.div}>
-            <TopBar></TopBar>
-            <StatusBar hidden={true}></StatusBar>
-            <View style={style.divTwo}>
-              <View
-                style={{
-                  position: 'absolute',
-                  top: '70%',
-                  left: '0%',
-                  marginLeft: 10,
-                  transform: [{ translateY: '0%' }],
-                  backgroundColor: 'white',
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  borderColor: 'gray',
-                  marginLeft: 20,
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  zIndex: 2,
-                }}
-              >
-                <MicOption marginRightArg={5}></MicOption>
+      <SafeAreaView style={{ flex: 1 }} edges={['right']}>
+        {!loaidng ? (
+          <>
+            <View style={style.div}>
+              <TopBar></TopBar>
+              <StatusBar hidden={true}></StatusBar>
+              <View style={style.divTwo}>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: '70%',
+                    left: '0%',
+                    marginLeft: 10,
+                    transform: [{ translateY: '0%' }],
+                    backgroundColor: 'white',
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    borderColor: 'gray',
+                    marginLeft: 20,
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 2,
+                  }}
+                >
+                  <MicOption marginRightArg={5}></MicOption>
+                </View>
+
+                <Image
+                  source={require('@/assets/rummy.png')}
+                  onLayout={e => {
+                    const { width, height } = e.nativeEvent.layout;
+                    setContainerSize({ width, height });
+                  }}
+                  style={{
+                    flex: 1,
+                    paddingTop: 0,
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    zIndex: 0,
+                  }}
+                  resizeMode="contain"
+                />
+                {playersGameTableInfoState ? (
+                  <CenterTable
+                    useAtomValue={true}
+                    scaledImageSize={scaledImageSize}
+                    valueOfContexts={playersGameTableInfoState}
+                  ></CenterTable>
+                ) : null}
               </View>
 
-              <Image
-                source={require('@/assets/rummy.png')}
-                onLayout={e => {
-                  const { width, height } = e.nativeEvent.layout;
-                  setContainerSize({ width, height });
-                }}
+              {displayCardThrowAnimation ? (
+                <AnimatedThrowCard
+                  toPos={toPostion}
+                  fromPos={formPostion}
+                ></AnimatedThrowCard>
+              ) : null}
+            </View>
+            {scoreBoardBol ? (
+              <View
                 style={{
-                  flex: 1,
-                  paddingTop: 0,
                   width: '100%',
                   height: '100%',
                   position: 'absolute',
-                  zIndex: 0,
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  backgroundColor: 'rgba(20, 20, 20, 0.9)',
                 }}
-                resizeMode="contain"
-              />
-              {playersGameTableInfoState ? (
-                <CenterTable
-                  useAtomValue={true}
-                  scaledImageSize={scaledImageSize}
-                  valueOfContexts={playersGameTableInfoState}
-                ></CenterTable>
-              ) : null}
-            </View>
-
-            {displayCardThrowAnimation ? (
-              <AnimatedThrowCard
-                toPos={toPostion}
-                fromPos={formPostion}
-              ></AnimatedThrowCard>
+              >
+                <ListPlayer></ListPlayer>
+              </View>
             ) : null}
-          </View>
-          {scoreBoardBol ? (
-            <View
-              style={{
-                width: '100%',
-                height: '100%',
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: 0,
-                backgroundColor: 'rgba(20, 20, 20, 0.9)',
-              }}
-            >
-              <ListPlayer></ListPlayer>
-            </View>
-          ) : null}
-        </>
-      ) : (
-        <Spinner></Spinner>
-      )}
+          </>
+        ) : (
+          <Spinner></Spinner>
+        )}
+      </SafeAreaView>
     </>
   );
 }

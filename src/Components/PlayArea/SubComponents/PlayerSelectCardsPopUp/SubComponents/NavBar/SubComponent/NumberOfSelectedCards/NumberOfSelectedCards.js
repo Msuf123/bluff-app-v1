@@ -17,8 +17,8 @@ export default function NumberOfSelectedCards() {
         <Text
           style={[
             styles.label,
-            width < 676 && styles.labelSmall,
-            width < 262 && styles.labelXSmall,
+            width < 876 && styles.labelSmall,
+            width < 662 && styles.labelXSmall,
           ]}
         >
           Selected Cards:
@@ -30,7 +30,7 @@ export default function NumberOfSelectedCards() {
             styles.value,
             hasCards && styles.valueActive,
             width < 676 && styles.valueSmall,
-            width < 262 && styles.valueXSmall,
+            width < 462 && styles.valueXSmall,
           ]}
         >
           {count}
