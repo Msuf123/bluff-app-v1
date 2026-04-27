@@ -1,11 +1,17 @@
-import { getDefaultStore, useAtom } from "jotai";
-import { animationDbs, displayAnimation, formPostionOfCardAnimaitonThrow, playersGameTableInfo, toPostionOfCardAnimationThrow } from "../../../../AppState/Atoms";
-import { useCallback, useEffect, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
-import { Image, StyleSheet, View } from "react-native";
-import AnimatedThrowCard from "../../../SubComponents/AnimateThrowCards/AnimateThrowCards";
-import CenterTable from "../../../SubComponents/CenterTable/CenterTable";
-import { animateIfReady } from "./animateIfReady";
+import { getDefaultStore, useAtom } from 'jotai';
+import {
+  animationDbs,
+  displayAnimation,
+  formPostionOfCardAnimaitonThrow,
+  playersGameTableInfo,
+  toPostionOfCardAnimationThrow,
+} from '../../../../AppState/Atoms';
+import { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { Image, StyleSheet, View } from 'react-native';
+import AnimatedThrowCard from '../../../SubComponents/AnimateThrowCards/AnimateThrowCards';
+import CenterTable from '../../../SubComponents/CenterTable/CenterTable';
+import { animateIfReady } from './animateIfReady';
 const originalImageSize = { width: 1920, height: 1080 };
 
 export default function HomeBackGround({ children }) {
@@ -17,12 +23,12 @@ export default function HomeBackGround({ children }) {
     height: 0,
   });
   const [animationState, setAnimationStates] = useState({
-    currentPlayer: "my@gm.co",
-    yourName: "msy@gm.co",
+    currentPlayer: 'my@gm.co',
+    yourName: 'msy@gm.co',
     opponentDetails: [
-      { opponentCards: 26, opponentName: "my@gm.co" },
-      { opponentCards: 26, opponentName: "okay@gm.co" },
-      { opponentCards: 26, opponentName: "nos@gm.co" },
+      { opponentCards: 26, opponentName: 'my@gm.co' },
+      { opponentCards: 26, opponentName: 'okay@gm.co' },
+      { opponentCards: 26, opponentName: 'nos@gm.co' },
     ],
   });
   const [displayCardThrowAnimation, setDisplayCardAnimaiton] =
@@ -54,14 +60,14 @@ export default function HomeBackGround({ children }) {
         store.get(animationDbs);
       const intervalId = setInterval(() => {
         let randomPlayer = Math.floor(Math.random() * 3);
-        let player = ["my@gm.co", "okay@gm.co", "nos@gm.co"];
+        let player = ['my@gm.co', 'okay@gm.co', 'nos@gm.co'];
 
-        setAnimationState((org) => ({
+        setAnimationState(org => ({
           ...org,
           currentPlayer: player[randomPlayer],
         }));
-        setPlayersGmeTableInfo((org) => {
-          let obj = {...org};
+        setPlayersGmeTableInfo(org => {
+          let obj = { ...org };
           if (!obj.throwAreaCards) {
             obj.throwAreaCards = { totalNumberOfCards: 0 };
           } else if (obj.throwAreaCards.totalNumberOfCards === 6) {
@@ -77,31 +83,31 @@ export default function HomeBackGround({ children }) {
           centerTable,
           setFromP,
           setToP,
-          setDisplayCardAnimaiton
+          setDisplayCardAnimaiton,
         );
       }, 3000);
 
       return () => {
         clearInterval(intervalId);
       };
-    }, [])
+    }, []),
   );
 
   return (
     <View style={style.div}>
       <Image
-        source={require("@/assets/rummy.png")}
-        onLayout={(e) => {
+        source={require('@/assets/rummy.png')}
+        onLayout={e => {
           const { width, height } = e.nativeEvent.layout;
           setContainerSize({ width, height });
         }}
         style={{
           flex: 1,
-          justifyContent: "start",
+          justifyContent: 'start',
           paddingTop: 0,
-          width: "100%",
-          height: "100%",
-          position: "absolute",
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
         }}
         resizeMode="contain"
       />
@@ -109,8 +115,8 @@ export default function HomeBackGround({ children }) {
         style={{
           height: scaledImageSize.height,
           zIndex: 11,
-          backgroundColor: "rgba(1, 1, 1, 0.5)",
-          position: "absolute",
+          backgroundColor: 'rgba(1, 1, 1, 0.5)',
+          position: 'absolute',
           width: scaledImageSize.width,
         }}
       ></View>
@@ -128,7 +134,7 @@ export default function HomeBackGround({ children }) {
       <View
         style={[
           style.child,
-          scaledImageSize.width < 646 ? { bottom: "0%" } : {},
+          scaledImageSize.width < 646 ? { bottom: '0%' } : {},
         ]}
       >
         {children}
@@ -139,21 +145,21 @@ export default function HomeBackGround({ children }) {
 const style = StyleSheet.create({
   div: {
     flex: 1,
-    backgroundColor: "#000000",
-    position: "absolute",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "100%",
+    backgroundColor: '#000000',
+    position: 'absolute',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
   },
 
   child: {
-    position: "absolute",
+    position: 'absolute',
     width: 200,
     height: 150,
-    left: "50%",
-    transform: [{ translateX: "-40%" }],
+    left: '50%',
+    transform: [{ translateX: '-40%' }],
     zIndex: 12,
   },
 });

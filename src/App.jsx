@@ -56,7 +56,7 @@ function App() {
     <>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="PlayTabel">
+          <Stack.Navigator initialRouteName="home">
             <Stack.Screen
               name="home"
               component={Home}

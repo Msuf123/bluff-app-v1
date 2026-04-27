@@ -6,6 +6,9 @@ import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost
 import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
+import com.oney.WebRTCModule.WebRTCModuleOptions;
+import android.media.AudioAttributes
+import org.webrtc.audio.JavaAudioDeviceModule;
 
 class MainApplication : Application(), ReactApplication {
 
@@ -21,6 +24,14 @@ class MainApplication : Application(), ReactApplication {
   }
 
   override fun onCreate() {
+    val options = WebRTCModuleOptions.getInstance()
+		val audioAttributes = AudioAttributes.Builder()
+			.setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+			.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+			.build()
+		options.audioDeviceModule = JavaAudioDeviceModule.builder(this)
+			.setAudioAttributes(audioAttributes)
+			.createAudioDeviceModule()
     super.onCreate()
     loadReactNative(this)
   }

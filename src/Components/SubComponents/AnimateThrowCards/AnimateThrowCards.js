@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
-import { Animated, Image, StyleSheet } from "react-native";
-import { displayAnimation } from "../../../AppState/Atoms";
-import { useAtom } from "jotai";
-import { useScreenDimensions } from "../../../Hooks/useScreenDimensions";
+import { useEffect, useRef } from 'react';
+import { Animated, Image, StyleSheet } from 'react-native';
+import { displayAnimation } from '../../../AppState/Atoms';
+import { useAtom } from 'jotai';
+import { useScreenDimensions } from '../../../Hooks/useScreenDimensions';
 
 export default function AnimatedThrowCard({ fromPos, toPos, onAnimationEnd }) {
   const translateX = useRef(new Animated.Value(fromPos.x)).current;
@@ -39,7 +39,7 @@ export default function AnimatedThrowCard({ fromPos, toPos, onAnimationEnd }) {
       ]}
     >
       <Image
-        source={require("@/assets/A.png")} // Your card image
+        source={require('@/assets/A.png')} // Your card image
         style={[
           styles.cardImage,
           width > 980 ? { width: 100, height: 100 } : {},
@@ -53,7 +53,7 @@ export default function AnimatedThrowCard({ fromPos, toPos, onAnimationEnd }) {
 
 const styles = StyleSheet.create({
   card: {
-    position: "absolute",
+    position: 'absolute',
     width: 60,
     height: 90,
     zIndex: 9,
@@ -61,9 +61,11 @@ const styles = StyleSheet.create({
     left: 0,
   },
   cardImage: {
+    marginTop: 5, // half of height — centers card vertically
+    marginLeft: -5,
     width: 90,
     height: 90,
-    resizeMode: "contain",
-    backgroundColor: "transparent",
+    resizeMode: 'contain',
+    backgroundColor: 'transparent',
   },
 });
