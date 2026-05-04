@@ -44,7 +44,7 @@ import { RTCView } from 'react-native-webrtc';
 export default function Lobby() {
   const store = getDefaultStore();
   const [webScoketCon, setWebSocketCon] = useAtom(webScoket);
-  const [connectionEstablised, setConnectionEstablishd] = useState(true);
+  const [connectionEstablised, setConnectionEstablishd] = useState(false);
   const [urls] = useAtom(backendUrlAtom);
   const [authS, setAuth] = useAtom(authAtom);
   const [playerTableInfoState, setPlayerTableInfo] =

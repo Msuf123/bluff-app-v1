@@ -49,14 +49,14 @@ function App() {
     if (lowPowerMode) {
       setThemeAtom(powerSavingTheme);
     } else {
-      setThemeAtom(powerSavingTheme);
+      setThemeAtom(lightTheme);
     }
   }, [lowPowerMode]);
   return (
     <>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="home">
+          <Stack.Navigator initialRouteName="LObby">
             <Stack.Screen
               name="home"
               component={Home}

@@ -20,6 +20,7 @@ import Spinner from '../SubComponents/Spinner/Spinner';
 import ListPlayer from './SubComponents/ListPlayer/ListPlayer';
 import Orientation from 'react-native-orientation-locker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 export default function PlayArea() {
   const nav = useNavigation();
   const [loaidng, setLoading] = useState(true);
@@ -70,11 +71,11 @@ export default function PlayArea() {
     if (ws && userInfo.leader === userInfo.yourEmail) {
       ws.send(JSON.stringify({ action: 'getPlayGroundDetails' }));
     } else {
-      // Toast.show({
-      //   type: "error",
-      //   text1: "Error Connecting",
-      //   text2: "Connection can't be found",
-      // });
+      Toast.show({
+        type: 'error',
+        text1: 'Error Connecting',
+        text2: "Connection can't be found",
+      });
     }
     return () => {
       if (ws) {

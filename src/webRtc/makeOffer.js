@@ -29,7 +29,7 @@ export default function makeOffer(
     pc.onicecandidate = event =>
       onIceCandidate(event, webSocket, yourEmail, email, data);
 
-    pc.oniceconnectionstatechange = onIceStateChange(pc);
+    pc.oniceconnectionstatechange = () => onIceStateChange(pc);
     let audioTrack = null;
     if (micMediaStreamState) {
       audioTrack = micMediaStreamState.getAudioTracks()[0];
@@ -44,8 +44,6 @@ export default function makeOffer(
     }
 
     pc.createOffer().then(offer => {
-      console.log(offer, yourEmail, email, data.data.room);
-      console.log(micMediaStreamState, 'jeje');
       pc.setLocalDescription(offer).then(() => {
         webSocket.send(
           JSON.stringify({
