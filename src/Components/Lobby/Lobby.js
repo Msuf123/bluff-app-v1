@@ -18,6 +18,7 @@ import {
   playerGameArea,
   playersGameTableInfo,
   remoteAudio,
+  remoteStreamAtom,
   scorePlayer,
   scroeBoard,
   themeAtom,
@@ -44,7 +45,7 @@ import { RTCView } from 'react-native-webrtc';
 export default function Lobby() {
   const store = getDefaultStore();
   const [webScoketCon, setWebSocketCon] = useAtom(webScoket);
-  const [connectionEstablised, setConnectionEstablishd] = useState(false);
+  const [connectionEstablised, setConnectionEstablishd] = useState(true);
   const [urls] = useAtom(backendUrlAtom);
   const [authS, setAuth] = useAtom(authAtom);
   const [playerTableInfoState, setPlayerTableInfo] =
@@ -72,7 +73,7 @@ export default function Lobby() {
   const [atHOme, setAthOme] = useAtom(atHome);
   const [peerConnectionDbsState, setPeerConnectionState] =
     useAtom(peerConnectionDbs);
-  const [remoteStream, setRemoteStream] = useState(null);
+  const [remoteStream, setRemoteStream] = useAtom(remoteStreamAtom);
 
   const [micMediaStreams, setMicMediaStreamState] = useAtom(micMediaStream);
   const [micStateGloablPermissions, setMicStateGlobalPermission] = useAtom(
@@ -138,17 +139,19 @@ export default function Lobby() {
 
           if (data.status == 202) {
             const micMediaStreamStatek = store.get(micMediaStream);
-
+            const peerConnectionDbsStateCurrent = store.get(peerConnectionDbs);
             makeOffer(
               data,
               ices,
               micMediaStreamStatek,
+              peerConnectionDbsStateCurrent,
               setPeerConnectionState,
               Toast,
               webScoket,
               setMicLoadingState,
               remoteAudios,
               setRemoteStream,
+              false,
             );
           }
         }
@@ -419,7 +422,7 @@ export default function Lobby() {
       setAthOme(org => !org);
     };
   }, []);
-  useLayoutEffect(() => {
+  useEffect(() => {
     const micStateGloablPermissionss = store.get(micStateGlobalPermission);
     const numberOfTimeGolobalPermissionClickedState = store.get(
       numberOfTimeGolobalPermissionClicked,
@@ -458,7 +461,18 @@ export default function Lobby() {
           )}
         </View>
       ) : (
-        <Spinner></Spinner>
+        <View
+          style={[
+            style.div,
+            {
+              backgroundColor: theme.colors.lobbyBackground,
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+          ]}
+        >
+          <Spinner></Spinner>
+        </View>
       )}
     </>
   );

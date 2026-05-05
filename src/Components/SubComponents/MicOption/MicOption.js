@@ -1,4 +1,4 @@
-import { getDefaultStore, useAtom } from "jotai";
+import { getDefaultStore, useAtom } from 'jotai';
 import {
   backendUrlAtom,
   deniedPermission,
@@ -11,13 +11,16 @@ import {
   peerConnectionDbs,
   playerGameArea,
   remoteAudio,
+  remoteStreamAtom,
   themeAtom,
   webScoket,
-} from "../../../AppState/Atoms";
-import { useEffect } from "react";
-import { Image, Pressable, StyleSheet, View } from "react-native";
-import Spinner from "../Spinner/Spinner";
-import MicPermission from "../../../Functions/micPermission";
+} from '../../../AppState/Atoms';
+import { useEffect } from 'react';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
+import Spinner from '../Spinner/Spinner';
+import MicPermission from '../../../Functions/micPermission';
+import makeOffer from '../../../webRtc/makeOffer';
+import Toast from 'react-native-toast-message';
 
 export default function MicOption({ marginRightArg }) {
   const [micStates, setMicState] = useAtom(micState);
@@ -28,6 +31,7 @@ export default function MicOption({ marginRightArg }) {
   const [urls] = useAtom(backendUrlAtom);
   const [micStream, setMicStreamState] = useAtom(micMediaStream);
   const [webScoketCon, setWebSocketCon] = useAtom(webScoket);
+  const [_, setRemoteStream] = useAtom(remoteStreamAtom);
   const [micMediaGlobalState, setMidiaGlobalState] = useAtom(
     micStateGlobalPermission,
   );
@@ -48,10 +52,10 @@ export default function MicOption({ marginRightArg }) {
   return (
     <View
       style={{
-        display: "flex",
-        flexDirection: "row",
+        display: 'flex',
+        flexDirection: 'row',
         marginLeft: 5,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: '#FFFFFF',
         borderRadius: 5,
         zIndex: 5,
         marginRight: marginRightArg ? marginRightArg : 0,
@@ -62,7 +66,7 @@ export default function MicOption({ marginRightArg }) {
       ) : (
         <Pressable
           onPressOut={() => {
-            console.log("hi");
+            console.log('hi');
             // setMicLoading(true);
             const peerConnectionDbsState = store.get(peerConnectionDbs);
             const datas = store.get(playerGameArea);
@@ -70,7 +74,7 @@ export default function MicOption({ marginRightArg }) {
             const remoteAudios = store.get(remoteAudio);
             const ws = store.get(webScoket);
             const micOnOff = store.get(deniedPermission);
-            setNumberOfTimeGolobalPermissionClicked((org) => ++org);
+            setNumberOfTimeGolobalPermissionClicked(org => ++org);
             MicPermission(
               micMediaGlobalState,
               setMidiaGlobalState,
@@ -85,17 +89,23 @@ export default function MicOption({ marginRightArg }) {
               () => {
                 const id = setInterval(() => {
                   const micMediaStreamStatek = store.get(micMediaStream);
+                  const peerConnectionDbsStateCurrent =
+                    store.get(peerConnectionDbs);
                   if (micMediaStreamStatek) {
                     clearInterval(id);
                     makeOffer(
                       { data: datas },
                       ices,
+
                       micMediaStreamStatek,
+                      peerConnectionDbsStateCurrent,
                       setPeerConnectionState,
                       Toast,
                       ws,
                       setMicLoading,
                       remoteAudios,
+                      setRemoteStream,
+                      true,
                     );
                   }
                 }, 500);
@@ -107,12 +117,12 @@ export default function MicOption({ marginRightArg }) {
         >
           {micStates ? (
             <Image
-              source={require("@/assets/mic.png")}
+              source={require('@/assets/mic.png')}
               style={style.image}
             ></Image>
           ) : (
             <Image
-              source={require("@/assets/mute.png")}
+              source={require('@/assets/mute.png')}
               style={style.image}
             ></Image>
           )}

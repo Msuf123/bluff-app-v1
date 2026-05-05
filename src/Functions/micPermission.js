@@ -35,7 +35,7 @@ export default function MicPermission(
           setDeniedMicState(false);
           if (createOffer) {
             console.log('Calling call offer');
-            // createOffer();
+            createOffer();
           } else {
             console.log('NO funciton given like create offer');
           }

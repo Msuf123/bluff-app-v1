@@ -1,8 +1,8 @@
-import { atom } from "jotai";
-import { lightTheme, powerSavingTheme } from "./Theme";
+import { atom } from 'jotai';
+import { lightTheme, powerSavingTheme } from './Theme';
 
 export const authAtom = atom(false);
-export const backendUrlAtom = atom("http://192.168.1.168:8001");
+export const backendUrlAtom = atom('http://192.168.1.168:8001');
 export const themeAtom = atom(powerSavingTheme);
 export const webScoket = atom(null);
 export const playerGameArea = atom({
@@ -13,13 +13,13 @@ export const playersGameTableInfo = atom({
 
   opponentDetails: [
     {
-      opponentName: "xrobo17@gmail.com",
+      opponentName: 'xrobo17@gmail.com',
 
       opponentCards: 26,
     },
 
     {
-      opponentName: "xrobo17@gmail.com",
+      opponentName: 'xrobo17@gmail.com',
 
       opponentCards: 26,
     },
@@ -32,231 +32,231 @@ export const playersGameTableInfo = atom({
 
     playerWhoThrewLatestCard: null,
 
-    cardLable: "",
+    cardLable: '',
   },
 
-  currentPlayer: "xrobo17@gmail.com",
+  currentPlayer: 'xrobo17@gmail.com',
 
   cards: [
     {
-      value: "6",
+      value: '6',
 
-      group: "spade",
+      group: 'spade',
 
-      name: "6Ofspade",
+      name: '6Ofspade',
     },
 
     {
-      value: "q",
+      value: 'q',
 
-      group: "club",
+      group: 'club',
 
-      name: "qOfclub",
+      name: 'qOfclub',
     },
 
     {
-      value: "3",
+      value: '3',
 
-      group: "spade",
+      group: 'spade',
 
-      name: "3Ofspade",
+      name: '3Ofspade',
     },
 
     {
-      value: "j",
+      value: 'j',
 
-      group: "heart",
+      group: 'heart',
 
-      name: "jOfheart",
+      name: 'jOfheart',
     },
 
     {
-      value: "4",
+      value: '4',
 
-      group: "heart",
+      group: 'heart',
 
-      name: "4Ofheart",
+      name: '4Ofheart',
     },
 
     {
-      value: "9",
+      value: '9',
 
-      group: "spade",
+      group: 'spade',
 
-      name: "9Ofspade",
+      name: '9Ofspade',
     },
 
     {
-      value: "5",
+      value: '5',
 
-      group: "heart",
+      group: 'heart',
 
-      name: "5Ofheart",
+      name: '5Ofheart',
     },
 
     {
-      value: "4",
+      value: '4',
 
-      group: "club",
+      group: 'club',
 
-      name: "4Ofclub",
+      name: '4Ofclub',
     },
 
     {
-      value: "7",
+      value: '7',
 
-      group: "club",
+      group: 'club',
 
-      name: "7Ofclub",
+      name: '7Ofclub',
     },
 
     {
-      value: "6",
+      value: '6',
 
-      group: "heart",
+      group: 'heart',
 
-      name: "6Ofheart",
+      name: '6Ofheart',
     },
 
     {
-      value: "8",
+      value: '8',
 
-      group: "club",
+      group: 'club',
 
-      name: "8Ofclub",
+      name: '8Ofclub',
     },
 
     {
-      value: "k",
+      value: 'k',
 
-      group: "diamond",
+      group: 'diamond',
 
-      name: "kOfdiamond",
+      name: 'kOfdiamond',
     },
 
     {
-      value: "7",
+      value: '7',
 
-      group: "diamond",
+      group: 'diamond',
 
-      name: "7Ofdiamond",
+      name: '7Ofdiamond',
     },
 
     {
-      value: "6",
+      value: '6',
 
-      group: "club",
+      group: 'club',
 
-      name: "6Ofclub",
+      name: '6Ofclub',
     },
 
     {
-      value: "8",
+      value: '8',
 
-      group: "spade",
+      group: 'spade',
 
-      name: "8Ofspade",
+      name: '8Ofspade',
     },
 
     {
-      value: "2",
+      value: '2',
 
-      group: "spade",
+      group: 'spade',
 
-      name: "2Ofspade",
+      name: '2Ofspade',
     },
 
     {
-      value: "j",
+      value: 'j',
 
-      group: "spade",
+      group: 'spade',
 
-      name: "jOfspade",
+      name: 'jOfspade',
     },
 
     {
-      value: "4",
+      value: '4',
 
-      group: "diamond",
+      group: 'diamond',
 
-      name: "4Ofdiamond",
+      name: '4Ofdiamond',
     },
 
     {
-      value: "8",
+      value: '8',
 
-      group: "diamond",
+      group: 'diamond',
 
-      name: "8Ofdiamond",
+      name: '8Ofdiamond',
     },
 
     {
-      value: "9",
+      value: '9',
 
-      group: "club",
+      group: 'club',
 
-      name: "9Ofclub",
+      name: '9Ofclub',
     },
 
     {
-      value: "10",
+      value: '10',
 
-      group: "diamond",
+      group: 'diamond',
 
-      name: "10Ofdiamond",
+      name: '10Ofdiamond',
     },
 
     {
-      value: "q",
+      value: 'q',
 
-      group: "heart",
+      group: 'heart',
 
-      name: "qOfheart",
+      name: 'qOfheart',
     },
 
     {
-      value: "6",
+      value: '6',
 
-      group: "diamond",
+      group: 'diamond',
 
-      name: "6Ofdiamond",
+      name: '6Ofdiamond',
     },
 
     {
-      value: "k",
+      value: 'k',
 
-      group: "heart",
+      group: 'heart',
 
-      name: "kOfheart",
+      name: 'kOfheart',
     },
 
     {
-      value: "3",
+      value: '3',
 
-      group: "diamond",
+      group: 'diamond',
 
-      name: "3Ofdiamond",
+      name: '3Ofdiamond',
     },
 
     {
-      value: "k",
+      value: 'k',
 
-      group: "spade",
+      group: 'spade',
 
-      name: "kOfspade",
+      name: 'kOfspade',
     },
   ],
 
-  yourName: "akshatmalik18t@gmail.com",
+  yourName: 'akshatmalik18t@gmail.com',
 });
 export const playerCardChooseOnGameTable = atom(false);
 export const playerCardsArrayThatHeSelected = atom([]);
-export const throwCardLabel = atom("");
+export const throwCardLabel = atom('');
 export const throwCardsButtonStatus = atom(false);
 export const scroeBoard = atom(false);
-export const scorePlayer = atom(["akshat", "james", "nodii"]);
-export const authStateEmail = atom("");
-export const authStateOtp = atom("XXXX");
+export const scorePlayer = atom(['akshat', 'james', 'nodii']);
+export const authStateEmail = atom('');
+export const authStateOtp = atom('XXXX');
 export const atHome = atom(false);
 export const centerTablePostion = atom();
 export const userCardPostion = atom();
@@ -279,6 +279,7 @@ export const numberOfTimeGolobalPermissionClicked = atom(0);
 export const deniedPermission = atom(false);
 export const rtc = atom();
 export const animationDbs = atom({});
+export const remoteStreamAtom = atom(null);
 export const iceConfig = atom({
-  iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+  iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
 });
