@@ -31,7 +31,7 @@ export default function MicOption({ marginRightArg }) {
   const [urls] = useAtom(backendUrlAtom);
   const [micStream, setMicStreamState] = useAtom(micMediaStream);
   const [webScoketCon, setWebSocketCon] = useAtom(webScoket);
-  const [_, setRemoteStream] = useAtom(remoteStreamAtom);
+  const [_s, setRemoteStream] = useAtom(remoteStreamAtom);
   const [micMediaGlobalState, setMidiaGlobalState] = useAtom(
     micStateGlobalPermission,
   );

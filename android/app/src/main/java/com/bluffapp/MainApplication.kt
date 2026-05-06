@@ -26,7 +26,7 @@ class MainApplication : Application(), ReactApplication {
   override fun onCreate() {
     val options = WebRTCModuleOptions.getInstance()
 		val audioAttributes = AudioAttributes.Builder()
-			.setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+			.setUsage(AudioAttributes.USAGE_MEDIA)
 			.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
 			.build()
 		options.audioDeviceModule = JavaAudioDeviceModule.builder(this)

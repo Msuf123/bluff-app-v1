@@ -32,6 +32,7 @@ export default async function makeOffer(
     //meaing we are reconnecting
     allPlayers = [...otherPlayers];
   }
+  console.log(allPlayers, otherPlayers, peerConnectionDbsStateCurrent);
   await Promise.allSettled(
     allPlayers.map(async ({ email }) => {
       const pc = new RTCPeerConnection(ices);
@@ -49,6 +50,7 @@ export default async function makeOffer(
       }
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
+      console.log('sending data', offer);
       webSocket.send(
         JSON.stringify({
           action: 'offer',

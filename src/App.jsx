@@ -15,6 +15,7 @@ import { useEffect } from 'react';
 import { usePowerState } from 'react-native-device-info';
 import { lightTheme, powerSavingTheme } from './AppState/Theme';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'react-native';
 const Stack = createNativeStackNavigator();
 function App() {
   const [theme, setThemeAtom] = useAtom(themeAtom);
@@ -55,78 +56,86 @@ function App() {
   return (
     <>
       <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Lobby">
-            <Stack.Screen
-              name="home"
-              component={Home}
-              options={{
-                headerShown: false,
-                unmountOnBlur: true,
-              }}
-            />
-            <Stack.Screen
-              name="profile"
-              component={ProfilePage}
-              options={{
-                headerShown: false,
-                headerTitle: 'Account',
-                ...styleTopBar,
-              }}
-            ></Stack.Screen>
-            <Stack.Screen
-              name="login"
-              component={Login}
-              options={{
-                headerShown: false,
-                contentStyle: { marginBottom: 0 },
-                headerStyle: { display: 1, position: 'relative' },
-              }}
-            />
-            <Stack.Screen
-              name="Lobby"
-              component={Lobby}
-              options={{
-                headerShown: false,
-                ...styleTopBar,
-                // headerRight: () => <RightHeaderBarLobbyArea />,
-              }}
-            />
-            <Stack.Screen
-              name="PlayTabel"
-              component={PlayArea}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="signIn"
-              component={SignIn}
-              options={{
-                headerShown: false,
-                title: 'Sign-Up',
-                ...styleTopBar,
-              }}
-            />
-            <Stack.Screen
-              name="Otp"
-              component={OtpScreen}
-              options={{
-                headerShown: false,
-                title: 'Sign-Up',
-                ...styleTopBar,
-              }}
-            />
-            <Stack.Screen
-              name="passSet"
-              component={PassInputFields}
-              options={{
-                headerShown: false,
-                title: 'Sign-Up',
-                ...styleTopBar,
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-        <Toast />
+        <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+          <StatusBar
+            hidden={false}
+            backgroundColor={theme?.colors?.topBarNav} // give it a solid color
+            barStyle="dark-content" // or "light-content"
+            translucent={false} // ← key prop for older behavior
+          />
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="home">
+              <Stack.Screen
+                name="home"
+                component={Home}
+                options={{
+                  headerShown: false,
+                  unmountOnBlur: true,
+                }}
+              />
+              <Stack.Screen
+                name="profile"
+                component={ProfilePage}
+                options={{
+                  headerShown: false,
+                  headerTitle: 'Account',
+                  ...styleTopBar,
+                }}
+              ></Stack.Screen>
+              <Stack.Screen
+                name="login"
+                component={Login}
+                options={{
+                  headerShown: false,
+                  contentStyle: { marginBottom: 0 },
+                  headerStyle: { display: 1, position: 'relative' },
+                }}
+              />
+              <Stack.Screen
+                name="Lobby"
+                component={Lobby}
+                options={{
+                  headerShown: false,
+                  ...styleTopBar,
+                  // headerRight: () => <RightHeaderBarLobbyArea />,
+                }}
+              />
+              <Stack.Screen
+                name="PlayTabel"
+                component={PlayArea}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="signIn"
+                component={SignIn}
+                options={{
+                  headerShown: false,
+                  title: 'Sign-Up',
+                  ...styleTopBar,
+                }}
+              />
+              <Stack.Screen
+                name="Otp"
+                component={OtpScreen}
+                options={{
+                  headerShown: false,
+                  title: 'Sign-Up',
+                  ...styleTopBar,
+                }}
+              />
+              <Stack.Screen
+                name="passSet"
+                component={PassInputFields}
+                options={{
+                  headerShown: false,
+                  title: 'Sign-Up',
+                  ...styleTopBar,
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+          <Toast />
+        </SafeAreaView>
       </SafeAreaProvider>
     </>
   );

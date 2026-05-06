@@ -24,8 +24,6 @@ export default function onTrack(event, audioElement, setRemoteStream) {
       if (typeof setRemoteStream === 'function') {
         setRemoteStream(remoteStream);
       }
-      inCallManager.start({ media: 'audio' });
-      inCallManager.setForceSpeakerphoneOn(true);
     } catch (e) {
       console.log('Error setting up speaker in andorid', e);
     }

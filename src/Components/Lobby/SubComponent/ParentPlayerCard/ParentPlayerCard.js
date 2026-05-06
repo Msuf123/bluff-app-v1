@@ -1,17 +1,17 @@
-import { useAtom } from "jotai";
-import { playerGameArea } from "../../../../AppState/Atoms";
-import { FlatList, StyleSheet } from "react-native";
-import PlayerCard from "./SubComponent/PlayerCard/PlayerCard";
+import { useAtom } from 'jotai';
+import { playerGameArea } from '../../../../AppState/Atoms';
+import { FlatList, StyleSheet } from 'react-native';
+import PlayerCard from './SubComponent/PlayerCard/PlayerCard';
 
 export default function ParentPlayerCard() {
   const [roomDetails] = useAtom(playerGameArea);
-  console.log(roomDetails.players, "ll");
+
   return (
     <FlatList
       style={style.div}
       data={roomDetails.players}
       contentContainerStyle={style.contnet}
-      renderItem={(item) => (
+      renderItem={item => (
         <PlayerCard
           email={item.item.email}
           name={item.item.name}
@@ -24,12 +24,12 @@ export default function ParentPlayerCard() {
 }
 const style = StyleSheet.create({
   div: {
-    width: "92%",
-    margin: "auto",
+    width: '92%',
+    margin: 'auto',
     marginTop: 15,
     height: 100,
   },
   contnet: {
-    display: "flex",
+    display: 'flex',
   },
 });

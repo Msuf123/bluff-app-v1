@@ -14,13 +14,14 @@ export default async function answerOffer(
   playerGameArea,
   remoteAudio,
   setMicLoadingState,
+  setRemoteStream,
 ) {
   const pc = new RTCPeerConnection(ices);
   pc.onconnectionstatechange = onConnectionStateChange(pc);
   let audioElement = remoteAudio;
 
   pc.ontrack = event => {
-    onTrack(event, audioElement);
+    onTrack(event, audioElement, setRemoteStream);
   };
   pc.onicecandidate = event => {
     onIceCandidate(

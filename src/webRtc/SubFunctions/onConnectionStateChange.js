@@ -1,24 +1,26 @@
+import Toast from 'react-native-toast-message';
+
 export default function onConnectionStateChange(pc) {
   switch (pc.connectionState) {
     case 'new':
-      //   console.log("New connection created.");
+      Toast.show({ text1: 'new', type: 'info' });
       break;
     case 'connecting':
-      // console.log("Attempting to establish a connection...");
+      Toast.show({ text1: 'Connecting', type: 'info' });
       break;
     case 'connected':
-      // console.log("✅ Connection established successfully!");
+      Toast.show({ text1: 'connected', type: 'info' });
       break;
     case 'disconnected':
-      //console.warn("⚠️ Connection temporarily lost.");
+      console.warn('⚠️ Connection temporarily lost.');
       break;
     case 'failed':
-      //console.error("❌ Connection failed!");
+      Toast.show({ text1: 'failed', type: 'info' });
       // You can trigger a reconnection or show a toast
 
       break;
     case 'closed':
-      //console.log("🔒 Connection closed.");
+      console.log('🔒 Connection closed.');
       break;
   }
 }

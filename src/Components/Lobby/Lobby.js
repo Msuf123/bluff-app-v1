@@ -73,7 +73,7 @@ export default function Lobby() {
   const [atHOme, setAthOme] = useAtom(atHome);
   const [peerConnectionDbsState, setPeerConnectionState] =
     useAtom(peerConnectionDbs);
-  const [remoteStream, setRemoteStream] = useAtom(remoteStreamAtom);
+  const [remoteStream, setRemoteStream] = useState(null);
 
   const [micMediaStreams, setMicMediaStreamState] = useAtom(micMediaStream);
   const [micStateGloablPermissions, setMicStateGlobalPermission] = useAtom(
@@ -131,7 +131,7 @@ export default function Lobby() {
         const { table: centerTable, ...restPropertiesAnimationDbs } =
           store.get(animationDbs);
         setThrowCArdButton(false);
-
+        console.log('incomming datal', data.status);
         if (data.status === 201 || data.status === 202) {
           setPlayerGameArea(data.data);
 
@@ -140,6 +140,7 @@ export default function Lobby() {
           if (data.status == 202) {
             const micMediaStreamStatek = store.get(micMediaStream);
             const peerConnectionDbsStateCurrent = store.get(peerConnectionDbs);
+            console.log('Mkaing offer ', data.data.yourEmail);
             makeOffer(
               data,
               ices,
@@ -174,6 +175,7 @@ export default function Lobby() {
             playerGameArea,
             remoteAudios,
             setMicLoadingState,
+            setRemoteStream,
           );
           //   }
           // }, 500);
