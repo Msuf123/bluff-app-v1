@@ -1,8 +1,7 @@
-import { useAtom } from "jotai";
-import { themeAtom } from "../../../../AppState/Atoms";
-import { Image, Pressable, Text, View } from "react-native";
-import Spinner from "../../../SubComponents/Spinner/Spinner";
-
+import { useAtom } from 'jotai';
+import { themeAtom } from '../../../../AppState/Atoms';
+import { Image, Pressable, Text, View } from 'react-native';
+import Spinner from '../../../SubComponents/Spinner/Spinner';
 
 export default function HomeJoinButtons({
   onClick,
@@ -19,7 +18,7 @@ export default function HomeJoinButtons({
       onPress={() => {
         setLoading(true);
 
-        if (typeof onClick === "function") {
+        if (typeof onClick === 'function') {
           setLoading(false);
           onClick();
         } else {
@@ -33,7 +32,7 @@ export default function HomeJoinButtons({
         paddingVertical: 12,
         paddingHorizontal: 0,
         borderRadius: 8,
-        alignItems: "start",
+        alignItems: 'start',
         marginTop: 5,
         minWidth: 150,
       }}
@@ -41,18 +40,17 @@ export default function HomeJoinButtons({
       <View
         style={[
           {
-            width:"100%",
-            alignSelf:"center",
-            flexDirection:"row"
+            width: '100%',
+            alignSelf: 'center',
+            flexDirection: 'row',
           },
         ]}
       >
-       
         {!loading ? (
           <Text
             style={{
-              color: "#000",
-              fontWeight: "bold",
+              color: '#000',
+              fontWeight: 'bold',
               fontSize: 16,
             }}
           >
@@ -62,15 +60,15 @@ export default function HomeJoinButtons({
           <Spinner />
         )}
         {authStateLoading ? (
-          <Spinner size={20}></Spinner>
+          <Spinner size={20} marginVal={10}></Spinner>
         ) : showImage ? (
           <Image
-            source={require("@/assets/lock.png")}
+            source={require('@/assets/lock.png')}
             style={{
               width: 20,
               height: 20,
               marginLeft: 10,
-              position: "relative",
+              position: 'relative',
             }}
           ></Image>
         ) : null}

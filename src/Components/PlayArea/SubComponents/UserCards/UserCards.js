@@ -1,12 +1,16 @@
-import { useAtom } from "jotai";
-import { animationDbs, playerCardChooseOnGameTable, playersGameTableInfo } from "../../../../AppState/Atoms";
-import { useEffect, useRef } from "react";
-import { useScreenDimensions } from "../../../../Hooks/useScreenDimensions";
-import { Animated, Image, StyleSheet, View } from "react-native";
-import PlayerCards from "../PlayerCards/PlayerCards";
-import ClikOptions from "../ClickOptionsCards/ClickOptionsCards";
-import UserName from "../UserName/UserName";
-import { useRoute } from "@react-navigation/native";
+import { useAtom } from 'jotai';
+import {
+  animationDbs,
+  playerCardChooseOnGameTable,
+  playersGameTableInfo,
+} from '../../../../AppState/Atoms';
+import { useEffect, useRef } from 'react';
+import { useScreenDimensions } from '../../../../Hooks/useScreenDimensions';
+import { Animated, Image, StyleSheet, View } from 'react-native';
+import PlayerCards from '../PlayerCards/PlayerCards';
+import ClikOptions from '../ClickOptionsCards/ClickOptionsCards';
+import UserName from '../UserName/UserName';
+import { useRoute } from '@react-navigation/native';
 
 export default function UserCards({
   toShow,
@@ -17,38 +21,32 @@ export default function UserCards({
   currentPlayer,
   yourName,
   styles,
-  homePage,
+
   scaledImageSize,
 }) {
   const [yourTurn] = useAtom(playerCardChooseOnGameTable);
-  const [detiasl] = useAtom(playersGameTableInfo);
+  const [playerGameTableInfoState] = useAtom(playersGameTableInfo);
   const [_, setUserCardPostion] = useAtom(animationDbs);
   const userCardRef = useRef();
   const { width, height } = useScreenDimensions();
-
+  console.log(currentPlayer, 'james');
   function autoValueSteForAnimation(playerName) {
-    setUserCardPostion((org) => ({
+    setUserCardPostion(org => ({
       ...org,
       [playerName]: userCardRef.current,
     }));
   }
-  let details = null;
 
-  if (detiasl) {
-    details = detiasl;
-  } else {
-    details = { opponentCards: 26, opponentName: "no@gm.co" };
-  }
   useEffect(() => {
-    if (!mainPlayer && toShow) {
+    if (cardDetails && !mainPlayer && toShow) {
       autoValueSteForAnimation(cardDetails.opponentName);
     }
-  }, [detiasl]);
+  }, [playerGameTableInfoState]);
   const fadeAnimation = useRef(new Animated.Value(1)).current;
-  details.yourName == details.currentPlayer;
+
   const sizeAnimation = useRef(new Animated.Value(1)).current;
   const route = useRoute();
-  let isHome = route.path !== "/play";
+  let isHome = route.path !== '/play';
   useEffect(() => {
     let animation = Animated.loop(
       Animated.parallel([
@@ -69,7 +67,7 @@ export default function UserCards({
             useNativeDriver: true,
           }),
         ]),
-      ])
+      ]),
     );
     animation.start();
     return () => {
@@ -83,34 +81,34 @@ export default function UserCards({
       style={[
         style.playersDiv,
         styles,
-        toShow ? {} : { backgroundColor: "transparent" },
-        mainPlayer ? { width: "100%", height: 90 } : {},
+        toShow ? {} : { backgroundColor: 'transparent' },
+        mainPlayer ? { width: '100%', height: 90 } : {},
         rotateValue === 90 || rotateValue === -90
           ? {
               width: 70,
               height: 70,
-              flexDirection: "row",
+              flexDirection: 'row',
 
               margin: 0,
             }
           : {
               maxHeight: 130,
-              height: "100%",
+              height: '100%',
               margin: 0,
             },
 
-        rotateValue === 90 ? { flexDirection: "row-reverse" } : {},
+        rotateValue === 90 ? { flexDirection: 'row-reverse' } : {},
         width > 980 && (rotateValue === 90 || rotateValue === -90)
-          ? { height: "100%", marginLeft: 40, marginRight: 40 }
+          ? { height: '100%', marginLeft: 40, marginRight: 40 }
           : {},
         width < 344 && (rotateValue === 90 || rotateValue === -90)
           ? { width: 40, height: 40 }
           : {},
         width < 491 && (rotateValue !== 90 || rotateValue !== -90)
-          ? { height: "80%" }
+          ? { height: '80%' }
           : {},
         width < 496 && (rotateValue !== 90 || rotateValue !== -90)
-          ? { height: "100%" }
+          ? { height: '100%' }
           : {},
       ]}
     >
@@ -119,16 +117,15 @@ export default function UserCards({
           {/**Here we have determined how many cads we need to show based on two show bool value which is bieng sent is centertAble.js and passed as prop */}
           {/**WAE only want to show cadrs when we are the main plyer other wise show a card back side */}
           {mainPlayer ? (
-            
             <PlayerCards containerWidth={scaledImageSize}></PlayerCards>
           ) : (
             <Image
-              source={require("@/assets/A.png")}
+              source={require('@/assets/A.png')}
               ref={userCardRef}
               resizeMode="contain"
               style={[
                 style.cards,
-                rotate ? { transform: [{ rotate: rotateValue + "deg" }] } : {},
+                rotate ? { transform: [{ rotate: rotateValue + 'deg' }] } : {},
                 mainPlayer ? { width: 70, height: 70 } : {},
                 width > 980
                   ? {
@@ -150,17 +147,16 @@ export default function UserCards({
             ></ClikOptions>
           ) : null}
           {/**Same mic logic for username */}
-          {!mainPlayer && toShow && !homePage ? (
-         
+          {!mainPlayer && toShow && route.name !== 'home' ? (
             <UserName
               displayBottom={rotateValue !== 90}
               displayHorizontalPostive={rotateValue === 90}
               displayHorizontalNegative={rotateValue === -90}
-              userName={cardDetails}
+              userName={cardDetails.nickName || '...'}
               userNameBottom={rotateValue !== 90 || rotateValue !== -90}
             ></UserName>
           ) : null}
-    
+
           {/**Same for the notifying who is the current player here my we add onle mroe coiontion we use currentPlayer===cardDetails.opponentName to
            * determine wather the player is current or not if we are the current player then notify the user who is the curretn by diplaying this Animate.view  */}
           {!mainPlayer &&
@@ -172,15 +168,15 @@ export default function UserCards({
                 style.arrow,
                 rotateValue === 90 || rotateValue === -90
                   ? {
-                      transform: [{ scale: sizeAnimation }, { rotate: "0deg" }],
+                      transform: [{ scale: sizeAnimation }, { rotate: '0deg' }],
                     }
                   : {
                       transform: [
                         { scale: sizeAnimation },
-                        { rotate: "-90deg" },
+                        { rotate: '-90deg' },
                       ],
-                      top: "50%",
-                      left: "-5",
+                      top: '50%',
+                      left: '-5',
                     },
               ]}
             ></Animated.View>
@@ -194,27 +190,27 @@ export default function UserCards({
 //mainPlayer && details.yourName == details.currentPlayer
 const style = StyleSheet.create({
   outerDiv: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 100,
-    backgroundColor: "black",
+    backgroundColor: 'black',
   },
   cards: {
     height: 70,
     width: 70,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   playersDiv: {
     width: 70,
-    backgroundColor: "",
-    overflow: "visible",
+    backgroundColor: '',
+    overflow: 'visible',
     margin: 0,
-    alignItem: "center",
-    justifyContent: "center",
-    height: "100%",
-    alignSelf: "center",
+    alignItem: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    alignSelf: 'center',
   },
   text: {
-    color: "white",
+    color: 'white',
   },
   arrow: {
     width: 0,
@@ -222,10 +218,10 @@ const style = StyleSheet.create({
     borderLeftWidth: 8,
     borderRightWidth: 8,
     borderTopWidth: 8,
-    borderTopColor: "green",
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    position: "absolute",
+    borderTopColor: 'green',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    position: 'absolute',
     top: -4,
   },
 });

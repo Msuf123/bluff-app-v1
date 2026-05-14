@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai';
 import {
+  displayAnimation,
   playerCardChooseOnGameTable,
   playersGameTableInfo,
 } from '../../../AppState/Atoms';
@@ -12,35 +13,22 @@ import UserCards from '../../PlayArea/SubComponents/UserCards/UserCards';
 import UserCenterTable from '../UserCenterTable/UserCenterTable';
 
 export default function CenterTable({
-  dummyUsers,
   scaledImageSize,
   useAtomValue,
   valueOfContexts,
 }) {
-  const [cardChooseS, setCardChoose] = useAtom(playerCardChooseOnGameTable);
   const route = useRoute();
-  const [detiasl] = useAtom(playersGameTableInfo);
-  let numberOfPlayer = null;
-  let valueOfContext = null;
-  let details = null;
-  if (detiasl) {
-    details = detiasl;
-  } else {
-    details = { opponentCards: 26, opponentName: 'no@gm.co' };
-  }
-  if (useAtomValue) {
-    valueOfContext = valueOfContexts;
-    numberOfPlayer = valueOfContexts.opponentDetails.length + 1;
-  }
-
-  if (dummyUsers) {
-    valueOfContext = dummyUsers;
-    numberOfPlayer = dummyUsers.opponentDetails.length + 1;
-  }
-
+  const [cardChoose] = useAtom(playerCardChooseOnGameTable);
+  const [displayCardThrowAnimation, setDiaplayA] = useAtom(displayAnimation);
   let layerOne = [];
   let layerTwo = [];
   let layerThree = [];
+
+  if (!valueOfContexts) {
+    console.log('no vlaue');
+    return;
+  }
+  let numberOfPlayer = valueOfContexts.opponentDetails.length + 1;
 
   switch (numberOfPlayer) {
     case 2:
@@ -48,41 +36,37 @@ export default function CenterTable({
         /**Form backend will get soemthing like this opponentDetails:  [{"opponentCards": 26, "opponentName": "my@gm.co"}] 
             now we asre pushing this obj to layers and accessign these using [0,or any other index] */
       }
-      layerOne.push(valueOfContext.opponentDetails[0]);
+      layerOne.push(valueOfContexts.opponentDetails[0]);
       layerThree.push(0);
       break;
     case 3:
-      layerOne.push(valueOfContext.opponentDetails[0]);
-      layerTwo.push(valueOfContext.opponentDetails[1]);
+      layerOne.push(valueOfContexts.opponentDetails[0]);
+      layerTwo.push(valueOfContexts.opponentDetails[1]);
       layerThree.push(0);
       break;
     case 4:
-      layerOne.push(valueOfContext.opponentDetails[0]);
-      layerTwo.push(valueOfContext.opponentDetails[1]);
-      layerTwo.push(valueOfContext.opponentDetails[2]);
+      layerOne.push(valueOfContexts.opponentDetails[0]);
+      layerTwo.push(valueOfContexts.opponentDetails[1]);
+      layerTwo.push(valueOfContexts.opponentDetails[2]);
       layerThree.push(0);
       break;
     case 5:
-      layerOne.push(valueOfContext.opponentDetails[0]);
-      layerTwo.push(valueOfContext.opponentDetails[1]);
-      layerTwo.push(valueOfContext.opponentDetails[2]);
+      layerOne.push(valueOfContexts.opponentDetails[0]);
+      layerTwo.push(valueOfContexts.opponentDetails[1]);
+      layerTwo.push(valueOfContexts.opponentDetails[2]);
       layerThree.push(0);
-      layerOne.push(valueOfContext.opponentDetails[3]);
+      layerOne.push(valueOfContexts.opponentDetails[3]);
       break;
     case 6:
-      layerOne.push(valueOfContext.opponentDetails[0]);
-      layerTwo.push(valueOfContext.opponentDetails[1]);
-      layerTwo.push(valueOfContext.opponentDetails[2]);
-      layerOne.push(valueOfContext.opponentDetails[3]);
-      layerOne.push(valueOfContext.opponentDetails[4]);
+      layerOne.push(valueOfContexts.opponentDetails[0]);
+      layerTwo.push(valueOfContexts.opponentDetails[1]);
+      layerTwo.push(valueOfContexts.opponentDetails[2]);
+      layerOne.push(valueOfContexts.opponentDetails[3]);
+      layerOne.push(valueOfContexts.opponentDetails[4]);
       layerThree.push(0);
       break;
   }
-  useEffect(() => {
-    return () => {
-      console.log('Unmouteds');
-    };
-  }, []);
+
   return (
     <View
       style={[
@@ -113,8 +97,8 @@ export default function CenterTable({
             rotate={true}
             cardDetails={i}
             rotateValue={180}
-            key={`${i.opponentName}-${valueOfContext.currentPlayer}`}
-            currentPlayer={valueOfContext.currentPlayer}
+            key={`${i.opponentName}-${valueOfContexts.currentPlayer}`}
+            currentPlayer={valueOfContexts.currentPlayer}
             styles={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}
           ></UserCards>
         ))}
@@ -127,19 +111,19 @@ export default function CenterTable({
         ]}
       >
         <UserCards
-          toShow={layerTwo.length >= 1}
+          toShow={layerTwo.length > 0}
           cardDetails={layerTwo[0]}
           rotate={true}
           rotateValue={90}
-          currentPlayer={valueOfContext.currentPlayer}
+          currentPlayer={valueOfContexts.currentPlayer}
         ></UserCards>
         <UserCenterTable></UserCenterTable>
         <UserCards
-          toShow={layerTwo.length >= 2}
+          toShow={layerTwo.length > 1}
           rotate={true}
           cardDetails={layerTwo[1]}
           rotateValue={-90}
-          currentPlayer={valueOfContext.currentPlayer}
+          currentPlayer={valueOfContexts.currentPlayer}
         ></UserCards>
       </View>
       <View
@@ -162,8 +146,9 @@ export default function CenterTable({
               toShow={true}
               mainPlayer={true}
               key={k}
-              currentPlayer={valueOfContext.currentPlayer}
-              yourName={valueOfContext.yourName}
+              cardDetails={i}
+              currentPlayer={valueOfContexts.currentPlayer}
+              yourName={valueOfContexts.yourName}
               styles={{
                 justifyContent: 'flex-end',
               }}
@@ -172,41 +157,36 @@ export default function CenterTable({
           ))
         ) : (
           <UserCards
-            homePage={true}
             toShow={true}
+            mainPlayer={false}
             rotate={true}
-            cardDetails={{ opponentCards: 26, opponentName: 'no@gm.co' }}
+            cardDetails={{
+              opponentCards: 26,
+              opponentName: 'no@gm.co',
+              nickName: 'jameKarme',
+            }}
             rotateValue={180}
             key={'df'}
-            currentPlayer={valueOfContext.currentPlayer}
+            currentPlayer={valueOfContexts.currentPlayer}
             styles={{
-              // alignItems: "flex-end",
               justifyContent: 'flex-end',
             }}
           ></UserCards>
         )}
       </View>
-      {cardChooseS && route.name === 'PlayTabel' ? (
+      {cardChoose &&
+      !displayCardThrowAnimation &&
+      route.name === 'PlayTabel' ? (
         <PlayerSelectCardsPopUp></PlayerSelectCardsPopUp>
       ) : null}
-      {!cardChooseS &&
-      details.yourName == details.currentPlayer &&
+      {!cardChoose &&
+      !displayCardThrowAnimation &&
+      valueOfContexts.yourName == valueOfContexts.currentPlayer &&
       useAtomValue ? (
         <View
           style={[
             scaledImageSize ? { width: scaledImageSize.width } : {},
-            {
-              height: '100%',
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              right: 0,
-              left: 0,
-              backgroundColor: 'rgba(20, 20, 20, 0.9)',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            },
+            style.throwShowOptionDiv,
           ]}
         >
           <ThrowShowOptions></ThrowShowOptions>
@@ -265,5 +245,17 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'transparent',
     flexDirection: 'row',
+  },
+  throwShowOptionDiv: {
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    backgroundColor: 'rgba(20, 20, 20, 0.9)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

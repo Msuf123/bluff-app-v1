@@ -42,10 +42,11 @@ import answerOffer from '../../webRtc/answerOffer';
 import handelIncommingAnswer from '../../webRtc/inCommingAnswer';
 import handelIcesOffer from '../../webRtc/iceOffer';
 import { RTCView } from 'react-native-webrtc';
+import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Lobby() {
   const store = getDefaultStore();
   const [webScoketCon, setWebSocketCon] = useAtom(webScoket);
-  const [connectionEstablised, setConnectionEstablishd] = useState(true);
+  const [connectionEstablised, setConnectionEstablishd] = useState(false);
   const [urls] = useAtom(backendUrlAtom);
   const [authS, setAuth] = useAtom(authAtom);
   const [playerTableInfoState, setPlayerTableInfo] =
@@ -140,20 +141,20 @@ export default function Lobby() {
           if (data.status == 202) {
             const micMediaStreamStatek = store.get(micMediaStream);
             const peerConnectionDbsStateCurrent = store.get(peerConnectionDbs);
-            console.log('Mkaing offer ', data.data.yourEmail);
-            makeOffer(
-              data,
-              ices,
-              micMediaStreamStatek,
-              peerConnectionDbsStateCurrent,
-              setPeerConnectionState,
-              Toast,
-              webScoket,
-              setMicLoadingState,
-              remoteAudios,
-              setRemoteStream,
-              false,
-            );
+
+            // makeOffer(
+            //   data,
+            //   ices,
+            //   micMediaStreamStatek,
+            //   peerConnectionDbsStateCurrent,
+            //   setPeerConnectionState,
+            //   Toast,
+            //   webScoket,
+            //   setMicLoadingState,
+            //   remoteAudios,
+            //   setRemoteStream,
+            //   false,
+            // );
           }
         }
         if (data.status === 1019) {
@@ -164,7 +165,7 @@ export default function Lobby() {
 
           // if (micMediaStreamStatek) {
           //   clearInterval(id);
-          console.log('Sending asnwer');
+
           answerOffer(
             ices,
             data,
@@ -206,7 +207,6 @@ export default function Lobby() {
           }
         }
         if (data.status === 302) {
-          console.log(data.data);
           setPlayerTableInfo(org => ({ ...org, ...data.data }));
         }
         if (data.status === 1013) {
@@ -447,7 +447,7 @@ export default function Lobby() {
   }, []);
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
       {connectionEstablised ? (
         <View
           style={[style.div, { backgroundColor: theme.colors.lobbyBackground }]}
@@ -476,7 +476,7 @@ export default function Lobby() {
           <Spinner></Spinner>
         </View>
       )}
-    </>
+    </SafeAreaView>
   );
 }
 const style = StyleSheet.create({

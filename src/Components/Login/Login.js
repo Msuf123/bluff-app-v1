@@ -28,18 +28,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [auth, setAuth] = useAtom(authAtom);
   const [opacity, setOpacity] = useState(0);
-  useFocusEffect(
-    useCallback(() => {
-      const timer = setTimeout(() => {
-        Orientation.lockToPortrait();
-      }, 100); // 👈 important
 
-      return () => {
-        clearTimeout(timer);
-        Orientation.unlockAllOrientations();
-      };
-    }, []),
-  );
   const handlePasswordVisibility = () => {
     setShowPassword(prev => !prev);
   };

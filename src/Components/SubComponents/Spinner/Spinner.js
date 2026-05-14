@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
-import { Animated, Easing, StyleSheet } from "react-native";
+import { useEffect, useRef } from 'react';
+import { Animated, Easing, StyleSheet } from 'react-native';
 
-const Spinner = ({ size = 40, color = "#4B5563" }) => {
+const Spinner = ({ size = 40, color = '#4B5563', marginVal = 0 }) => {
   const spinAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -11,13 +11,13 @@ const Spinner = ({ size = 40, color = "#4B5563" }) => {
         duration: 1000,
         easing: Easing.linear,
         useNativeDriver: true,
-      })
+      }),
     ).start();
   }, []);
 
   const rotate = spinAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ["0deg", "360deg"],
+    outputRange: ['0deg', '360deg'],
   });
 
   return (
@@ -29,6 +29,7 @@ const Spinner = ({ size = 40, color = "#4B5563" }) => {
           height: size,
           borderColor: color,
           transform: [{ rotate }],
+          marginLeft: marginVal,
         },
       ]}
     />
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   spinner: {
     borderWidth: 3,
     borderRadius: 9999,
-    borderTopColor: "transparent",
+    borderTopColor: 'transparent',
   },
 });
 

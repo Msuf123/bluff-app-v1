@@ -78,8 +78,8 @@ const makeCardStyles = theme =>
       paddingVertical: 6,
       borderRadius: 10,
       borderWidth: 1.5,
-      borderColor: theme.colors.inputBorder,
-      backgroundColor: theme.colors.inputBackground,
+      borderColor: '#555555',
+      backgroundColor: '#3A3A3A',
       marginHorizontal: 3,
       position: 'relative',
       ...(Platform.OS === 'web' && {
@@ -96,15 +96,15 @@ const makeCardStyles = theme =>
       }),
     },
     cardSelected: {
-      borderColor: theme.colors.primary,
+      borderColor: '#FF69B4',
       borderWidth: 2,
-      backgroundColor: theme.colors.inputBackground,
+      backgroundColor: '#3A3A3A',
       transform: [{ translateY: -8 }],
       ...(Platform.OS === 'web' && {
-        boxShadow: `0 6px 20px ${theme.colors.primary}55`,
+        boxShadow: `0 6px 20px ${'#FF69B4'}55`,
       }),
       ...(Platform.OS !== 'web' && {
-        shadowColor: theme.colors.primary,
+        shadowColor: '#FF69B4',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.5,
         shadowRadius: 8,
@@ -118,7 +118,7 @@ const makeCardStyles = theme =>
       width: 8,
       height: 8,
       borderRadius: 4,
-      backgroundColor: theme.colors.primary,
+      backgroundColor: '#FF69B4',
     },
     img: {
       width: 72,

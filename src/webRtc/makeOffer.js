@@ -32,7 +32,7 @@ export default async function makeOffer(
     //meaing we are reconnecting
     allPlayers = [...otherPlayers];
   }
-  console.log(allPlayers, otherPlayers, peerConnectionDbsStateCurrent);
+
   await Promise.allSettled(
     allPlayers.map(async ({ email }) => {
       const pc = new RTCPeerConnection(ices);

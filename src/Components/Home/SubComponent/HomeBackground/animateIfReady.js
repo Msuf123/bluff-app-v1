@@ -4,13 +4,13 @@ export function animateIfReady(
   centerTable,
   setFromP,
   setToP,
-  setDiaplayA
+  setDiaplayA,
 ) {
   if (
     userCard &&
     centerTable &&
-    typeof userCard.measure === "function" &&
-    typeof centerTable.measure === "function"
+    typeof userCard.measure === 'function' &&
+    typeof centerTable.measure === 'function'
   ) {
     (() => {
       userCard.measure((fx, fy, width, height, px, py) => {

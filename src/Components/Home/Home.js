@@ -4,6 +4,8 @@ import {
   micMediaStream,
   micStateGlobalPermission,
   peerConnectionDbs,
+  playerGameArea,
+  playersGameTableInfo,
   webScoket,
 } from '../../AppState/Atoms';
 import { useAtom } from 'jotai';
@@ -18,6 +20,10 @@ import UserRoomButtons from './SubComponent/UserRoomButtons/UserRoomButtons';
 import JoinPopUp from './SubComponent/JoinPopUp/JoinPopUp';
 import { cleanupPeerConnections } from '../../webRtc/SubFunctions/cleanUpVoiceCommunication';
 import InCallManager from 'react-native-incall-manager';
+import {
+  defaultState,
+  playerGameAreaConstantHome,
+} from './homePlayerTableConstant';
 
 export default function Home() {
   const [joinPopUp, setJoinPopUp] = useState(false);
@@ -32,6 +38,8 @@ export default function Home() {
   );
   const wsRef = useRef(ws);
   const pcStateConnectionDBsRef = useRef(pcStateConnectionDBs);
+  const [_, setPlayerTable] = useAtom(playerGameArea);
+  const [_2, setGameTableInfo] = useAtom(playersGameTableInfo);
   useEffect(() => {
     wsRef.current = ws;
   }, [ws]);
@@ -53,6 +61,8 @@ export default function Home() {
 
   useFocusEffect(
     useCallback(() => {
+      setPlayerTable(playerGameAreaConstantHome);
+      setGameTableInfo(defaultState);
       Orientation.lockToPortrait();
       if (wsRef.current) {
         wsRef.current.close();
@@ -61,6 +71,8 @@ export default function Home() {
       setPcStateDbs({});
 
       return () => {
+        // setPlayerTable(null);
+        // setGameTableInfo(null);
         Orientation.unlockAllOrientations();
       };
     }, []),
@@ -87,6 +99,8 @@ export default function Home() {
           <UserRoomButtons
             setPopUp={setJoinPopUp}
             popup={setJoinPopUp}
+            authState={stateAuth}
+            authStateLoading={displayLobby}
           ></UserRoomButtons>
         </HomeBackGround>
       ) : (

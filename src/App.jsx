@@ -89,6 +89,7 @@ function App() {
                   headerShown: false,
                   contentStyle: { marginBottom: 0 },
                   headerStyle: { display: 1, position: 'relative' },
+                  animation: 'none',
                 }}
               />
               <Stack.Screen

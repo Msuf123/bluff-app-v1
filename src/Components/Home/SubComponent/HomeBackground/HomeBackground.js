@@ -16,21 +16,14 @@ const originalImageSize = { width: 1920, height: 1080 };
 
 export default function HomeBackGround({ children }) {
   const store = getDefaultStore();
-  const [_s, setPlayersGmeTableInfo] = useAtom(playersGameTableInfo);
+  const [gameTableInfoState, setPlayersGmeTableInfo] =
+    useAtom(playersGameTableInfo);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const [scaledImageSize, setScaledImageSize] = useState({
     width: 0,
     height: 0,
   });
-  const [animationState, setAnimationStates] = useState({
-    currentPlayer: 'my@gm.co',
-    yourName: 'msy@gm.co',
-    opponentDetails: [
-      { opponentCards: 26, opponentName: 'my@gm.co' },
-      { opponentCards: 26, opponentName: 'okay@gm.co' },
-      { opponentCards: 26, opponentName: 'nos@gm.co' },
-    ],
-  });
+
   const [displayCardThrowAnimation, setDisplayCardAnimaiton] =
     useAtom(displayAnimation);
 
@@ -60,8 +53,12 @@ export default function HomeBackGround({ children }) {
         store.get(animationDbs);
       const intervalId = setInterval(() => {
         let randomPlayer = Math.floor(Math.random() * 3);
-        let player = ['my@gm.co', 'okay@gm.co', 'nos@gm.co'];
-
+        let player = [
+          'xrobo17@gmail.com',
+          'xrobo19@gmail.com',
+          'xrobo20@gmail.com',
+        ];
+        console.log(restPropertiesAnimationDbs, 'll');
         setAnimationState(org => ({
           ...org,
           currentPlayer: player[randomPlayer],
@@ -77,6 +74,7 @@ export default function HomeBackGround({ children }) {
           }
           return obj;
         });
+
         animateIfReady(
           true,
           restPropertiesAnimationDbs[player[randomPlayer]],
@@ -120,11 +118,16 @@ export default function HomeBackGround({ children }) {
           width: scaledImageSize.width,
         }}
       ></View>
-      <CenterTable
-        dummyUsers={animationState}
-        scaledImageSize={scaledImageSize}
-        useAtomValue={false}
-      ></CenterTable>
+      {gameTableInfoState ? (
+        gameTableInfoState.status === 304 ? (
+          <CenterTable
+            scaledImageSize={scaledImageSize}
+            useAtomValue={false}
+            valueOfContexts={gameTableInfoState}
+          ></CenterTable>
+        ) : null
+      ) : null}
+
       {displayCardThrowAnimation ? (
         <AnimatedThrowCard
           toPos={toPostion}
