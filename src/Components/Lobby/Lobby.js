@@ -132,7 +132,7 @@ export default function Lobby() {
         const { table: centerTable, ...restPropertiesAnimationDbs } =
           store.get(animationDbs);
         setThrowCArdButton(false);
-        console.log('incomming datal', data.status);
+        console.log('incomming datal', data.status, data);
         if (data.status === 201 || data.status === 202) {
           setPlayerGameArea(data.data);
 

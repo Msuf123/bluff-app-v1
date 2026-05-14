@@ -70,12 +70,6 @@ export default function PlayArea() {
 
     if (ws && userInfo.leader === userInfo.yourEmail) {
       ws.send(JSON.stringify({ action: 'getPlayGroundDetails' }));
-    } else {
-      Toast.show({
-        type: 'error',
-        text1: 'Error Connecting',
-        text2: "Connection can't be found",
-      });
     }
     return () => {
       if (ws) {

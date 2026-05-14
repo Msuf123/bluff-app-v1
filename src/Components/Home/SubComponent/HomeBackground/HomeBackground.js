@@ -58,7 +58,7 @@ export default function HomeBackGround({ children }) {
           'xrobo19@gmail.com',
           'xrobo20@gmail.com',
         ];
-        console.log(restPropertiesAnimationDbs, 'll');
+
         setAnimationState(org => ({
           ...org,
           currentPlayer: player[randomPlayer],

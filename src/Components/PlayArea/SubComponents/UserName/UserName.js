@@ -9,7 +9,7 @@ export default function UserName({
   displayHorizontalNegative,
 }) {
   const { width, height } = useScreenDimensions();
-  console.log(userName, 'llkk');
+
   return (
     <View
       style={[

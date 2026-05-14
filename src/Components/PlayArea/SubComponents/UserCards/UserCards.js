@@ -29,7 +29,7 @@ export default function UserCards({
   const [_, setUserCardPostion] = useAtom(animationDbs);
   const userCardRef = useRef();
   const { width, height } = useScreenDimensions();
-  console.log(currentPlayer, 'james');
+
   function autoValueSteForAnimation(playerName) {
     setUserCardPostion(org => ({
       ...org,
