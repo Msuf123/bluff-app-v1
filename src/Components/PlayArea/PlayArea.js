@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import {
   atHome,
@@ -7,6 +7,7 @@ import {
   playerGameArea,
   playersGameTableInfo,
   scroeBoard,
+  themeAtom,
   toPostionOfCardAnimationThrow,
   webScoket,
 } from '../../AppState/Atoms';
@@ -30,7 +31,7 @@ export default function PlayArea() {
   const orientationLocked = useRef(false);
   const [playersGameTableInfoState] = useAtom(playersGameTableInfo);
   const [atHOme, setAthOme] = useAtom(atHome);
-
+  const [theme] = useAtom(themeAtom);
   const [toPostion] = useAtom(toPostionOfCardAnimationThrow);
   const [formPostion] = useAtom(formPostionOfCardAnimaitonThrow);
   const [displayCardThrowAnimation, setDiaplayA] = useAtom(displayAnimation);
@@ -70,7 +71,7 @@ export default function PlayArea() {
 
     if (ws && userInfo.leader === userInfo.yourEmail) {
       ws.send(JSON.stringify({ action: 'getPlayGroundDetails' }));
-    }
+    } // removed elese as it will always run for player who joins.
     return () => {
       if (ws) {
         ws.close('1000', 'jl');
@@ -98,7 +99,7 @@ export default function PlayArea() {
     const beforeRemove = e => {
       e.preventDefault();
       nav.removeListener('beforeRemove', beforeRemove); // remove listener first
-      nav.dispatch(StackActions.replace('home'));
+      nav.dispatch(StackActions.popToTop());
     };
 
     nav.addListener('beforeRemove', beforeRemove);
@@ -185,7 +186,18 @@ export default function PlayArea() {
             ) : null}
           </>
         ) : (
-          <Spinner></Spinner>
+          <View
+            style={[
+              style.div,
+              {
+                backgroundColor: theme.colors.lobbyBackground,
+                alignItems: 'center',
+                justifyContent: 'center',
+              },
+            ]}
+          >
+            <Spinner></Spinner>
+          </View>
         )}
       </SafeAreaView>
     </>

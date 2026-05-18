@@ -1,4 +1,8 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import {
+  CommonActions,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { authAtom, backendUrlAtom, themeAtom } from '../../AppState/Atoms';
 import { useAtom } from 'jotai';
@@ -69,7 +73,12 @@ export default function Login() {
       }, 6000);
     } else if (res === 'okay') {
       setAuth(true);
-      nav.navigate('home');
+      nav.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'home' }],
+        }),
+      );
     }
 
     setLoading(false);

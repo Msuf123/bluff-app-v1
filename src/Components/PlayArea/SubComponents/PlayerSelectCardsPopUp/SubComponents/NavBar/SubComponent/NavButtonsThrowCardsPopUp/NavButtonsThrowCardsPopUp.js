@@ -57,7 +57,7 @@ export default function NavButtonsThrowCardPopUp() {
           }),
         );
       }
-      setThrowCards([]);
+      // setThrowCards([]);
       setLoading(true);
     }
   }
@@ -83,7 +83,10 @@ export default function NavButtonsThrowCardPopUp() {
           pressed && styles.backButtonPressed,
         ]}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        onPress={() => setCardChoose(false)}
+        onPress={() => {
+          setCardChoose(false);
+          setThrowCards([]);
+        }}
       >
         <View style={styles.backButtonInner}>
           <Image

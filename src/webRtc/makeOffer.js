@@ -36,21 +36,34 @@ export default async function makeOffer(
   await Promise.allSettled(
     allPlayers.map(async ({ email }) => {
       const pc = new RTCPeerConnection(ices);
-      pc.onconnectionstatechange = () => onConnectionStateChange(pc);
+      pc.onconnectionstatechange = () =>
+        onConnectionStateChange(pc, email, () => {
+          console.log('Reconnecting', email);
+        });
       pc.ontrack = event => onTrack(event, remoteAudio, setRemoteStream);
       pc.onicecandidate = event =>
         onIceCandidate(event, webSocket, yourEmail, email, data);
       pc.oniceconnectionstatechange = () => onIceStateChange(pc);
-      const audioTrack = micMediaStreamState?.getAudioTracks()[0];
-      if (audioTrack && audioTrack.readyState === 'live') {
-        audioTrack.enabled = true;
+      // const audioTrack = micMediaStreamState?.getAudioTracks()[0];
+      const audioTrack = micMediaStreamState?.getAudioTracks()?.[0];
+
+      if (audioTrack) {
+        // muted mic still works
+        audioTrack.enabled = audioTrack.enabled ?? true;
+
         pc.addTrack(audioTrack, micMediaStreamState);
       } else {
-        console.error(`❌ Audio track not live for ${email}`);
+        console.warn('No local audio track, adding recvonly transceiver');
+
+        pc.addTransceiver('audio', {
+          direction: 'recvonly',
+        });
       }
+      // Store pc FIRST, then create offer becaue we can get ICE candidates can fire during createOffer and setLocalDescription  will try to read a pc from pcDbs that isn't stored yet
+      setPeerConnectionState(ori => ({ ...ori, [email]: pc }));
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
-      console.log('sending data', offer);
+
       webSocket.send(
         JSON.stringify({
           action: 'offer',
@@ -60,7 +73,6 @@ export default async function makeOffer(
           roomNumber: data.data.room,
         }),
       );
-      setPeerConnectionState(ori => ({ ...ori, [email]: pc }));
     }),
   );
 }

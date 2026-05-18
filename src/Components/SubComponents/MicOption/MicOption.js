@@ -66,7 +66,6 @@ export default function MicOption({ marginRightArg }) {
       ) : (
         <Pressable
           onPressOut={() => {
-            console.log('hi');
             // setMicLoading(true);
             const peerConnectionDbsState = store.get(peerConnectionDbs);
             const datas = store.get(playerGameArea);

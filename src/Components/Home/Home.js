@@ -84,7 +84,7 @@ export default function Home() {
         flex: 1,
       }}
     >
-      {loading ? null : true ? <PorfileIcon></PorfileIcon> : null}
+      {loading ? null : stateAuth ? <PorfileIcon></PorfileIcon> : null}
       {loading ? (
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}

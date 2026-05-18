@@ -1,26 +1,40 @@
-import Toast from 'react-native-toast-message';
+// onConnectionStateChange.js
+const reconnectTimers = new Map(); // email → timer id
 
-export default function onConnectionStateChange(pc) {
+export default function onConnectionStateChange(pc, email, onReconnect) {
   switch (pc.connectionState) {
-    case 'new':
-      Toast.show({ text1: 'new', type: 'info' });
-      break;
-    case 'connecting':
-      Toast.show({ text1: 'Connecting', type: 'info' });
-      break;
     case 'connected':
-      Toast.show({ text1: 'connected', type: 'info' });
+      // Cancel any pending reconnect — connection recovered
+      if (reconnectTimers.has(email)) {
+        clearTimeout(reconnectTimers.get(email));
+        reconnectTimers.delete(email);
+      }
       break;
-    case 'disconnected':
-      console.warn('⚠️ Connection temporarily lost.');
-      break;
-    case 'failed':
-      Toast.show({ text1: 'failed', type: 'info' });
-      // You can trigger a reconnection or show a toast
 
+    case 'disconnected':
+      // ICE may self-heal (mobile network blip etc.) — wait 6s first
+      if (!reconnectTimers.has(email)) {
+        const timer = setTimeout(() => {
+          reconnectTimers.delete(email);
+          if (pc.connectionState === 'disconnected') {
+            onReconnect(email, pc, 'ice-restart');
+          }
+        }, 6000);
+        reconnectTimers.set(email, timer);
+      }
       break;
+
+    case 'failed':
+      // Hard fail — reconnect immediately, no waiting
+      if (reconnectTimers.has(email)) {
+        clearTimeout(reconnectTimers.get(email));
+        reconnectTimers.delete(email);
+      }
+      onReconnect(email, pc, 'full');
+      break;
+
     case 'closed':
-      console.log('🔒 Connection closed.');
+      reconnectTimers.delete(email);
       break;
   }
 }

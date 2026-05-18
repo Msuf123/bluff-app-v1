@@ -17,7 +17,10 @@ export default async function answerOffer(
   setRemoteStream,
 ) {
   const pc = new RTCPeerConnection(ices);
-  pc.onconnectionstatechange = onConnectionStateChange(pc);
+  pc.onconnectionstatechange = () =>
+    onConnectionStateChange(pc, data.from, () => {
+      console.log('Reconnecting', data.from);
+    });
   let audioElement = remoteAudio;
 
   pc.ontrack = event => {
@@ -32,7 +35,7 @@ export default async function answerOffer(
       { data: { room: store.get(playerGameArea).room } },
     );
   };
-  pc.oniceconnectionstatechange = onIceStateChange(pc);
+  pc.oniceconnectionstatechange = () => onIceStateChange(pc);
 
   try {
     await pc.setRemoteDescription(new RTCSessionDescription(data.offer));

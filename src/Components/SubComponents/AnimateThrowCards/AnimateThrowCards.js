@@ -42,9 +42,9 @@ export default function AnimatedThrowCard({ fromPos, toPos, onAnimationEnd }) {
         source={require('@/assets/A.png')} // Your card image
         style={[
           styles.cardImage,
-          width > 980 ? { width: 100, height: 100 } : {},
-          width < 491 ? { width: 70, height: 70 } : {},
-          width < 496 ? { width: 50, height: 50 } : {},
+          width > 980 ? { width: 95, height: 95 } : {},
+          width < 491 ? { width: 65, height: 65 } : {},
+          width < 496 ? { width: 45, height: 45 } : {},
         ]}
       />
     </Animated.View>
@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
   cardImage: {
     marginTop: 5, // half of height — centers card vertically
     marginLeft: -5,
-    width: 90,
-    height: 90,
+    width: 85,
+    height: 85,
     resizeMode: 'contain',
     backgroundColor: 'transparent',
   },

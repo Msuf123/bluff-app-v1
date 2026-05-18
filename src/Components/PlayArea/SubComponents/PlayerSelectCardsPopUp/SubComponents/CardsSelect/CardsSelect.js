@@ -16,7 +16,7 @@ export default function CardsSelect() {
     cardsPerRow = 1;
   } else if (width < 644) {
     cardsPerRow = 2;
-  } else if (width < 824) {
+  } else if (width < 954) {
     cardsPerRow = 3;
   } else if (width < 1002) {
     cardsPerRow = 4;

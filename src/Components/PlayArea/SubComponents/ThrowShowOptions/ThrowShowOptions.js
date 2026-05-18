@@ -73,13 +73,13 @@ const makeStyles = theme =>
     div: {
       width: 320,
       height: 90,
-      backgroundColor: theme.colors.transparentBackground,
+      backgroundColor: 'rgba(0, 0, 0, 0.63)',
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 16,
       borderWidth: 1,
-      borderColor: theme.colors.inputBorder,
+      borderColor: '#CED4DA',
 
       overflow: 'hidden',
       ...(Platform.OS === 'web' && {
@@ -131,7 +131,7 @@ const makeStyles = theme =>
       color: '#FFD51B', // Show — amber, game semantic color
     },
     textThree: {
-      color: theme.colors.primary, // Pass — uses theme primary (blue / pink)
+      color: '#66B2FF', // Pass — uses theme primary (blue / pink)
     },
 
     // Disabled states
@@ -139,13 +139,13 @@ const makeStyles = theme =>
       opacity: 0.35,
     },
     disabledText: {
-      color: theme.colors.textSecondary,
+      color: '#6C757D',
     },
 
     // Vertical divider between buttons
     divider: {
       width: 1,
       height: '55%',
-      backgroundColor: theme.colors.inputBorder,
+      backgroundColor: '#CED4DA',
     },
   });

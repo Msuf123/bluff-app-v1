@@ -25,9 +25,5 @@ export default function handelIncommingAnswer(Platform, data, pcDbs) {
         //   console.error("Failed to set remote description for answer:", err);
       });
   } else {
-    //  console.warn(
-    //    "Skipping setRemoteDescription for answer due to signaling state:",
-    //    pc.signalingState
-    //  );
   }
 }

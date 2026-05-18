@@ -3,6 +3,7 @@ import { lightTheme, powerSavingTheme } from './Theme';
 
 export const authAtom = atom(false);
 export const backendUrlAtom = atom('http://192.168.1.168:8001');
+//http://192.168.1.168:8001;
 export const themeAtom = atom(powerSavingTheme);
 export const webScoket = atom(null);
 //playerGameArea is about playera and other things

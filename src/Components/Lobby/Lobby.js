@@ -15,6 +15,7 @@ import {
   numberOfTimeGolobalPermissionClicked,
   peerConnectionDbs,
   playerCardChooseOnGameTable,
+  playerCardsArrayThatHeSelected,
   playerGameArea,
   playersGameTableInfo,
   remoteAudio,
@@ -27,7 +28,11 @@ import {
   webScoket,
 } from '../../AppState/Atoms';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { animateIfReady } from '../Home/SubComponent/HomeBackground/animateIfReady';
 import Toast from 'react-native-toast-message';
 import { Platform, StyleSheet, View } from 'react-native';
@@ -43,6 +48,7 @@ import handelIncommingAnswer from '../../webRtc/inCommingAnswer';
 import handelIcesOffer from '../../webRtc/iceOffer';
 import { RTCView } from 'react-native-webrtc';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Orientation from 'react-native-orientation-locker';
 export default function Lobby() {
   const store = getDefaultStore();
   const [webScoketCon, setWebSocketCon] = useAtom(webScoket);
@@ -56,7 +62,7 @@ export default function Lobby() {
   );
   const [playerGameAreaState, setPlayerGameArea] = useAtom(playerGameArea);
   const [micLoadingState, setMicLoadingState] = useAtom(micLoading);
-
+  const [throwCard, setThrowCards] = useAtom(playerCardsArrayThatHeSelected);
   const nav = useNavigation();
 
   const router = useRoute();
@@ -93,7 +99,6 @@ export default function Lobby() {
   useEffect(() => {
     let webScoket = null;
     function createRoom(parentUrl, token, nav) {
-      console.log('This is my req');
       let url = (
         parentUrl +
         '/room?action=create&platform=' +
@@ -122,7 +127,9 @@ export default function Lobby() {
       webScoket.onopen = () => {
         console.log('connection establiesd of websocket ');
       };
-
+      webScoket.onclose = () => {
+        console.log('conneciton claoed');
+      };
       webScoket.onmessage = e => {
         let data = JSON.parse(e.data);
         const micMediaStreamState = store.get(micMediaStream); //add stream here
@@ -132,7 +139,7 @@ export default function Lobby() {
         const { table: centerTable, ...restPropertiesAnimationDbs } =
           store.get(animationDbs);
         setThrowCArdButton(false);
-        console.log('incomming datal', data.status, data);
+
         if (data.status === 201 || data.status === 202) {
           setPlayerGameArea(data.data);
 
@@ -141,31 +148,58 @@ export default function Lobby() {
           if (data.status == 202) {
             const micMediaStreamStatek = store.get(micMediaStream);
             const peerConnectionDbsStateCurrent = store.get(peerConnectionDbs);
-
-            // makeOffer(
-            //   data,
-            //   ices,
-            //   micMediaStreamStatek,
-            //   peerConnectionDbsStateCurrent,
-            //   setPeerConnectionState,
-            //   Toast,
-            //   webScoket,
-            //   setMicLoadingState,
-            //   remoteAudios,
-            //   setRemoteStream,
-            //   false,
-            // );
+            console.log('making offer');
+            makeOffer(
+              data,
+              ices,
+              micMediaStreamStatek,
+              peerConnectionDbsStateCurrent,
+              setPeerConnectionState,
+              Toast,
+              webScoket,
+              setMicLoadingState,
+              remoteAudios,
+              setRemoteStream,
+              false,
+            );
           }
+        }
+        if (data.status === 2021) {
+          setPlayerGameArea(data.data);
+          const latestPlayers = data.data.players || [];
+          const latestEmails = latestPlayers.map(player => player.email);
+          const peerConnectionDbsStateCurrent = store.get(peerConnectionDbs);
+          const updatedPcState = { ...peerConnectionDbsStateCurrent };
+          Object.keys(peerConnectionDbsStateCurrent).forEach(email => {
+            if (!latestEmails.includes(email)) {
+              const pc = peerConnectionDbsStateCurrent[email];
+              if (pc) {
+                try {
+                  pc.onicecandidate = null;
+                  pc.ontrack = null;
+                  pc.onconnectionstatechange = null;
+
+                  pc.close();
+                } catch (err) {
+                  console.error('Error closing peer connection:', err);
+                }
+                delete updatedPcState[email];
+              }
+            }
+          });
+          setPeerConnectionState(updatedPcState);
+
+          setConnectionEstablishd(true);
         }
         if (data.status === 1019) {
           //hadnle the incomming offer accordinly tell me steps what'as happening
 
-          // const id = setInterval(() => {
           const micMediaStreamStatek = store.get(micMediaStream);
-
-          // if (micMediaStreamStatek) {
-          //   clearInterval(id);
-
+          const existing = store.get(peerConnectionDbs)[data.from];
+          if (existing && existing.signalingState !== 'closed') {
+            existing.close();
+          }
+          console.log('Incomming offer form ', data.from);
           answerOffer(
             ices,
             data,
@@ -178,11 +212,9 @@ export default function Lobby() {
             setMicLoadingState,
             setRemoteStream,
           );
-          //   }
-          // }, 500);
         }
         if (data.status === 1020) {
-          console.log('Answer incomming ');
+          console.log('incomming answer form ', data.from);
           handelIncommingAnswer(Platform, data, pcDbs);
         }
         if (data.status === 1021) {
@@ -210,6 +242,7 @@ export default function Lobby() {
           setPlayerTableInfo(org => ({ ...org, ...data.data }));
         }
         if (data.status === 1013) {
+          setThrowCards([]);
           const personWhoThrewTheCards =
             data.data.throwAreaCards.playerWhoThrewLatestCard;
           if (data.data.animation) {
@@ -235,7 +268,6 @@ export default function Lobby() {
           }
 
           if (data.data.animation) {
-            console.log('Showing aniamiton ');
             animateIfReady(
               true,
               restPropertiesAnimationDbs[personWhoThrewTheCards],
@@ -339,7 +371,6 @@ export default function Lobby() {
           });
         }
         if (data.status === 1015) {
-          console.log(data);
           Toast.show({
             type: 'error',
             text1: data.data.msg,
@@ -347,7 +378,6 @@ export default function Lobby() {
           });
         }
         if (data.status === 1012) {
-          console.log(data);
           Toast.show({
             type: 'error',
             text1: 'Something went wrong',
@@ -356,7 +386,7 @@ export default function Lobby() {
         }
         if (data.status === 1018) {
           //means match has ended
-          console.log(data, 'Mathc neded');
+
           setScoreBoardDisplay(true);
           setPlayerScoreOrder(data.data.playerWinOrder);
         }
@@ -366,14 +396,28 @@ export default function Lobby() {
             players: data.data,
           }));
         }
-
+        if (data.status === 1023) {
+          Toast.show({
+            type: 'info',
+            text1: 'Match ended',
+            text2: 'Other player has left',
+          });
+          setTimeout(() => {
+            nav.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'home' }],
+              }),
+            );
+          }, 2000);
+        }
         webScoket.onerror = ev => {
           Toast.show({
             type: 'error',
             text1: 'Unable to reach Server',
             text2: 'Please try again later',
           });
-          nav.navigate('Home');
+          nav.navigate('home');
         };
       };
       webScoket.onclose = ev => {
@@ -422,6 +466,7 @@ export default function Lobby() {
     return () => {
       //i am calling this so that i can call a callback at the home componet which will rotate screen to protrait
       setAthOme(org => !org);
+      console.log('Leving to home');
     };
   }, []);
   useEffect(() => {
@@ -432,6 +477,14 @@ export default function Lobby() {
     const micStates = store.get(micState);
     const micStreamState = store.get(micMediaStream);
     const micOffOn = store.get(deniedPermission);
+    const lockToLandscape = () => {
+      try {
+        Orientation.lockToPortrait();
+      } catch (err) {
+        console.error('❌ Orientation lock error:', err);
+      }
+    };
+    lockToLandscape();
     MicPermission(
       micStateGloablPermissionss,
       setMicStateGlobalPermission,

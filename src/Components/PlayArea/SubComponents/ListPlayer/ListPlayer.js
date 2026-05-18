@@ -6,16 +6,17 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { scorePlayer, themeAtom } from "../../../../AppState/Atoms";
-import { useScreenDimensions } from "../../../../Hooks/useScreenDimensions";
-import { useAtom } from "jotai";
+} from 'react-native';
+import { scorePlayer, themeAtom } from '../../../../AppState/Atoms';
+import { useScreenDimensions } from '../../../../Hooks/useScreenDimensions';
+import { useAtom } from 'jotai';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
 export default function ListPlayer() {
   const [randomPlayers] = useAtom(scorePlayer);
   const { width } = useScreenDimensions();
   const [theme] = useAtom(themeAtom);
-
+  const nav = useNavigation();
   const styles = makeStyles(theme);
 
   return (
@@ -90,7 +91,13 @@ export default function ListPlayer() {
 
       {/* Footer Button */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.okayButton} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.okayButton}
+          onPress={() => {
+            nav.dispatch(StackActions.popToTop());
+          }}
+          activeOpacity={0.8}
+        >
           <Text style={styles.okayButtonText}>Okay</Text>
         </TouchableOpacity>
       </View>
@@ -98,26 +105,26 @@ export default function ListPlayer() {
   );
 }
 
-const makeStyles = (theme) =>
+const makeStyles = theme =>
   StyleSheet.create({
     wrapper: {
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: [{ translateX: "-50%" }, { translateY: "-50%" }],
-      width: "80%",
-      height: "80%",
-      margin: "auto",
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
+      width: '80%',
+      height: '80%',
+      margin: 'auto',
       borderRadius: 16,
       backgroundColor: theme.colors.transparentBackground,
       borderWidth: 1,
       borderColor: theme.colors.inputBorder,
-      overflow: "hidden",
-      ...(Platform.OS === "web" && {
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+      overflow: 'hidden',
+      ...(Platform.OS === 'web' && {
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
       }),
-      ...(Platform.OS !== "web" && {
-        shadowColor: "#000",
+      ...(Platform.OS !== 'web' && {
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.4,
         shadowRadius: 16,
@@ -127,9 +134,9 @@ const makeStyles = (theme) =>
 
     // Header
     header: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
       paddingHorizontal: 20,
       paddingVertical: 14,
       gap: 10,
@@ -137,7 +144,7 @@ const makeStyles = (theme) =>
     headerTitle: {
       color: theme.colors.textPrimary,
       fontSize: 18,
-      fontWeight: "700",
+      fontWeight: '700',
       fontFamily: theme.fonts.heading,
       letterSpacing: 0.5,
     },
@@ -147,16 +154,16 @@ const makeStyles = (theme) =>
       paddingHorizontal: 8,
       paddingVertical: 2,
       minWidth: 24,
-      alignItems: "center",
+      alignItems: 'center',
     },
     headerBadgeText: {
       color: theme.colors.background,
       fontSize: 12,
-      fontWeight: "700",
+      fontWeight: '700',
       fontFamily: theme.fonts.heading,
     },
     headerDivider: {
-      width: "100%",
+      width: '100%',
       height: 1,
       backgroundColor: theme.colors.inputBorder,
     },
@@ -165,8 +172,8 @@ const makeStyles = (theme) =>
     container: {
       paddingVertical: 12,
       paddingHorizontal: 16,
-      alignItems: "center",
-      width: "100%",
+      alignItems: 'center',
+      width: '100%',
     },
     containerSmall: {
       paddingVertical: 8,
@@ -175,24 +182,24 @@ const makeStyles = (theme) =>
 
     // Player Row
     playerRow: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       backgroundColor: theme.colors.inputBackground,
       paddingHorizontal: 16,
       paddingVertical: 12,
       marginVertical: 5,
       borderRadius: 12,
-      width: "100%",
+      width: '100%',
       borderWidth: 1,
       borderColor: theme.colors.inputBorder,
-      ...(Platform.OS !== "web" && {
-        shadowColor: "#000",
+      ...(Platform.OS !== 'web' && {
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,
         shadowRadius: 4,
       }),
-      ...(Platform.OS === "web" && {
-        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+      ...(Platform.OS === 'web' && {
+        boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
       }),
       elevation: 2,
     },
@@ -212,8 +219,8 @@ const makeStyles = (theme) =>
       height: 36,
       borderRadius: 18,
       backgroundColor: theme.colors.primary,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       marginRight: 14,
       borderWidth: 2,
       borderColor: theme.colors.inputBorder,
@@ -227,7 +234,7 @@ const makeStyles = (theme) =>
     },
     indexText: {
       color: theme.colors.background,
-      fontWeight: "700",
+      fontWeight: '700',
       fontSize: 16,
       fontFamily: theme.fonts.heading,
     },
@@ -239,7 +246,7 @@ const makeStyles = (theme) =>
     playerName: {
       fontSize: 16,
       color: theme.colors.textPrimary,
-      fontWeight: "600",
+      fontWeight: '600',
       flex: 1,
       fontFamily: theme.fonts.body,
     },
@@ -268,19 +275,19 @@ const makeStyles = (theme) =>
     footer: {
       paddingHorizontal: 20,
       paddingVertical: 14,
-      alignItems: "center",
+      alignItems: 'center',
     },
     okayButton: {
       backgroundColor: theme.colors.primary,
       paddingVertical: 12,
       paddingHorizontal: 48,
       borderRadius: 12,
-      alignItems: "center",
-      width: "100%",
-      ...(Platform.OS === "web" && {
+      alignItems: 'center',
+      width: '100%',
+      ...(Platform.OS === 'web' && {
         boxShadow: `0 4px 12px ${theme.colors.primary}55`,
       }),
-      ...(Platform.OS !== "web" && {
+      ...(Platform.OS !== 'web' && {
         shadowColor: theme.colors.primary,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.4,
@@ -291,7 +298,7 @@ const makeStyles = (theme) =>
     okayButtonText: {
       color: theme.colors.background,
       fontSize: 16,
-      fontWeight: "700",
+      fontWeight: '700',
       fontFamily: theme.fonts.heading,
       letterSpacing: 0.5,
     },
