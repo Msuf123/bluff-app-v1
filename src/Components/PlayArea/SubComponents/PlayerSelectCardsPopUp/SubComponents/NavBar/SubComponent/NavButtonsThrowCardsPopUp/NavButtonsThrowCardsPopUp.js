@@ -116,7 +116,7 @@ export default function NavButtonsThrowCardPopUp() {
           style={[
             styles.throwButtonText,
             loading && styles.throwButtonTextLoading,
-            isTiny && { fontSize: 12 },
+            isTiny && { fontSize: 10 },
           ]}
         >
           {!loading ? 'Throw Cards' : 'Loading...'}
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(76, 175, 80, 0.15)',
     borderRadius: 12,
-    paddingHorizontal: 8,
+    paddingHorizontal: 7,
     paddingVertical: 10,
     minWidth: 0, // allow shrinking, no fixed minWidth
     borderWidth: 1,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   throwButtonPressed: { backgroundColor: 'rgba(76, 175, 80, 0.28)' },
   throwButtonText: {
     color: '#FFFFFF',
-    fontSize: 13, // slightly smaller to fit in narrow parent
+    fontSize: 12, // slightly smaller to fit in narrow parent
     fontWeight: '700',
     textAlign: 'center',
     letterSpacing: 0.3,

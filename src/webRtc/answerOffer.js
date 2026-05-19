@@ -18,9 +18,10 @@ export default async function answerOffer(
 ) {
   const pc = new RTCPeerConnection(ices);
   pc.onconnectionstatechange = () =>
-    onConnectionStateChange(pc, data.from, () => {
-      console.log('Reconnecting', data.from);
-    });
+    console.log('B pc connectionState:', pc.connectionState);
+  onConnectionStateChange(pc, data.from, () => {
+    console.log('Reconnecting', data.from);
+  });
   let audioElement = remoteAudio;
 
   pc.ontrack = event => {

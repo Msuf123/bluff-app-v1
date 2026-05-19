@@ -15,7 +15,7 @@ export default function TopBar() {
     <View style={[styles.container]}>
       {/* Back Button */}
       <Pressable
-        style={[styles.backButton, width < 400 && styles.backButtonSmall]}
+        style={[styles.backButton, width < 500 && styles.backButtonSmall]}
         hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
         onPressOut={() => {
           nav.popTo('home');
@@ -33,9 +33,9 @@ export default function TopBar() {
       <View
         style={[
           styles.scoreBoard,
-          width < 552 && styles.scoreBoardVertical,
-          width >= 400 && width < 600 && styles.scoreBoardSmall,
-          width >= 600 && width < 900 && styles.scoreBoardMedium,
+          width < 400 && styles.scoreBoardSmall, // very small screens
+          width >= 400 && width < 900 && styles.scoreBoardMedium, // medium screens
+          width > 900 && styles.scoreBoardVertical,
         ]}
       >
         <ScoreItem
@@ -45,7 +45,7 @@ export default function TopBar() {
         />
 
         <View
-          style={[styles.divider, width < 552 && styles.dividerHorizontal]}
+          style={[styles.divider, width > 900 && styles.dividerHorizontal]}
         />
 
         <ScoreItem
@@ -60,7 +60,7 @@ export default function TopBar() {
         />
 
         <View
-          style={[styles.divider, width < 552 && styles.dividerHorizontal]}
+          style={[styles.divider, width > 900 && styles.dividerHorizontal]}
         />
 
         <ScoreItem
@@ -72,7 +72,7 @@ export default function TopBar() {
         />
 
         <View
-          style={[styles.divider, width < 552 && styles.dividerHorizontal]}
+          style={[styles.divider, width > 900 && styles.dividerHorizontal]}
         />
 
         <ScoreItem
@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 8,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    margin: 5,
   },
   backButtonSmall: {
     padding: 3,

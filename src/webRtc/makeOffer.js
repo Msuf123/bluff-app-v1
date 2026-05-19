@@ -35,6 +35,14 @@ export default async function makeOffer(
 
   await Promise.allSettled(
     allPlayers.map(async ({ email }) => {
+      if (reconnetWebRtc && peerConnectionDbsStateCurrent[email]) {
+        const oldPc = peerConnectionDbsStateCurrent[email];
+        oldPc.onicecandidate = null;
+        oldPc.ontrack = null;
+        oldPc.onconnectionstatechange = null;
+        oldPc.oniceconnectionstatechange = null;
+        oldPc.close();
+      }
       const pc = new RTCPeerConnection(ices);
       pc.onconnectionstatechange = () =>
         onConnectionStateChange(pc, email, () => {

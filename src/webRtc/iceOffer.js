@@ -15,6 +15,7 @@ export default function handelIcesOffer(Platform, data, pcDbs) {
       return;
     }
     if (
+      pc._replaced ||
       pc.signalingState === 'closed' ||
       pc.connectionState === 'closed' ||
       pc.connectionState === 'failed'
@@ -45,6 +46,7 @@ export default function handelIcesOffer(Platform, data, pcDbs) {
 
     if (
       !pc ||
+      pc._replaced ||
       pc.signalingState === 'closed' ||
       pc.connectionState === 'closed' ||
       pc.connectionState === 'failed'

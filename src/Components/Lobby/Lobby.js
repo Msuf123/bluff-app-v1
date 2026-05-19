@@ -197,6 +197,7 @@ export default function Lobby() {
           const micMediaStreamStatek = store.get(micMediaStream);
           const existing = store.get(peerConnectionDbs)[data.from];
           if (existing && existing.signalingState !== 'closed') {
+            existing._replaced = true;
             existing.close();
           }
           console.log('Incomming offer form ', data.from);

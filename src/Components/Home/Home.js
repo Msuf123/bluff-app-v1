@@ -24,6 +24,7 @@ import {
   defaultState,
   playerGameAreaConstantHome,
 } from './homePlayerTableConstant';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Home() {
   const [joinPopUp, setJoinPopUp] = useState(false);
@@ -79,34 +80,36 @@ export default function Home() {
   );
 
   return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
-      {loading ? null : stateAuth ? <PorfileIcon></PorfileIcon> : null}
-      {loading ? (
-        <View
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-        >
-          <Spinner></Spinner>
-        </View>
-      ) : (
-        <></>
-      )}
-      {!loading ? (
-        <HomeBackGround>
-          <UserRoomButtons
-            setPopUp={setJoinPopUp}
-            popup={setJoinPopUp}
-            authState={stateAuth}
-            authStateLoading={displayLobby}
-          ></UserRoomButtons>
-        </HomeBackGround>
-      ) : (
-        <></>
-      )}
-      {joinPopUp ? <JoinPopUp changeState={setJoinPopUp}></JoinPopUp> : <></>}
-    </View>
+    <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        {loading ? null : stateAuth ? <PorfileIcon></PorfileIcon> : null}
+        {loading ? (
+          <View
+            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          >
+            <Spinner></Spinner>
+          </View>
+        ) : (
+          <></>
+        )}
+        {!loading ? (
+          <HomeBackGround>
+            <UserRoomButtons
+              setPopUp={setJoinPopUp}
+              popup={setJoinPopUp}
+              authState={stateAuth}
+              authStateLoading={displayLobby}
+            ></UserRoomButtons>
+          </HomeBackGround>
+        ) : (
+          <></>
+        )}
+        {joinPopUp ? <JoinPopUp changeState={setJoinPopUp}></JoinPopUp> : <></>}
+      </View>
+    </SafeAreaView>
   );
 }
