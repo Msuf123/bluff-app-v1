@@ -6,6 +6,7 @@ import {
   peerConnectionDbs,
   playerGameArea,
   playersGameTableInfo,
+  throwCardLabel,
   webScoket,
 } from '../../AppState/Atoms';
 import { useAtom } from 'jotai';
@@ -38,6 +39,7 @@ export default function Home() {
     micStateGlobalPermission,
   );
   const wsRef = useRef(ws);
+  const [_3, setThrowCardLabel] = useAtom(throwCardLabel);
   const pcStateConnectionDBsRef = useRef(pcStateConnectionDBs);
   const [_, setPlayerTable] = useAtom(playerGameArea);
   const [_2, setGameTableInfo] = useAtom(playersGameTableInfo);
@@ -64,6 +66,7 @@ export default function Home() {
     useCallback(() => {
       setPlayerTable(playerGameAreaConstantHome);
       setGameTableInfo(defaultState);
+      setThrowCardLabel('');
       Orientation.lockToPortrait();
       if (wsRef.current) {
         wsRef.current.close();

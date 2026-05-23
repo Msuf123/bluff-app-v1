@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { lightTheme, powerSavingTheme } from './Theme';
 
 export const authAtom = atom(false);
-export const backendUrlAtom = atom('http://192.168.1.168:8001');
+export const backendUrlAtom = atom('https://bluff.scalcraft.com');
 //http://192.168.1.168:8001;
 export const themeAtom = atom(powerSavingTheme);
 export const webScoket = atom(null);

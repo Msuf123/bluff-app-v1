@@ -56,8 +56,10 @@ export default function Login() {
     }
 
     setLoading(true);
+    const cleanedEmail = emailId.trim();
+
     const res = await authenticateUsers(url, '/auth/login', {
-      emailId,
+      emailId: cleanedEmail,
       password: pass,
     });
 

@@ -1,4 +1,4 @@
-import fetchReq from "./FetchReq";
+import fetchReq from './FetchReq';
 
 export async function authenticateUsers(parentUrl, url, data) {
   let response = await fetchReq(parentUrl, url, data);
