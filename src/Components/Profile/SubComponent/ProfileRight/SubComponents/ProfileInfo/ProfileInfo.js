@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
-import { backendUrlAtom, themeAtom } from "../../../../../../AppState/Atoms";
-import { useAtom } from "jotai";
-import { useNavigation } from "@react-navigation/native";
-import { useUserSignedIn } from "../../../../../../Hooks/useUserSignedIn";
-import getProfileInfo from "./Functions/getProfileInfo";
+import { useCallback, useEffect, useState } from 'react';
+import { backendUrlAtom, themeAtom } from '../../../../../../AppState/Atoms';
+import { useAtom } from 'jotai';
+import { useNavigation } from '@react-navigation/native';
+import { useUserSignedIn } from '../../../../../../Hooks/useUserSignedIn';
+import getProfileInfo from './Functions/getProfileInfo';
 import {
   Image,
   Platform,
@@ -12,27 +12,24 @@ import {
   Text,
   TextInput,
   View,
-} from "react-native";
-import { debounce } from "lodash";
-import changeUserName from "./Functions/changeUserName";
-import { launchImageLibrary } from "react-native-image-picker";
-import SkeletonLoadingOfprofileInfoSection from "./SubComponents/SkeletonLoadingOfProfileInfoSection";
-import ProgressDot from "./SubComponents/ProgressDot/ProgressDot";
-import GButton from "../../../../../SubComponents/GButton/GButton";
-import { readFileAsBase64, uploadChunks } from "./Functions/readFileAsBase64";
+} from 'react-native';
+import { debounce } from 'lodash';
+import changeUserName from './Functions/changeUserName';
+import { launchImageLibrary } from 'react-native-image-picker';
+import SkeletonLoadingOfprofileInfoSection from './SubComponents/SkeletonLoadingOfProfileInfoSection';
+import ProgressDot from './SubComponents/ProgressDot/ProgressDot';
+import GButton from '../../../../../SubComponents/GButton/GButton';
+import { readFileAsBase64, uploadChunks } from './Functions/readFileAsBase64';
+import { imageUrl } from '../../../../../Home/homePlayerTableConstant';
 
 export default function ProfileInfo() {
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState('');
   const [inputWidth, setInputWidth] = useState(0);
   const [disabled, setDisabled] = useState(true);
-  const [stateLoading, setStateLoading] = useState("hide");
+  const [stateLoading, setStateLoading] = useState('hide');
   const [backedUrl] = useAtom(backendUrlAtom);
-  const [image, setImage] = useState(
-    "https://res.cloudinary.com/dkoptxs2o/image/upload/v1761653016/vecteezy_blue-profile-icon_36885313_odxqtn.png",
-  );
-  const [originalImageUrlState, setOriginalImageUrlState] = useState(
-    "https://res.cloudinary.com/dkoptxs2o/image/upload/v1761653016/vecteezy_blue-profile-icon_36885313_odxqtn.png",
-  );
+  const [image, setImage] = useState(imageUrl);
+  const [originalImageUrlState, setOriginalImageUrlState] = useState(imageUrl);
   const navigation = useNavigation();
   const [uploadigState, setUploadingState] = useState(0);
   const [imageOnHover, setImageOnHover] = useState(false);
@@ -43,31 +40,31 @@ export default function ProfileInfo() {
   useEffect(() => {
     if (!loading) {
       if (!isAuth) {
-        nav.navigate("login");
+        nav.navigate('login');
       }
     }
   }, [isAuth]);
   useEffect(() => {
-    getProfileInfo(backedUrl + "/profile/info").then((a) => {
-      if (a.hasOwnProperty("name") || a.hasOwnProperty("image")) {
+    getProfileInfo(backedUrl + '/profile/info').then(a => {
+      if (a.hasOwnProperty('name') || a.hasOwnProperty('image')) {
         setComponentData(true);
-        if (a["image"]) {
-          setImage(a["image"]);
+        if (a['image']) {
+          setImage(a['image']);
         }
-        setOriginalImageUrlState(a["image"]);
-        setUserName(a["name"]);
+        setOriginalImageUrlState(a['image']);
+        setUserName(a['name']);
       }
     });
-    if (Platform.OS !== "web") {
+    if (Platform.OS !== 'web') {
       navigation.setOptions({
         tabBarStyle: {
-          display: "block",
+          display: 'block',
         },
       });
     }
   }, []);
   const debouncedChangeUserName = useCallback(
-    debounce(async (parameter) => {
+    debounce(async parameter => {
       changeUserNameWrapper(parameter);
     }, 1000),
     [],
@@ -75,29 +72,29 @@ export default function ProfileInfo() {
   async function changeUserNameWrapper(parameter) {
     let res = await changeUserName(backedUrl, parameter);
 
-    if (res["success"]) setStateLoading("success");
+    if (res['success']) setStateLoading('success');
     else {
-      setStateLoading("error");
+      setStateLoading('error');
     }
     setTimeout(() => {
-      setStateLoading("hide");
+      setStateLoading('hide');
     }, 1000);
   }
   const pickImage = async () => {
     try {
       const result = await launchImageLibrary({
-        mediaType: "photo",
+        mediaType: 'photo',
         quality: 1,
         selectionLimit: 1,
       });
 
       if (result.didCancel) {
-        console.log("User cancelled image picker");
+        console.log('User cancelled image picker');
         return;
       }
 
       if (result.errorCode) {
-        console.log("Error: ", result.errorMessage);
+        console.log('Error: ', result.errorMessage);
         return;
       }
 
@@ -106,17 +103,17 @@ export default function ProfileInfo() {
       setImage(asset.uri);
 
       const base64 = await readFileAsBase64(asset.uri);
-      console.log(base64, "kk");
+      console.log(base64, 'kk');
       uploadChunks(
         base64,
-        asset.fileName || "image.jpg",
+        asset.fileName || 'image.jpg',
         setUploadingState,
         setImage,
         originalImageUrlState,
         backedUrl,
       );
     } catch (err) {
-      console.error("❌ Image picker error:", err);
+      console.error('❌ Image picker error:', err);
     }
   };
 
@@ -128,10 +125,10 @@ export default function ProfileInfo() {
         style.outerdiv,
         {
           backgroundColor: theme.colors?.background,
-          width: "100%",
-          height: "100%",
+          width: '100%',
+          height: '100%',
         },
-        Platform.OS !== "web" ? { flexDirection: "column-reverse" } : {},
+        Platform.OS !== 'web' ? { flexDirection: 'column-reverse' } : {},
       ]}
     >
       <View
@@ -139,15 +136,15 @@ export default function ProfileInfo() {
           style.userName,
           {
             backgroundColor: theme.colors?.background,
-            width: "100%",
-            height: "100%",
+            width: '100%',
+            height: '100%',
           },
-          Platform.OS !== "web"
+          Platform.OS !== 'web'
             ? {
                 marginTop: 0,
-                paddingTop: "20%",
+                paddingTop: '20%',
                 paddingLeft: 20,
-                width: "100%",
+                width: '100%',
               }
             : {},
         ]}
@@ -173,7 +170,7 @@ export default function ProfileInfo() {
 
           <Text
             style={[style.hiddenText]}
-            onLayout={(e) => {
+            onLayout={e => {
               const width = e.nativeEvent.layout.width;
               setInputWidth(width + 10); // Add some padding
             }}
@@ -182,9 +179,9 @@ export default function ProfileInfo() {
           </Text>
           <TextInput
             value={userName}
-            onChangeText={(e) => {
+            onChangeText={e => {
               setUserName(e);
-              setStateLoading("processing");
+              setStateLoading('processing');
 
               debouncedChangeUserName(e);
             }}
@@ -195,9 +192,9 @@ export default function ProfileInfo() {
                 width: inputWidth,
                 maxWidth: 200,
                 borderWidth: 0,
-                backgroundColor: "transparent",
+                backgroundColor: 'transparent',
                 color: theme.colors?.textPrimary,
-                outlineStyle: "none",
+                outlineStyle: 'none',
                 borderColor: theme.colors?.textPrimary,
                 fontSize: 18,
               },
@@ -208,28 +205,28 @@ export default function ProfileInfo() {
             style={[
               style.imageIcon,
               style.pressButton,
-              { backgroundColor: "white", borderRadius: 2, marginLeft: 15 },
+              { backgroundColor: 'white', borderRadius: 2, marginLeft: 15 },
               { left: inputWidth },
               inputWidth > 200 ? { left: 200 } : {},
             ]}
-            source={require("@/assets/edit.png")}
+            source={require('@/assets/edit.png')}
           />
         </View>
       </View>
       <View>
         <Pressable
           onPressOut={() => {
-            if (uploadigState === 0 && Platform.OS === "web") {
+            if (uploadigState === 0 && Platform.OS === 'web') {
               pickImage();
             }
           }}
           onHoverIn={() => {
-            if (Platform.OS === "web") {
+            if (Platform.OS === 'web') {
               setImageOnHover(true);
             }
           }}
           onHoverOut={() => {
-            if (Platform.OS === "web") {
+            if (Platform.OS === 'web') {
               setImageOnHover(false);
             }
           }}
@@ -237,14 +234,14 @@ export default function ProfileInfo() {
             width: 200,
             height: 200,
             borderRadius: 200,
-            overflow: "hidden",
+            overflow: 'hidden',
           }}
         >
           {imageOnHover && uploadigState === 0 ? (
             <View style={style.cameraIcon}>
               <Image
                 style={{ width: 30, height: 30 }}
-                source={require("@/assets/camera.png")}
+                source={require('@/assets/camera.png')}
               ></Image>
             </View>
           ) : null}
@@ -261,11 +258,11 @@ export default function ProfileInfo() {
             }}
           />
         </Pressable>
-        {Platform.OS !== "web" ? (
+        {Platform.OS !== 'web' ? (
           <GButton
-            text={"Upload pic"}
+            text={'Upload pic'}
             onClick={() => {
-              if (uploadigState === 0 && Platform.OS !== "web") {
+              if (uploadigState === 0 && Platform.OS !== 'web') {
                 pickImage();
               }
             }}
@@ -280,19 +277,19 @@ export default function ProfileInfo() {
 
 const style = StyleSheet.create({
   outerdiv: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
   userNameEdit: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   userNameText: {
     fontSize: 18,
   },
   userName: {
-    display: "flex",
+    display: 'flex',
     flex: 1,
   },
   imageIcon: {
@@ -301,7 +298,7 @@ const style = StyleSheet.create({
     marginLeft: 6,
   },
   hiddenText: {
-    position: "absolute",
+    position: 'absolute',
     opacity: 0,
     fontSize: 16,
     padding: 0,
@@ -312,26 +309,26 @@ const style = StyleSheet.create({
     margin: 0,
     borderBottomWidth: 1,
 
-    position: "absolute",
+    position: 'absolute',
   },
   pressButton: {
-    position: "absolute",
+    position: 'absolute',
   },
   progressBar: {
-    backgroundColor: "transparent",
-    position: "absolute",
+    backgroundColor: 'transparent',
+    position: 'absolute',
     left: -20,
   },
   cameraIcon: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     zIndex: 3,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

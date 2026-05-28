@@ -148,7 +148,7 @@ export default function Lobby() {
           if (data.status == 202) {
             const micMediaStreamStatek = store.get(micMediaStream);
             const peerConnectionDbsStateCurrent = store.get(peerConnectionDbs);
-            console.log('making offer');
+
             makeOffer(
               data,
               ices,
@@ -418,7 +418,7 @@ export default function Lobby() {
             text1: 'Unable to reach Server',
             text2: 'Please try again later',
           });
-          nav.navigate('home');
+          nav.replace('home');
         };
       };
       webScoket.onclose = ev => {
@@ -445,6 +445,14 @@ export default function Lobby() {
             text2: 'Try logging in agian and retry',
           });
           setAuth(false);
+        }
+        if (ev.code === 1009) {
+          Toast.show({
+            type: 'info',
+            text1: 'Removed',
+            text2: 'Leader removed you form lobby',
+          });
+          nav.replace('home');
         }
       };
     }

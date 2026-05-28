@@ -66,3 +66,5 @@ export const playerGameAreaConstantHome = {
     },
   ],
 };
+export const imageUrl =
+  'https://res.cloudinary.com/dkoptxs2o/image/upload/v1761653016/vecteezy_blue-profile-icon_36885313_odxqtn.png';

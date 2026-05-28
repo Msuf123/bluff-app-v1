@@ -3,23 +3,23 @@ import {
   playerGameArea,
   playersGameTableInfo,
   themeAtom,
+  webScoket,
 } from '../../../../../../AppState/Atoms';
 import { useAtom } from 'jotai';
 import gesture from './gesture';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import ReadySatus from './SubComponent/ReadyStatus/ReadyStatus';
 import MicOption from '../../../../../SubComponents/MicOption/MicOption';
+import { imageUrl } from '../../../../../Home/homePlayerTableConstant';
 
-export default function PlayerCard({ name, email, readySataus, url }) {
-  const [width, setWidth] = useState(-10);
+export default function PlayerCard({ name, showBin, email, readySataus, url }) {
   const [roomDetails] = useAtom(playerGameArea);
   const [theme] = useAtom(themeAtom);
-  const ref = useRef();
-  const handlers = gesture(width, setWidth, ref);
+
+  const [ws] = useAtom(webScoket);
 
   return (
-    <View style={style.div} ref={ref}>
-      <View style={[style.overlap, { width: width }]}></View>
+    <View style={[style.div, { backgroundColor: theme?.colors?.background }]}>
       <View
         style={[
           style.front,
@@ -29,7 +29,7 @@ export default function PlayerCard({ name, email, readySataus, url }) {
         <Image
           resizeMode="contain"
           style={[style.img, style.profile]}
-          source={{ uri: url }}
+          source={{ uri: url ? url : imageUrl }}
         ></Image>
         <Text style={[style.name, { color: theme?.colors?.textPrimary }]}>
           {name.length > 12 ? name.slice(0, 11) + ' ...' : name}
@@ -64,9 +64,25 @@ export default function PlayerCard({ name, email, readySataus, url }) {
           source={require('@/assets/admin.png')}
           resizeMode="contain"
         ></Image>
-      ) : (
-        <></>
-      )}
+      ) : showBin ? (
+        <Pressable
+          onPress={() => {
+            ws.send(
+              JSON.stringify({
+                action: 'removeUserFromLobby',
+                emailToKick: email,
+              }),
+            );
+          }}
+          style={[style.pressable]}
+        >
+          <Image
+            style={style.imgBin}
+            source={require('@/assets/bin.png')}
+            resizeMode="contain"
+          ></Image>
+        </Pressable>
+      ) : null}
     </View>
   );
 }
@@ -75,7 +91,8 @@ const style = StyleSheet.create({
     position: 'relative',
     marginLeft: 0,
     marginRight: 0,
-    overflow: 'hidden',
+    overflow: 'visible',
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -86,13 +103,7 @@ const style = StyleSheet.create({
     alignSelf: 'center',
     maxWidth: 550,
     width: '98%',
-
-    ...(Platform.OS !== 'web' && {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 3 },
-      shadowOpacity: 0.2,
-      shadowRadius: 4,
-    }),
+    backgroundColor: '#FFFFFF',
   },
 
   img: {
@@ -122,15 +133,12 @@ const style = StyleSheet.create({
   },
 
   front: {
-    width: '100%',
-    height: '100%',
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: 'white',
   },
 
   overlap: {
-    backgroundColor: 'rgba(243, 45, 10, 0.9)',
     position: 'absolute',
     width: 0,
     height: '100%',
@@ -139,5 +147,21 @@ const style = StyleSheet.create({
 
   name: {
     fontSize: 19,
+  },
+  pressable: {
+    display: 'flex',
+    zIndex: 12,
+    width: 'auto',
+    padding: 2,
+    borderRadius: 5,
+    marginRight: 10,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imgBin: {
+    width: 30,
+    height: 30,
+    alignSelf: 'center',
   },
 });

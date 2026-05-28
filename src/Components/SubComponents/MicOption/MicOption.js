@@ -57,7 +57,7 @@ export default function MicOption({ marginRightArg }) {
         marginLeft: 5,
         backgroundColor: '#FFFFFF',
         borderRadius: 5,
-        zIndex: 5,
+        zIndex: 15,
         marginRight: marginRightArg ? marginRightArg : 0,
       }}
     >

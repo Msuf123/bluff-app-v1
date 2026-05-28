@@ -17,6 +17,7 @@ export default function ParentPlayerCard() {
           name={item.item.name}
           url={item.item.image}
           readySataus={item.item.readyStatus}
+          showBin={roomDetails.leader === roomDetails.yourEmail}
         ></PlayerCard>
       )}
     ></FlatList>
