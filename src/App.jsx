@@ -50,7 +50,7 @@ function App() {
     if (lowPowerMode) {
       setThemeAtom(powerSavingTheme);
     } else {
-      setThemeAtom(lightTheme);
+      setThemeAtom(powerSavingTheme);
     }
   }, [lowPowerMode]);
   return (
@@ -64,7 +64,7 @@ function App() {
             translucent={false} // ← key prop for older behavior
           />
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="home">
+            <Stack.Navigator initialRouteName="PlayTabel">
               <Stack.Screen
                 name="home"
                 component={Home}

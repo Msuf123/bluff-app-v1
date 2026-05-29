@@ -40,11 +40,13 @@ export default function MicPermission(
             console.log('NO funciton given like create offer');
           }
         }
+        setMicState(true);
         setMicMediaStreamState(res);
       })
       .catch(err => {
         setMicStateGolbalPermission(false);
         setDeniedMicState(true);
+        setMicState(false);
         if (
           Platform.OS === 'android' &&
           numberOfTimeGolobalPermissionClickedState !== 0

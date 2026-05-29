@@ -42,13 +42,13 @@ export default function MicOption({ marginRightArg }) {
     setNumberOfTimeGolobalPermissionClicked,
   ] = useAtom(numberOfTimeGolobalPermissionClicked);
   const [_, setMicOnOff] = useAtom(deniedPermission);
-  useEffect(() => {
-    if (micMediaGlobalState) {
-      setMicState(true);
-    } else {
-      setMicState(false);
-    }
-  }, [micMediaGlobalState]);
+  // useEffect(() => {
+  //   if (micMediaGlobalState) {
+  //     setMicState(true);
+  //   } else {
+  //     setMicState(false);
+  //   }
+  // }, [micMediaGlobalState]);
   return (
     <View
       style={{
