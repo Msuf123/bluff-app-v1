@@ -1,11 +1,16 @@
 import { useAtom } from 'jotai';
-import { playerGameArea, themeAtom } from '../../../../AppState/Atoms';
+import {
+  backendUrlAtom,
+  playerGameArea,
+  themeAtom,
+} from '../../../../AppState/Atoms';
 import { Pressable, Share, StyleSheet, Text, View } from 'react-native';
 import { useCallback } from 'react';
 import Clipboard from '@react-native-clipboard/clipboard';
 export default function RoomInfo() {
   const [roomDetails] = useAtom(playerGameArea);
   const [theme] = useAtom(themeAtom);
+  const [url] = useAtom(backendUrlAtom);
   const handleCopy = useCallback(() => {
     let roomId = roomDetails.room;
     if (!roomId) return;
@@ -13,9 +18,10 @@ export default function RoomInfo() {
   }, [roomDetails.room]);
   const share = useCallback(() => {
     if (!roomDetails.room) return;
+    const shareLink = `${url}/redirect?roomNumber=${roomDetails.room}`;
     Share.share({
-      message: `${roomDetails.room}`,
-      title: 'Share Room ID',
+      message: `Join my room! Tap to open: ${shareLink}`,
+      title: 'Join My Lobby',
     });
   }, [roomDetails.room]);
   return (

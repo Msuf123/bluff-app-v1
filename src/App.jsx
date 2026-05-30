@@ -31,21 +31,21 @@ function App() {
     headerTintColor: theme?.colors?.textPrimary,
   };
   const { lowPowerMode } = usePowerState();
-  // const linking = {
-  //     prefixes: ["bluffZone://", "http://localhost:8081"],
-  //     config: {
-  //         screens: {
-  //             home: "",
-  //             profile: "profile",
-  //             Lobby: "Lobby",
-  //             PlayTabel: "PlayTabel", // 👈 Define your path here
-  //             login: "login",
-  //             signIn: "signIn",
-  //             Otp: "Otp",
-  //             passSet: "passSet",
-  //         },
-  //     },
-  // };
+  const linking = {
+    prefixes: ['bluffarena://'],
+    config: {
+      screens: {
+        home: '',
+        profile: 'profile',
+        Lobby: 'Lobby',
+        PlayTabel: 'PlayTabel',
+        login: 'login',
+        signIn: 'signIn',
+        Otp: 'Otp',
+        passSet: 'passSet',
+      },
+    },
+  };
   useEffect(() => {
     if (lowPowerMode) {
       setThemeAtom(powerSavingTheme);
@@ -63,8 +63,8 @@ function App() {
             barStyle="dark-content" // or "light-content"
             translucent={false} // ← key prop for older behavior
           />
-          <NavigationContainer>
-            <Stack.Navigator initialRouteName="PlayTabel">
+          <NavigationContainer linking={linking}>
+            <Stack.Navigator initialRouteName="home">
               <Stack.Screen
                 name="home"
                 component={Home}

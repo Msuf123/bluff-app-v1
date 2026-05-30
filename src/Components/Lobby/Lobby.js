@@ -397,6 +397,19 @@ export default function Lobby() {
             players: data.data,
           }));
         }
+        if (data.status === 1024) {
+          nav.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'home' }],
+            }),
+          );
+          Toast.show({
+            type: 'info',
+            text1: 'Removed',
+            text2: 'Leader removed you form lobby',
+          });
+        }
         if (data.status === 1023) {
           Toast.show({
             type: 'info',
@@ -445,14 +458,6 @@ export default function Lobby() {
             text2: 'Try logging in agian and retry',
           });
           setAuth(false);
-        }
-        if (ev.code === 1009) {
-          Toast.show({
-            type: 'info',
-            text1: 'Removed',
-            text2: 'Leader removed you form lobby',
-          });
-          nav.replace('home');
         }
       };
     }

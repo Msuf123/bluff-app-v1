@@ -12,7 +12,11 @@ import {
 import { useAtom } from 'jotai';
 import { StatusBar, View } from 'react-native';
 import { useUserSignedIn } from '../../Hooks/useUserSignedIn';
-import { useFocusEffect } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import Orientation from 'react-native-orientation-locker';
 import PorfileIcon from './SubComponent/ProfileIcon/ProfileIcon';
 import Spinner from '../SubComponents/Spinner/Spinner';
@@ -43,6 +47,8 @@ export default function Home() {
   const pcStateConnectionDBsRef = useRef(pcStateConnectionDBs);
   const [_, setPlayerTable] = useAtom(playerGameArea);
   const [_2, setGameTableInfo] = useAtom(playersGameTableInfo);
+  const nav = useNavigation();
+  const route = useRoute();
   useEffect(() => {
     wsRef.current = ws;
   }, [ws]);
@@ -50,6 +56,24 @@ export default function Home() {
     pcStateConnectionDBsRef.current = pcStateConnectionDBs;
   }, [pcStateConnectionDBs]);
 
+  useFocusEffect(
+    useCallback(() => {
+      console.log('hello', route.params);
+      if (route.params?.action === 'join') {
+        nav.navigate('Lobby', {
+          roomNumber: route.params.roomNumber,
+          action: 'join',
+        });
+      }
+      return () => {
+        console.log('Resetting');
+        nav.setParams({
+          action: undefined,
+          roomNumber: undefined,
+        });
+      };
+    }, [route.params]),
+  );
   useEffect(() => {
     setLoading(displayLobby);
   }, [displayLobby]);
