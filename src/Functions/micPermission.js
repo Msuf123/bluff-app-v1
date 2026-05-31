@@ -23,7 +23,7 @@ export default function MicPermission(
       });
     } else {
       const { mediaDevices } = require('react-native-webrtc');
-      mic = mediaDevices.getUserMedia({ audio: true });
+      mic = mediaDevices.getUserMedia({ audio: true, video: false });
     }
     mic
       .then(res => {

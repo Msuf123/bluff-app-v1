@@ -89,12 +89,10 @@ export default function ProfileInfo() {
       });
 
       if (result.didCancel) {
-        console.log('User cancelled image picker');
         return;
       }
 
       if (result.errorCode) {
-        console.log('Error: ', result.errorMessage);
         return;
       }
 
@@ -103,7 +101,7 @@ export default function ProfileInfo() {
       setImage(asset.uri);
 
       const base64 = await readFileAsBase64(asset.uri);
-      console.log(base64, 'kk');
+
       uploadChunks(
         base64,
         asset.fileName || 'image.jpg',

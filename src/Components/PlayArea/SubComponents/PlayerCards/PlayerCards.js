@@ -1,8 +1,11 @@
-import { useAtom } from "jotai";
-import { backendUrlAtom, playersGameTableInfo } from "../../../../AppState/Atoms";
-import { useScreenDimensions } from "../../../../Hooks/useScreenDimensions";
-import { useMemo } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { useAtom } from 'jotai';
+import {
+  backendUrlAtom,
+  playersGameTableInfo,
+} from '../../../../AppState/Atoms';
+import { useScreenDimensions } from '../../../../Hooks/useScreenDimensions';
+import { useMemo } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 
 export default function PlayerCards({ containerWidth }) {
   const [playersGameTableInfoState] = useAtom(playersGameTableInfo);
@@ -49,7 +52,7 @@ export default function PlayerCards({ containerWidth }) {
     }
     // If cards are too small compared to container, enlarge them (but cap at 1.5x)
     else if (numberOfCards < 5) {
-      scale = Math.min(1.5, (availableWidth / baseStackWidth) * 0.8);
+      scale = Math.min(1, (availableWidth / baseStackWidth) * 0.8);
     }
 
     const finalCardWidth = baseCardWidth * scale;
@@ -79,7 +82,7 @@ export default function PlayerCards({ containerWidth }) {
       {playerCards.map((cardObj, i) => (
         <Image
           key={i}
-          source={{ uri: urls + "/image/" + cardObj.name }}
+          source={{ uri: urls + '/image/' + cardObj.name }}
           resizeMode="contain"
           style={[
             styles.card,
@@ -97,13 +100,13 @@ export default function PlayerCards({ containerWidth }) {
 
 const styles = StyleSheet.create({
   outer: {
-    height: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   card: {
-    position: "absolute",
+    position: 'absolute',
   },
 });

@@ -22,7 +22,6 @@ export default function JoinPopUp({ changeState }) {
   const hidePopUp = () => changeState(false);
 
   const navigateFun = () => {
-    console.log('navi to lobby with', text);
     nav.navigate('Lobby', { action: 'join', roomNumber: text });
   };
 
