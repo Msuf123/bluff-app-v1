@@ -1,8 +1,8 @@
-import { useAtom } from "jotai";
-import { authAtom, backendUrlAtom } from "../../../../../../../AppState/Atoms";
-import { Platform } from "react-native";
-import * as Keychain from "react-native-keychain";
-import { useNavigation } from "@react-navigation/native";
+import { useAtom } from 'jotai';
+import { authAtom, backendUrlAtom } from '../../../../../../../AppState/Atoms';
+import { Platform } from 'react-native';
+import * as Keychain from 'react-native-keychain';
+import { useNavigation } from '@react-navigation/native';
 
 export default function useDeleteUser() {
   const [, setAuth] = useAtom(authAtom);
@@ -15,41 +15,38 @@ export default function useDeleteUser() {
     };
 
     try {
-      if (Platform.OS === "android" || Platform.OS === "ios") {
+      if (Platform.OS === 'android' || Platform.OS === 'ios') {
         let token = null;
         const credentials = await Keychain.getGenericPassword();
 
         if (credentials) {
           token = credentials.password;
-          console.log("Token:", token);
         } else {
-          console.log("No credentials stored");
         }
         if (token) {
-          headers["Token"] = token;
+          headers['Token'] = token;
         }
       }
 
       const response = await fetch(url, {
-        method: "DELETE",
+        method: 'DELETE',
         headers,
-        credentials: "include",
+        credentials: 'include',
       });
 
       if (!response.ok) {
-        console.log("Failed to delete user:", response.status);
         return false;
       }
 
       // Clear token & auth state
-      if (Platform.OS === "android" || Platform.OS === "ios") {
+      if (Platform.OS === 'android' || Platform.OS === 'ios') {
         await Keychain.resetGenericPassword();
-        nav.navigate("home");
+        nav.navigate('home');
       }
 
       setAuth(false);
     } catch (error) {
-      console.error("Delete user error:", error);
+      console.error('Delete user error:', error);
     }
   }
 

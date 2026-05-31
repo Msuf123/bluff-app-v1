@@ -17,9 +17,7 @@ export function useUserSignedIn() {
           let tokenPresent = null;
           if (credentials) {
             tokenPresent = credentials.password; // assuming token is stored as password
-            console.log('Token:', tokenPresent);
           } else {
-            console.log('No credentials stored');
           }
           if (tokenPresent) {
             let userLoggedInStatus = await tokenVerification(
@@ -35,9 +33,7 @@ export function useUserSignedIn() {
             setAuthState(false);
             setLoadingState(false);
           }
-        } catch (e) {
-          console.log(e);
-        }
+        } catch (e) {}
       }
       if (Platform.OS === 'web') {
         try {

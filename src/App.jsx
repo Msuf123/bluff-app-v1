@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import Home from './Components/Home/Home';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { themeAtom } from './AppState/Atoms';
+import { backendUrlAtom, themeAtom } from './AppState/Atoms';
 import ProfilePage from './Components/Profile/Profile';
 import Login from './Components/Login/Login';
 import SignIn from './Components/Sign-In/SignIn';
@@ -11,15 +11,26 @@ import PassInputFields from './Components/PasswordInputFields/PasswordInputField
 import Toast from 'react-native-toast-message';
 import Lobby from './Components/Lobby/Lobby';
 import PlayArea from './Components/PlayArea/PlayArea';
-import { useEffect } from 'react';
-import { usePowerState } from 'react-native-device-info';
+import { useEffect, useState } from 'react';
+import DeviceInfo, { usePowerState } from 'react-native-device-info';
 import { lightTheme, powerSavingTheme } from './AppState/Theme';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'react-native';
+import {
+  Modal,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { UpdateWarning } from './Components/UpdateWarning/updateWarning';
+
 const Stack = createNativeStackNavigator();
 function App() {
   const [theme, setThemeAtom] = useAtom(themeAtom);
 
+  const { lowPowerMode } = usePowerState();
   const styleTopBar = {
     headerTitleStyle: {
       color: theme?.colors?.textPrimary,
@@ -30,7 +41,7 @@ function App() {
     },
     headerTintColor: theme?.colors?.textPrimary,
   };
-  const { lowPowerMode } = usePowerState();
+
   const linking = {
     prefixes: ['bluffarena://'],
     config: {
@@ -50,9 +61,10 @@ function App() {
     if (lowPowerMode) {
       setThemeAtom(powerSavingTheme);
     } else {
-      setThemeAtom(powerSavingTheme);
+      setThemeAtom(lightTheme);
     }
   }, [lowPowerMode]);
+
   return (
     <>
       <SafeAreaProvider>
@@ -63,6 +75,8 @@ function App() {
             barStyle="dark-content" // or "light-content"
             translucent={false} // ← key prop for older behavior
           />
+          <UpdateWarning></UpdateWarning>
+
           <NavigationContainer linking={linking}>
             <Stack.Navigator initialRouteName="home">
               <Stack.Screen

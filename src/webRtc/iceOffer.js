@@ -2,7 +2,6 @@ import { RTCIceCandidate } from 'react-native-webrtc';
 
 export default function handelIcesOffer(Platform, data, pcDbs) {
   if (Platform.OS === 'web') {
-    console.log('Reving ice offer');
     const { ice } = data.data;
     const from = data.from;
     if (!from) {

@@ -52,7 +52,7 @@ export default function PlayerCards({ containerWidth }) {
     }
     // If cards are too small compared to container, enlarge them (but cap at 1.5x)
     else if (numberOfCards < 5) {
-      scale = Math.min(1, (availableWidth / baseStackWidth) * 0.8);
+      scale = Math.min(0.9, (availableWidth / baseStackWidth) * 0.9);
     }
 
     const finalCardWidth = baseCardWidth * scale;

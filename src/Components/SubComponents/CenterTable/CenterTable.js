@@ -25,7 +25,6 @@ export default function CenterTable({
   let layerThree = [];
 
   if (!valueOfContexts) {
-    console.log('no vlaue');
     return;
   }
   let numberOfPlayer = valueOfContexts.opponentDetails.length + 1;

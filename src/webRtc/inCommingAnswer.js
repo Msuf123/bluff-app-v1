@@ -11,7 +11,6 @@ export default function handelIncommingAnswer(Platform, data, pcDbs) {
   }
 
   if (pc.signalingState === 'have-local-offer') {
-    console.log('here');
     pc.setRemoteDescription(new RTCSessionDescription(answer))
       .then(() => {
         if (pc.pendingIceCandidates) {

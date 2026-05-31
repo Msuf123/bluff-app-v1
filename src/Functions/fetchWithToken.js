@@ -1,21 +1,20 @@
-import { Platform } from "react-native";
+import { Platform } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 
 export default async function fetchWithToken(url, objs, otherOps) {
   try {
     let obj = { ...objs };
-    if (Platform.OS !== "web") {
+    if (Platform.OS !== 'web') {
       const credentials = await Keychain.getGenericPassword();
-if (credentials) {
-      const tokenPresent =credentials.password; 
-      obj["Token"] = tokenPresent;}
-      else {
-  console.log('No credentials stored');
-}
+      if (credentials) {
+        const tokenPresent = credentials.password;
+        obj['Token'] = tokenPresent;
+      } else {
+      }
     }
     let response = await fetch(url, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Platform: Platform.OS,
 
         ...obj,
@@ -23,7 +22,7 @@ if (credentials) {
       ...otherOps,
     });
     if (!response.ok) {
-      throw new Error("Newtork request not okay");
+      throw new Error('Newtork request not okay');
     } else {
       return response;
     }

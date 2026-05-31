@@ -58,20 +58,14 @@ export default function Home() {
 
   useFocusEffect(
     useCallback(() => {
-      console.log('hello', route.params);
       if (route.params?.action === 'join') {
+        // ✅ Clear params first, then navigate
+        nav.setParams({ action: undefined, roomNumber: undefined });
         nav.navigate('Lobby', {
           roomNumber: route.params.roomNumber,
           action: 'join',
         });
       }
-      return () => {
-        console.log('Resetting');
-        nav.setParams({
-          action: undefined,
-          roomNumber: undefined,
-        });
-      };
     }, [route.params]),
   );
   useEffect(() => {

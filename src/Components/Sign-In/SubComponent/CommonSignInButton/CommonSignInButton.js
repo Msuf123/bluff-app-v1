@@ -1,15 +1,15 @@
-import { useAtom } from "jotai";
-import { useState } from "react";
+import { useAtom } from 'jotai';
+import { useState } from 'react';
 import {
   authAtom,
   backendUrlAtom,
   themeAtom,
-} from "../../../../AppState/Atoms";
-import { useNavigation } from "@react-navigation/native";
-import emailChecker from "./emailChecker";
-import fetchReq from "../../../Login/Functions/FetchReq";
-import Toast from "react-native-toast-message";
-import { Platform, Pressable, StyleSheet, Text } from "react-native";
+} from '../../../../AppState/Atoms';
+import { useNavigation } from '@react-navigation/native';
+import emailChecker from './emailChecker';
+import fetchReq from '../../../Login/Functions/FetchReq';
+import Toast from 'react-native-toast-message';
+import { Platform, Pressable, StyleSheet, Text } from 'react-native';
 
 export default function CommonSignInButton({
   emailId,
@@ -27,7 +27,7 @@ export default function CommonSignInButton({
   const nav = useNavigation();
   const [theme] = useAtom(themeAtom);
   function pressButton() {
-    if (emailId !== "" && emailChecker(emailId)) {
+    if (emailId !== '' && emailChecker(emailId)) {
       setLoadingState(true);
       let data = {};
       data.emailId = emailId;
@@ -38,29 +38,29 @@ export default function CommonSignInButton({
         data.password = password;
       }
 
-      fetchReq(urls, url, data).then((a) => {
+      fetchReq(urls, url, data).then(a => {
         setLoadingState(false);
-        console.log("Respose is", a, urls);
-        if (a === "userThere") {
+
+        if (a === 'userThere') {
           Toast.show({
-            type: "info",
-            text1: "User already exists",
-            text2: "Try loggin in",
+            type: 'info',
+            text1: 'User already exists',
+            text2: 'Try loggin in',
           });
           return;
         }
 
-        if (a === "invalidOtp") {
+        if (a === 'invalidOtp') {
           setLoadingState(false);
           Toast.show({
-            type: "error",
-            text1: "The opt is invaild",
-            text2: "Try again",
+            type: 'error',
+            text1: 'The opt is invaild',
+            text2: 'Try again',
           });
         }
-        if (a === "okay") {
+        if (a === 'okay') {
           setLoadingState(false);
-          if (pathToNav === "Lobby") {
+          if (pathToNav === 'Lobby') {
             setAtuhState(true);
             nav.navigate(pathToNav);
           } else {
@@ -70,23 +70,23 @@ export default function CommonSignInButton({
               nav.navigate(pathToNav);
             }
           }
-        } else if (a === "notOkay") {
+        } else if (a === 'notOkay') {
           Toast.show({
-            type: "error",
-            text1: "Something went Wrong",
-            text2: "Try again later",
+            type: 'error',
+            text1: 'Something went Wrong',
+            text2: 'Try again later',
           });
-        } else if (a === "noUser" || a === "userDoesNotExist") {
+        } else if (a === 'noUser' || a === 'userDoesNotExist') {
           Toast.show({
-            type: "error",
-            text1: "User does not exists",
-            text2: "Create account",
+            type: 'error',
+            text1: 'User does not exists',
+            text2: 'Create account',
           });
-        } else if (a === "noPass") {
+        } else if (a === 'noPass') {
           Toast.show({
-            type: "info",
-            text1: "Password Incorrect",
-            text2: "Reset you password",
+            type: 'info',
+            text1: 'Password Incorrect',
+            text2: 'Reset you password',
           });
         }
         setLoadingState(false);
@@ -98,17 +98,17 @@ export default function CommonSignInButton({
       style={[
         style.button,
         { backgroundColor: theme.colors?.primary },
-        { width: inputWidth ? inputWidth : "80%" },
-        Platform.OS === "web" ? { minWidth: 150, maxWidth: "40%" } : {},
+        { width: inputWidth ? inputWidth : '80%' },
+        Platform.OS === 'web' ? { minWidth: 150, maxWidth: '40%' } : {},
       ]}
       onPressOut={pressButton}
     >
       {loadingState ? (
-        <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
+        <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>
           Loaidng
         </Text>
       ) : (
-        <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
+        <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>
           Next
         </Text>
       )}
@@ -117,11 +117,11 @@ export default function CommonSignInButton({
 }
 const style = StyleSheet.create({
   button: {
-    width: "100%",
-    backgroundColor: "#3b82f6",
+    width: '100%',
+    backgroundColor: '#3b82f6',
     paddingVertical: 15,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 20,
     marginTop: 15,
   },

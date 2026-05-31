@@ -89,14 +89,13 @@ export const uploadChunks = async (
 
       result = await response.json();
     } catch (error) {
-      console.log('Upload failed:', error);
       result = { success: false }; // Fallback response
     }
 
     // Handle result safely now
     if (result.hasOwnProperty('success') && result['success'] === false) {
       setStatus(0);
-      console.log(originalImageUrl);
+
       setOriginalImageUrlState(originalImageUrl);
       Toast.show({
         text1: 'Error',
@@ -109,7 +108,5 @@ export const uploadChunks = async (
     } else {
       setStatus(((i + 1) / totalChunks) * 100);
     }
-
-    console.log(`Uploaded chunk ${i + 1}/${totalChunks}`, result);
   }
 };

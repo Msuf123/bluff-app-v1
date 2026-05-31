@@ -45,9 +45,7 @@ export default async function makeOffer(
       }
       const pc = new RTCPeerConnection(ices);
       pc.onconnectionstatechange = () =>
-        onConnectionStateChange(pc, email, () => {
-          console.log('Reconnecting', email);
-        });
+        onConnectionStateChange(pc, email, () => {});
       pc.ontrack = event => onTrack(event, remoteAudio, setRemoteStream);
       pc.onicecandidate = event =>
         onIceCandidate(event, webSocket, yourEmail, email, data);

@@ -125,10 +125,18 @@ export default function Lobby() {
       setWebSocketCon(webScoket);
       wss.current = webScoket;
       webScoket.onopen = () => {
-        console.log('connection establiesd of websocket ');
+        const keepAlive = setInterval(() => {
+          if (wss.current?.readyState === WebSocket.OPEN) {
+            wss.current.send(JSON.stringify({ action: 'ping' }));
+          }
+        }, 30000);
+        wss.keepAlive = keepAlive;
       };
       webScoket.onclose = () => {
-        console.log('conneciton claoed');
+        if (wss.keepAlive) {
+          clearInterval(wss.keepAlive);
+          wss.keepAlive = null;
+        }
       };
       webScoket.onmessage = e => {
         let data = JSON.parse(e.data);
@@ -200,7 +208,7 @@ export default function Lobby() {
             existing._replaced = true;
             existing.close();
           }
-          console.log('Incomming offer form ', data.from);
+
           answerOffer(
             ices,
             data,
@@ -215,7 +223,6 @@ export default function Lobby() {
           );
         }
         if (data.status === 1020) {
-          console.log('incomming answer form ', data.from);
           handelIncommingAnswer(Platform, data, pcDbs);
         }
         if (data.status === 1021) {
@@ -435,7 +442,6 @@ export default function Lobby() {
         };
       };
       webScoket.onclose = ev => {
-        console.log('Players left only you are left', ev.reason);
         if (ev.reason === 'Opponent player left') {
           Toast.show({
             type: 'info',
@@ -466,9 +472,7 @@ export default function Lobby() {
       if (Platform.OS !== 'web') {
         if (credentials) {
           token = credentials.password; // assuming token is stored as password
-          console.log('Token:', token);
         } else {
-          console.log('No credentials stored');
         }
       } else {
         token = null;
@@ -480,7 +484,6 @@ export default function Lobby() {
     return () => {
       //i am calling this so that i can call a callback at the home componet which will rotate screen to protrait
       setAthOme(org => !org);
-      console.log('Leving to home');
     };
   }, []);
   useEffect(() => {

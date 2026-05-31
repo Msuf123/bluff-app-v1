@@ -18,10 +18,7 @@ export default async function answerOffer(
 ) {
   const pc = new RTCPeerConnection(ices);
   pc.onconnectionstatechange = () =>
-    console.log('B pc connectionState:', pc.connectionState);
-  onConnectionStateChange(pc, data.from, () => {
-    console.log('Reconnecting', data.from);
-  });
+    onConnectionStateChange(pc, data.from, () => {});
   let audioElement = remoteAudio;
 
   pc.ontrack = event => {
@@ -49,7 +46,6 @@ export default async function answerOffer(
     if (audioTrack) {
       pc.addTrack(audioTrack, micStream);
     } else {
-      console.log('NO mic was found in ', store.get(playerGameArea).yourEmail);
     }
 
     const answer = await pc.createAnswer();

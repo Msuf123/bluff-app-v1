@@ -2,8 +2,6 @@ import { Platform } from 'react-native';
 import inCallManager from 'react-native-incall-manager';
 
 export default function onTrack(event, audioElement, setRemoteStream) {
-  console.log('🎧 Remote track received:', event);
-
   const remoteStream = event.streams[0];
 
   if (Platform.OS === 'web') {
@@ -24,8 +22,6 @@ export default function onTrack(event, audioElement, setRemoteStream) {
       if (typeof setRemoteStream === 'function') {
         setRemoteStream(remoteStream);
       }
-    } catch (e) {
-      console.log('Error setting up speaker in andorid', e);
-    }
+    } catch (e) {}
   }
 }

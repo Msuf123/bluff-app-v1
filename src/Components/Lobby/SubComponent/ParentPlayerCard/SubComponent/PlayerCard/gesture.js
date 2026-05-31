@@ -1,4 +1,4 @@
-import { PanResponder } from "react-native";
+import { PanResponder } from 'react-native';
 export default function gesture(width, setWidth, ref) {
   return PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -6,15 +6,14 @@ export default function gesture(width, setWidth, ref) {
     onPanResponderGrant: () => {
       //change color
     },
-    onPanResponderMove: (event) => {
+    onPanResponderMove: event => {
       //tracks user finger
       const postion = event.nativeEvent;
       setWidth(postion.locationX);
       //console.log("hello",postion.locationX)
     },
-    onPanResponderRelease: (event) => {
+    onPanResponderRelease: event => {
       //send signal to backend to remove friend
-      console.log(ref.current.width);
       //
     },
   });
