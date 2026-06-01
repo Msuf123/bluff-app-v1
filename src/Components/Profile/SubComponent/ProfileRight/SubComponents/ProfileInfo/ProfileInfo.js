@@ -245,7 +245,7 @@ export default function ProfileInfo() {
           ) : null}
           {uploadigState !== 0 ? (
             <View style={style.cameraIcon}>
-              <Text>{uploadigState}%</Text>
+              <Text>{Math.floor(uploadigState)}%</Text>
             </View>
           ) : null}
           <Image

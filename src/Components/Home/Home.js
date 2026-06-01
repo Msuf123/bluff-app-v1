@@ -10,7 +10,13 @@ import {
   webScoket,
 } from '../../AppState/Atoms';
 import { useAtom } from 'jotai';
-import { StatusBar, View } from 'react-native';
+import {
+  AppState,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useUserSignedIn } from '../../Hooks/useUserSignedIn';
 import {
   useFocusEffect,
@@ -30,6 +36,7 @@ import {
   playerGameAreaConstantHome,
 } from './homePlayerTableConstant';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Sound from 'react-native-sound';
 
 export default function Home() {
   const [joinPopUp, setJoinPopUp] = useState(false);
@@ -49,13 +56,30 @@ export default function Home() {
   const [_2, setGameTableInfo] = useAtom(playersGameTableInfo);
   const nav = useNavigation();
   const route = useRoute();
+  const [isMuted, setIsMuted] = useState(false);
+  const soundRef = useRef(null);
+
   useEffect(() => {
     wsRef.current = ws;
   }, [ws]);
   useEffect(() => {
     pcStateConnectionDBsRef.current = pcStateConnectionDBs;
   }, [pcStateConnectionDBs]);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (!soundRef.current) return;
 
+      if (nextAppState === 'background' || nextAppState === 'inactive') {
+        soundRef.current.pause();
+      } else if (nextAppState === 'active') {
+        soundRef.current.play();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
   useFocusEffect(
     useCallback(() => {
       if (route.params?.action === 'join') {
@@ -99,6 +123,45 @@ export default function Home() {
       };
     }, []),
   );
+  useFocusEffect(
+    useCallback(() => {
+      // Load and play music when home screen is focused
+      const music = new Sound(
+        'background_music.mp3',
+        Sound.MAIN_BUNDLE,
+        error => {
+          if (error) {
+            console.log('Failed to load sound', error);
+            return;
+          }
+          music.setNumberOfLoops(-1);
+          music.setVolume(1.0);
+          music.play();
+        },
+      );
+
+      soundRef.current = music;
+
+      // Stop music when leaving home screen
+      return () => {
+        if (soundRef.current) {
+          soundRef.current.stop();
+          soundRef.current.release();
+          soundRef.current = null;
+        }
+      };
+    }, []),
+  );
+  const toggleMute = () => {
+    if (!soundRef.current) return;
+
+    if (isMuted) {
+      soundRef.current.setVolume(1.0); // Unmute
+    } else {
+      soundRef.current.setVolume(0.0); // Mute
+    }
+    setIsMuted(!isMuted);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
@@ -107,6 +170,20 @@ export default function Home() {
           flex: 1,
         }}
       >
+        <TouchableOpacity
+          onPress={toggleMute}
+          style={{
+            position: 'absolute',
+            top: 16,
+            left: 16,
+            zIndex: 999,
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            borderRadius: 24,
+            padding: 10,
+          }}
+        >
+          <Text style={{ fontSize: 22 }}>{isMuted ? '🔇' : '🔊'}</Text>
+        </TouchableOpacity>
         {loading ? null : stateAuth ? <PorfileIcon></PorfileIcon> : null}
         {loading ? (
           <View

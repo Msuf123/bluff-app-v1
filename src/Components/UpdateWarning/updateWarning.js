@@ -92,7 +92,7 @@ export const UpdateWarning = ({}) => {
               },
             ]}
           >
-            A new version of BluffArena is available. Please update to continue
+            A new version of Bluff Arena is available. Please update to continue
             playing.
           </Text>
 

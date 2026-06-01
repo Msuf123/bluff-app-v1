@@ -140,6 +140,7 @@ export default function Lobby() {
       };
       webScoket.onmessage = e => {
         let data = JSON.parse(e.data);
+        
         const micMediaStreamState = store.get(micMediaStream); //add stream here
         const ices = store.get(iceConfig);
         const pcDbs = store.get(peerConnectionDbs);
@@ -416,6 +417,9 @@ export default function Lobby() {
             text1: 'Removed',
             text2: 'Leader removed you form lobby',
           });
+        }
+        if (data.status === 1025) {
+          console.log(data.msg);
         }
         if (data.status === 1023) {
           Toast.show({
