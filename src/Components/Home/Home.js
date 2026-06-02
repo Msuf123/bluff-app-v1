@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   atHome,
+  backgroundMusicIsMuted,
+  backgroundMusicSound,
   micMediaStream,
   micStateGlobalPermission,
   peerConnectionDbs,
@@ -56,8 +58,10 @@ export default function Home() {
   const [_2, setGameTableInfo] = useAtom(playersGameTableInfo);
   const nav = useNavigation();
   const route = useRoute();
-  const [isMuted, setIsMuted] = useState(false);
-  const soundRef = useRef(null);
+  const [isMuted, setIsMuted] = useAtom(backgroundMusicIsMuted);
+  const [soundBackgroundMusic, setSoundBackgroundMusic] =
+    useAtom(backgroundMusicSound);
+  const soundPositionRef = useRef(0);
 
   useEffect(() => {
     wsRef.current = ws;
@@ -67,12 +71,12 @@ export default function Home() {
   }, [pcStateConnectionDBs]);
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
-      if (!soundRef.current) return;
+      if (!soundBackgroundMusic) return;
 
       if (nextAppState === 'background' || nextAppState === 'inactive') {
-        soundRef.current.pause();
+        soundBackgroundMusic.pause();
       } else if (nextAppState === 'active') {
-        soundRef.current.play();
+        soundBackgroundMusic.play();
       }
     });
 
@@ -80,6 +84,7 @@ export default function Home() {
       subscription.remove();
     };
   }, []);
+
   useFocusEffect(
     useCallback(() => {
       if (route.params?.action === 'join') {
@@ -126,39 +131,51 @@ export default function Home() {
   useFocusEffect(
     useCallback(() => {
       // Load and play music when home screen is focused
-      const music = new Sound(
-        'background_music.mp3',
-        Sound.MAIN_BUNDLE,
-        error => {
-          if (error) {
-            console.log('Failed to load sound', error);
-            return;
-          }
-          music.setNumberOfLoops(-1);
-          music.setVolume(1.0);
-          music.play();
-        },
+      if (loading) {
+        return;
+      }
+      console.log(
+        'here soundBackgroundMusic value is ',
+        soundBackgroundMusic ? 1 : null,
       );
+      if (soundBackgroundMusic) {
+        soundBackgroundMusic.setVolume(isMuted ? 0.0 : 1.0);
+        soundBackgroundMusic.play();
+      } else {
+        console.log('new sound added');
+        const music = new Sound(
+          'background_music.mp3',
+          Sound.MAIN_BUNDLE,
+          error => {
+            if (error) {
+              console.log('Failed to load sound', error);
+              return;
+            }
+            music.setNumberOfLoops(-1);
+            music.setVolume(1.0);
 
-      soundRef.current = music;
+            music.play();
+          },
+        );
 
+        setSoundBackgroundMusic(music);
+      }
       // Stop music when leaving home screen
       return () => {
-        if (soundRef.current) {
-          soundRef.current.stop();
-          soundRef.current.release();
-          soundRef.current = null;
+        console.log('runnign', soundBackgroundMusic);
+        if (soundBackgroundMusic) {
+          soundBackgroundMusic.pause();
         }
       };
-    }, []),
+    }, [loading, soundBackgroundMusic, isMuted]),
   );
   const toggleMute = () => {
-    if (!soundRef.current) return;
+    if (!soundBackgroundMusic) return;
 
     if (isMuted) {
-      soundRef.current.setVolume(1.0); // Unmute
+      soundBackgroundMusic.setVolume(1.0); // Unmute
     } else {
-      soundRef.current.setVolume(0.0); // Mute
+      soundBackgroundMusic.setVolume(0.0); // Mute
     }
     setIsMuted(!isMuted);
   };
@@ -170,20 +187,22 @@ export default function Home() {
           flex: 1,
         }}
       >
-        <TouchableOpacity
-          onPress={toggleMute}
-          style={{
-            position: 'absolute',
-            top: 16,
-            left: 16,
-            zIndex: 999,
-            backgroundColor: 'rgba(0,0,0,0.4)',
-            borderRadius: 24,
-            padding: 10,
-          }}
-        >
-          <Text style={{ fontSize: 22 }}>{isMuted ? '🔇' : '🔊'}</Text>
-        </TouchableOpacity>
+        {loading ? null : (
+          <TouchableOpacity
+            onPress={toggleMute}
+            style={{
+              position: 'absolute',
+              top: 16,
+              left: 16,
+              zIndex: 999,
+              backgroundColor: 'rgba(0,0,0,0.4)',
+              borderRadius: 24,
+              padding: 10,
+            }}
+          >
+            <Text style={{ fontSize: 22 }}>{isMuted ? '🔇' : '🔊'}</Text>
+          </TouchableOpacity>
+        )}
         {loading ? null : stateAuth ? <PorfileIcon></PorfileIcon> : null}
         {loading ? (
           <View

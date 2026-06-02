@@ -46,3 +46,5 @@ export const remoteStreamAtom = atom(null);
 export const iceConfig = atom({
   iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
 });
+export const backgroundMusicIsMuted = atom(false);
+export const backgroundMusicSound = atom(null);
