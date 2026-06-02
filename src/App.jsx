@@ -16,6 +16,7 @@ import DeviceInfo, { usePowerState } from 'react-native-device-info';
 import { lightTheme, powerSavingTheme } from './AppState/Theme';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import {
+  Linking,
   Modal,
   Platform,
   StatusBar,

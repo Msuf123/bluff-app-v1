@@ -1,4 +1,4 @@
-package com.bluffarena
+package com.msuf123.bluffarena
 
 import android.app.Application
 import com.facebook.react.PackageList

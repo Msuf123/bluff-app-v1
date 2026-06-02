@@ -21,8 +21,10 @@ import {
 } from 'react-native';
 import { useUserSignedIn } from '../../Hooks/useUserSignedIn';
 import {
+  CommonActions,
   useFocusEffect,
   useNavigation,
+  useNavigationState,
   useRoute,
 } from '@react-navigation/native';
 import Orientation from 'react-native-orientation-locker';
@@ -61,41 +63,58 @@ export default function Home() {
   const [isMuted, setIsMuted] = useAtom(backgroundMusicIsMuted);
   const [soundBackgroundMusic, setSoundBackgroundMusic] =
     useAtom(backgroundMusicSound);
-  const soundPositionRef = useRef(0);
-
+  const currentRouteName = useNavigationState(
+    state => state.routes[state.index]?.name,
+  );
   useEffect(() => {
     wsRef.current = ws;
   }, [ws]);
   useEffect(() => {
     pcStateConnectionDBsRef.current = pcStateConnectionDBs;
   }, [pcStateConnectionDBs]);
+
   useEffect(() => {
+    // Only run on Home screen
+    if (currentRouteName !== ' home') return;
+
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (!soundBackgroundMusic) return;
 
       if (nextAppState === 'background' || nextAppState === 'inactive') {
         soundBackgroundMusic.pause();
       } else if (nextAppState === 'active') {
-        soundBackgroundMusic.play();
+        if (currentRouteName === 'home') {
+          soundBackgroundMusic.play();
+        }
       }
     });
 
     return () => {
       subscription.remove();
     };
-  }, []);
+  }, [currentRouteName, soundBackgroundMusic]);
 
   useFocusEffect(
     useCallback(() => {
       if (route.params?.action === 'join') {
-        // ✅ Clear params first, then navigate
         nav.setParams({ action: undefined, roomNumber: undefined });
-        nav.navigate('Lobby', {
-          roomNumber: route.params.roomNumber,
-          action: 'join',
+
+        // ✅ Reset stack so there's no history duplication
+        nav.reset({
+          index: 1,
+          routes: [
+            { name: 'home' },
+            {
+              name: 'Lobby',
+              params: {
+                roomNumber: route.params.roomNumber,
+                action: 'join',
+              },
+            },
+          ],
         });
       }
-    }, [route.params]),
+    }, [route.params?.action, route.params?.roomNumber]), // ✅ specific deps, not whole object
   );
   useEffect(() => {
     setLoading(displayLobby);
@@ -128,58 +147,53 @@ export default function Home() {
       };
     }, []),
   );
+
   useFocusEffect(
     useCallback(() => {
-      // Load and play music when home screen is focused
-      if (loading) {
-        return;
-      }
-      console.log(
-        'here soundBackgroundMusic value is ',
-        soundBackgroundMusic ? 1 : null,
-      );
-      if (soundBackgroundMusic) {
-        soundBackgroundMusic.setVolume(isMuted ? 0.0 : 1.0);
-        soundBackgroundMusic.play();
-      } else {
-        console.log('new sound added');
+      // On focus — create only if doesn't exist yet
+
+      setSoundBackgroundMusic(prev => {
+        if (prev) {
+          prev.play();
+          return prev;
+        }
+
+        // First time only — create it
         const music = new Sound(
           'background_music.mp3',
           Sound.MAIN_BUNDLE,
           error => {
-            if (error) {
-              console.log('Failed to load sound', error);
-              return;
-            }
+            if (error) return;
             music.setNumberOfLoops(-1);
-            music.setVolume(1.0);
-
-            music.play();
+            music.setVolume(isMuted ? 0 : 1);
+            loading ? null : music.play();
           },
         );
 
-        setSoundBackgroundMusic(music);
-      }
-      // Stop music when leaving home screen
+        return music;
+      });
+
       return () => {
-        console.log('runnign', soundBackgroundMusic);
-        if (soundBackgroundMusic) {
-          soundBackgroundMusic.pause();
-        }
+        // On blur — just pause, don't release or null it
+
+        setSoundBackgroundMusic(prev => {
+          if (prev) {
+            prev.pause();
+          } // ✅ keep the instance alive in atom
+          return prev;
+        });
       };
-    }, [loading, soundBackgroundMusic, isMuted]),
+    }, [isMuted, loading, currentRouteName]),
   );
+
   const toggleMute = () => {
     if (!soundBackgroundMusic) return;
 
-    if (isMuted) {
-      soundBackgroundMusic.setVolume(1.0); // Unmute
-    } else {
-      soundBackgroundMusic.setVolume(0.0); // Mute
-    }
-    setIsMuted(!isMuted);
-  };
+    const newMuted = !isMuted;
+    setIsMuted(newMuted);
 
+    soundBackgroundMusic.setVolume(newMuted ? 0 : 1);
+  };
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
       <View

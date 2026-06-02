@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.bluffarena"
+    namespace "com.msuf123.bluffarena"
     defaultConfig {
-        applicationId "com.bluffarena"
+        applicationId "com.msuf123.bluffarena"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

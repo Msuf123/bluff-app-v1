@@ -4,6 +4,7 @@ import {
   atHome,
   authAtom,
   backendUrlAtom,
+  backgroundMusicSound,
   deniedPermission,
   displayAnimation,
   formPostionOfCardAnimaitonThrow,
@@ -27,9 +28,16 @@ import {
   toPostionOfCardAnimationThrow,
   webScoket,
 } from '../../AppState/Atoms';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   CommonActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -92,6 +100,7 @@ export default function Lobby() {
     setNumberOfTimeGolobalPermissionClicked,
   ] = useAtom(numberOfTimeGolobalPermissionClicked);
   const [theme] = useAtom(themeAtom);
+
   useEffect(() => {
     playerTableInfoRef.current = playerTableInfoState;
   }, [playerTableInfoState]);
@@ -140,7 +149,7 @@ export default function Lobby() {
       };
       webScoket.onmessage = e => {
         let data = JSON.parse(e.data);
-        
+
         const micMediaStreamState = store.get(micMediaStream); //add stream here
         const ices = store.get(iceConfig);
         const pcDbs = store.get(peerConnectionDbs);
@@ -419,7 +428,6 @@ export default function Lobby() {
           });
         }
         if (data.status === 1025) {
-          console.log(data.msg);
         }
         if (data.status === 1023) {
           Toast.show({
@@ -506,18 +514,20 @@ export default function Lobby() {
       }
     };
     lockToLandscape();
-    MicPermission(
-      micStateGloablPermissionss,
-      setMicStateGlobalPermission,
-      numberOfTimeGolobalPermissionClickedState,
-      setNumberOfTimeGolobalPermissionClicked,
-      micStates,
-      setMicState,
-      setMicMediaStreamState,
-      micStreamState,
-      micOffOn,
-      setMicOnOffDeniedState,
-    );
+    setTimeout(() => {
+      MicPermission(
+        micStateGloablPermissionss,
+        setMicStateGlobalPermission,
+        numberOfTimeGolobalPermissionClickedState,
+        setNumberOfTimeGolobalPermissionClicked,
+        micStates,
+        setMicState,
+        setMicMediaStreamState,
+        micStreamState,
+        micOffOn,
+        setMicOnOffDeniedState,
+      );
+    }, 1000);
   }, []);
 
   return (

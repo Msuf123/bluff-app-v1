@@ -1,4 +1,4 @@
-package com.bluffarena
+package com.msuf123.bluffarena
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
