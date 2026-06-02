@@ -74,9 +74,6 @@ export default function Home() {
   }, [pcStateConnectionDBs]);
 
   useEffect(() => {
-    // Only run on Home screen
-    if (currentRouteName !== ' home') return;
-
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (!soundBackgroundMusic) return;
 
@@ -118,6 +115,9 @@ export default function Home() {
   );
   useEffect(() => {
     setLoading(displayLobby);
+    if (soundBackgroundMusic) {
+      soundBackgroundMusic.play();
+    }
   }, [displayLobby]);
   useEffect(() => {
     if (micMediaStreamState) {
