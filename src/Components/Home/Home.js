@@ -82,6 +82,8 @@ export default function Home() {
       } else if (nextAppState === 'active') {
         if (currentRouteName === 'home') {
           soundBackgroundMusic.play();
+        } else {
+          soundBackgroundMusic.pause();
         }
       }
     });
@@ -115,9 +117,6 @@ export default function Home() {
   );
   useEffect(() => {
     setLoading(displayLobby);
-    if (soundBackgroundMusic) {
-      soundBackgroundMusic.play();
-    }
   }, [displayLobby]);
   useEffect(() => {
     if (micMediaStreamState) {
@@ -127,7 +126,9 @@ export default function Home() {
 
     setMicStateGlobalPermission(false);
   }, [atHOme]);
-
+  useEffect(() => {
+    if (!loading) soundBackgroundMusic.play();
+  }, [loading]);
   useFocusEffect(
     useCallback(() => {
       setPlayerTable(playerGameAreaConstantHome);
