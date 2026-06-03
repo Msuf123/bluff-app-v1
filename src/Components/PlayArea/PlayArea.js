@@ -73,6 +73,7 @@ export default function PlayArea() {
       ws.send(JSON.stringify({ action: 'getPlayGroundDetails' }));
     } // removed elese as it will always run for player who joins.
     return () => {
+      Orientation.unlockAllOrientations();
       if (ws) {
         ws.close('1000', 'jl');
       }

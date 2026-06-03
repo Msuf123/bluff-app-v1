@@ -63,6 +63,11 @@ export default function CommonSignInButton({
           if (pathToNav === 'Lobby') {
             setAtuhState(true);
             nav.navigate(pathToNav);
+          } else if (pathToNav === 'home') {
+            nav.reset({
+              index: 0,
+              routes: [{ name: 'home' }],
+            });
           } else {
             if (options) {
               nav.navigate(pathToNav, options);
@@ -105,7 +110,7 @@ export default function CommonSignInButton({
     >
       {loadingState ? (
         <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>
-          Loaidng
+          Loading
         </Text>
       ) : (
         <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>

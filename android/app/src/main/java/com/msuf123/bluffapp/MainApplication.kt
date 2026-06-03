@@ -62,9 +62,7 @@ class MainApplication : Application(), ReactApplication {
             .setUseHardwareNoiseSuppressor(true)
             .createAudioDeviceModule()
 
-        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
-        routeAudio(audioManager)
+      
 
         val filter = IntentFilter(AudioManager.ACTION_HEADSET_PLUG).apply {
             addAction(BluetoothDevice.ACTION_ACL_CONNECTED)

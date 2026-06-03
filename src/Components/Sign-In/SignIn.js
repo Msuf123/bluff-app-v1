@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { authStateEmail, themeAtom } from "../../AppState/Atoms";
-import { useAtom } from "jotai";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { StyleSheet, TextInput, View } from "react-native";
-import CommonSignInButton from "./SubComponent/CommonSignInButton/CommonSignInButton";
-import emailChecker from "./SubComponent/CommonSignInButton/emailChecker";
+import { useState } from 'react';
+import { authStateEmail, themeAtom } from '../../AppState/Atoms';
+import { useAtom } from 'jotai';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { StyleSheet, TextInput, View } from 'react-native';
+import CommonSignInButton from './SubComponent/CommonSignInButton/CommonSignInButton';
+import emailChecker from './SubComponent/CommonSignInButton/emailChecker';
 
 export default function SignIn() {
-  const [emailId, setEmailId] = useState("");
+  const [emailId, setEmailId] = useState('');
   const [email, setEmail] = useAtom(authStateEmail);
   const [validEmail, setValidEmail] = useState(true);
   const [theme] = useAtom(themeAtom);
@@ -30,9 +30,9 @@ export default function SignIn() {
             borderColor: theme?.colors?.inputBorder,
             color: theme?.colors?.textPrimary,
           },
-          validEmail ? {} : { borderColor: "red" },
-          Platform.OS === "web"
-            ? { minWidth: 150, maxWidth: "40%", outlineStyle: "none" }
+          validEmail ? {} : { borderColor: 'red' },
+          Platform.OS === 'web'
+            ? { minWidth: 150, maxWidth: '40%', outlineStyle: 'none' }
             : {},
         ]}
         value={emailId}
@@ -43,15 +43,15 @@ export default function SignIn() {
       <CommonSignInButton
         emailId={emailId}
         options={
-          params ? (params.type === "reset" ? { type: "reset" } : null) : null
+          params ? (params.type === 'reset' ? { type: 'reset' } : null) : null
         }
-        pathToNav={"Otp"}
+        pathToNav={'Otp'}
         url={
           params
-            ? params.type !== "reset"
-              ? "/auth/createUser"
-              : "/auth/changePassword"
-            : "/auth/createUser"
+            ? params.type !== 'reset'
+              ? '/auth/createUser'
+              : '/auth/changePassword'
+            : '/auth/createUser'
         }
       ></CommonSignInButton>
     </View>
@@ -59,13 +59,13 @@ export default function SignIn() {
 }
 const style = StyleSheet.create({
   div: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   input: {
-    width: "80%",
+    width: '80%',
     height: 50,
     borderWidth: 1,
     borderRadius: 8,
@@ -74,11 +74,11 @@ const style = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    width: "100%",
-    backgroundColor: "#3b82f6",
+    width: '100%',
+    backgroundColor: '#3b82f6',
     paddingVertical: 15,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 20,
     marginTop: 15,
   },

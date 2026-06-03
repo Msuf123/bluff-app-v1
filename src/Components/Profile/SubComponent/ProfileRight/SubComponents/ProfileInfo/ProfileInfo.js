@@ -21,6 +21,7 @@ import ProgressDot from './SubComponents/ProgressDot/ProgressDot';
 import GButton from '../../../../../SubComponents/GButton/GButton';
 import { readFileAsBase64, uploadChunks } from './Functions/readFileAsBase64';
 import { imageUrl } from '../../../../../Home/homePlayerTableConstant';
+import Toast from 'react-native-toast-message';
 
 export default function ProfileInfo() {
   const [userName, setUserName] = useState('');
@@ -45,16 +46,28 @@ export default function ProfileInfo() {
     }
   }, [isAuth]);
   useEffect(() => {
-    getProfileInfo(backedUrl + '/profile/info').then(a => {
-      if (a.hasOwnProperty('name') || a.hasOwnProperty('image')) {
-        setComponentData(true);
-        if (a['image']) {
-          setImage(a['image']);
+    getProfileInfo(backedUrl + '/profile/info')
+      .then(a => {
+        if (a.hasOwnProperty('name') || a.hasOwnProperty('image')) {
+          setComponentData(true);
+          if (a['image']) {
+            setImage(a['image']);
+          }
+          setOriginalImageUrlState(a['image']);
+          setUserName(a['name']);
         }
-        setOriginalImageUrlState(a['image']);
-        setUserName(a['name']);
-      }
-    });
+      })
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'Something Went Wrong',
+          text2: 'Try loggin in',
+        });
+        nav.reset({
+          index: 0,
+          routes: [{ name: 'home' }],
+        });
+      });
     if (Platform.OS !== 'web') {
       navigation.setOptions({
         tabBarStyle: {

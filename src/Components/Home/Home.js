@@ -66,6 +66,11 @@ export default function Home() {
   const currentRouteName = useNavigationState(
     state => state.routes[state.index]?.name,
   );
+  const loadingRef = useRef(loading);
+
+  useEffect(() => {
+    loadingRef.current = loading;
+  }, [loading]);
   useEffect(() => {
     wsRef.current = ws;
   }, [ws]);
@@ -79,10 +84,13 @@ export default function Home() {
 
       if (nextAppState === 'background' || nextAppState === 'inactive') {
         soundBackgroundMusic.pause();
+        console.log('in avie out csreen');
       } else if (nextAppState === 'active') {
         if (currentRouteName === 'home') {
           soundBackgroundMusic.play();
+          console.log('playing msuyicn ineven tliner');
         } else {
+          console.log('paued in litner');
           soundBackgroundMusic.pause();
         }
       }
@@ -127,8 +135,17 @@ export default function Home() {
     setMicStateGlobalPermission(false);
   }, [atHOme]);
   useEffect(() => {
-    if (!loading) soundBackgroundMusic.play();
-  }, [loading]);
+    if (
+      !loading &&
+      soundBackgroundMusic &&
+      AppState.currentState === 'active' &&
+      currentRouteName === 'home'
+    ) {
+      console.log('plain in use effect');
+      soundBackgroundMusic.play();
+    }
+  }, [loading, soundBackgroundMusic, currentRouteName]);
+
   useFocusEffect(
     useCallback(() => {
       setPlayerTable(playerGameAreaConstantHome);
@@ -144,7 +161,7 @@ export default function Home() {
       return () => {
         // setPlayerTable(null);
         // setGameTableInfo(null);
-        Orientation.unlockAllOrientations();
+        //  Orientation.unlockAllOrientations();
       };
     }, []),
   );
@@ -155,7 +172,11 @@ export default function Home() {
 
       setSoundBackgroundMusic(prev => {
         if (prev) {
-          prev.play();
+          if (AppState.currentState === 'active') {
+            prev.play();
+            console.log('Playing in useFous');
+          }
+
           return prev;
         }
 
@@ -167,7 +188,9 @@ export default function Home() {
             if (error) return;
             music.setNumberOfLoops(-1);
             music.setVolume(isMuted ? 0 : 1);
-            loading ? null : music.play();
+            if (!loadingRef.current && AppState.currentState === 'active') {
+              music.play();
+            }
           },
         );
 
@@ -179,6 +202,7 @@ export default function Home() {
 
         setSoundBackgroundMusic(prev => {
           if (prev) {
+            console.log('Puased in usefous');
             prev.pause();
           } // ✅ keep the instance alive in atom
           return prev;

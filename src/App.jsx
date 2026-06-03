@@ -158,3 +158,6 @@ function App() {
 }
 
 export default App;
+// val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+//       audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+//       routeAudio(audioManager)

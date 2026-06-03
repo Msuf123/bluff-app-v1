@@ -40,7 +40,10 @@ export default function useLogoutUser() {
         if (Platform.OS === 'android' || Platform.OS === 'ios') {
           await Keychain.resetGenericPassword();
         }
-        nav.navigate('home');
+        nav.reset({
+          index: 0,
+          routes: [{ name: 'home' }],
+        });
         // Clear auth state
         setAuth(false);
       }
