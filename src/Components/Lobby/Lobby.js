@@ -89,6 +89,7 @@ export default function Lobby() {
   const [peerConnectionDbsState, setPeerConnectionState] =
     useAtom(peerConnectionDbs);
   const [remoteStream, setRemoteStream] = useState(null);
+  const latestRoomData = useRef(null);
 
   const [micMediaStreams, setMicMediaStreamState] = useAtom(micMediaStream);
   const [micStateGloablPermissions, setMicStateGlobalPermission] = useAtom(
@@ -104,7 +105,30 @@ export default function Lobby() {
   useEffect(() => {
     playerTableInfoRef.current = playerTableInfoState;
   }, [playerTableInfoState]);
+  const reconnectWebRtcAfterMic = useCallback(() => {
+    const data = latestRoomData.current;
 
+    if (!data) return;
+
+    const ices = store.get(iceConfig);
+    const peerConnectionDbsStateCurrent = store.get(peerConnectionDbs);
+    const micMediaStreamStatek = store.get(micMediaStream); // now it's set!
+    const remoteAudios = store.get(remoteAudio);
+
+    makeOffer(
+      data,
+      ices,
+      micMediaStreamStatek,
+      peerConnectionDbsStateCurrent,
+      setPeerConnectionState,
+      Toast,
+      wss.current,
+      setMicLoadingState,
+      remoteAudios,
+      setRemoteStream,
+      true, // reconnetWebRtc = true, replaces recvonly PCs
+    );
+  }, [latestRoomData, wss, micMediaStreams]);
   useEffect(() => {
     let webScoket = null;
     function createRoom(parentUrl, token, nav) {
@@ -162,7 +186,7 @@ export default function Lobby() {
           setPlayerGameArea(data.data);
 
           setConnectionEstablishd(true);
-
+          latestRoomData.current = data;
           if (data.status == 202) {
             const micMediaStreamStatek = store.get(micMediaStream);
             const peerConnectionDbsStateCurrent = store.get(peerConnectionDbs);
@@ -526,6 +550,7 @@ export default function Lobby() {
         micStreamState,
         micOffOn,
         setMicOnOffDeniedState,
+        reconnectWebRtcAfterMic,
       );
     }, 1000);
   }, []);

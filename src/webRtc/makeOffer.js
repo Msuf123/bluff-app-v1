@@ -21,6 +21,7 @@ export default async function makeOffer(
   const otherPlayers = data.data.players.filter(p => p.email !== yourEmail);
   // reconnetWebRtc this means that voice comminicaiton was there but at that time my mic was off so sending offer to all the people again that are in my dbs
   let allPlayers = [];
+
   if (!reconnetWebRtc) {
     //code here means that we are not reconnecting just establing new connection
     otherPlayers.map(item => {
@@ -60,7 +61,7 @@ export default async function makeOffer(
         pc.addTrack(audioTrack, micMediaStreamState);
       } else {
         console.warn('No local audio track, adding recvonly transceiver');
-
+        noMicPlayers.push(email);
         pc.addTransceiver('audio', {
           direction: 'recvonly',
         });

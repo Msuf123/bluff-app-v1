@@ -28,18 +28,25 @@ export default function MicPermission(
     mic
       .then(res => {
         setMicStateGolbalPermission(true);
+
         res.getAudioTracks().forEach(track => {
           track.enabled = true;
         });
+        setMicMediaStreamState(res);
         if (deniedMicState) {
           setDeniedMicState(false);
           if (createOffer) {
             createOffer();
           } else {
           }
+        } else {
+          //Run this even if user didn't denies meaing the mic pop was late and conneciotn was not there of mic
+
+          if (createOffer) {
+            createOffer();
+          }
         }
         setMicState(true);
-        setMicMediaStreamState(res);
       })
       .catch(err => {
         setMicStateGolbalPermission(false);
