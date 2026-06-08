@@ -84,7 +84,7 @@ function App() {
                 name="home"
                 component={Home}
                 options={{
-                  headerShown: false,
+                 headerShown: false,
                   unmountOnBlur: true,
                 }}
               />
@@ -92,7 +92,7 @@ function App() {
                 name="profile"
                 component={ProfilePage}
                 options={{
-                  headerShown: false,
+                 headerShown: true,
                   headerTitle: 'Account',
                   ...styleTopBar,
                 }}
@@ -101,7 +101,7 @@ function App() {
                 name="login"
                 component={Login}
                 options={{
-                  headerShown: false,
+                 headerShown: true,
                   contentStyle: { marginBottom: 0 },
                   headerStyle: { display: 1, position: 'relative' },
                   animation: 'none',
@@ -111,7 +111,7 @@ function App() {
                 name="Lobby"
                 component={Lobby}
                 options={{
-                  headerShown: false,
+                 headerShown: true,
                   ...styleTopBar,
                   // headerRight: () => <RightHeaderBarLobbyArea />,
                 }}
@@ -119,13 +119,13 @@ function App() {
               <Stack.Screen
                 name="PlayTabel"
                 component={PlayArea}
-                options={{ headerShown: false }}
+                options={{headerShown: true }}
               />
               <Stack.Screen
                 name="signIn"
                 component={SignIn}
                 options={{
-                  headerShown: false,
+                 headerShown: true,
                   title: 'Sign-Up',
                   ...styleTopBar,
                 }}
@@ -134,7 +134,7 @@ function App() {
                 name="Otp"
                 component={OtpScreen}
                 options={{
-                  headerShown: false,
+                 headerShown: true,
                   title: 'Sign-Up',
                   ...styleTopBar,
                 }}
@@ -143,7 +143,7 @@ function App() {
                 name="passSet"
                 component={PassInputFields}
                 options={{
-                  headerShown: false,
+                 headerShown: true,
                   title: 'Sign-Up',
                   ...styleTopBar,
                 }}

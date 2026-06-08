@@ -62,7 +62,7 @@ export default function Login() {
       emailId: cleanedEmail,
       password: pass,
     });
-
+     console.log(res,'hre')
     if (res === 'noPass' || res === 'noUser') {
       Toast.show({
         type: 'error',

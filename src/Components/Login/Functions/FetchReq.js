@@ -8,7 +8,7 @@ export default async function fetchReq(parentUrl, url, data) {
     body: JSON.stringify(data),
   })
     .then(async(a) => {
-      if (Platform.OS === "android" || Platform.OS === "macos") {
+      if (Platform.OS === "android" || Platform.OS === "ios") {
         if (a.status == 203) {
           let token = a.headers.get("Token");
 

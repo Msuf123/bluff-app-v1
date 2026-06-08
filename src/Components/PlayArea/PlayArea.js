@@ -22,6 +22,7 @@ import ListPlayer from './SubComponents/ListPlayer/ListPlayer';
 import Orientation from 'react-native-orientation-locker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
+
 export default function PlayArea() {
   const nav = useNavigation();
   const [loaidng, setLoading] = useState(true);
@@ -75,7 +76,7 @@ export default function PlayArea() {
     return () => {
       Orientation.unlockAllOrientations();
       if (ws) {
-        ws.close('1000', 'jl');
+        ws.close(1000, 'jl');
       }
     };
   }, []);
@@ -122,7 +123,7 @@ export default function PlayArea() {
                     top: '70%',
                     left: '0%',
                     marginLeft: 10,
-                    transform: [{ translateY: '0%' }],
+                    transform: [{ translateY: 0 }],
                     backgroundColor: 'white',
                     borderWidth: 1,
                     borderRadius: 10,
@@ -207,9 +208,9 @@ export default function PlayArea() {
 const style = StyleSheet.create({
   div: {
     flex: 1,
-    justifyContent: 'start',
+    justifyContent: 'flex-start',
     paddingTop: 0,
-    backgroundColor: '',
+    backgroundColor: 'transport',
     overflow: 'hidden',
   },
   divTwo: {
